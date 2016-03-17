@@ -14,7 +14,7 @@ com.google
 doubleclick.com
 doubleclick.net
 duck.com
-feedburner.com
+#feedburner.com #some feeds will not work
 foofle.com
 froogle.com
 g.co
@@ -65,7 +65,7 @@ google.co.jp
 google.co.ke
 google.co.kr
 google.co.ls
-google.com  # be carefull
+#google.com  # be carefull
 google.co.ma
 google.com.af
 google.com.ag
@@ -206,6 +206,7 @@ googlr.com
 goolge.com
 gooogle.com
 gstatic.com
+gstatic.info
 igoogle.com
 keyhole.com
 like.com
@@ -235,3 +236,4 @@ safebrowsing-cache.google.com
 safebrowsing.google.com
 translate.google.com
 doubleclickbygoogle.com
+clients1.google.com
