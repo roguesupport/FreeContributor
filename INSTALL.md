@@ -5,10 +5,10 @@ For example for Debian/Ubuntu GNU/Linux distribution
 
     sudo apt-get install dnsmasq
 
-Backup the dnsmaq.conf in the /etc directory. Edit the dnsmaq.conf
+Backup the '/etc/dnsmaq.conf' . Edit the dnsmaq.conf
 or use configuration file provided in the conf directory
 
-Edit the /etc/resolv.conf and put as first entry
+Edit the '/etc/resolv.conf' and put as first entry
 
     nameserver 127.0.0.1
 
@@ -18,7 +18,7 @@ Add two more DNS resolvers.
     nameserver <ip address>
     nameserver <ip address>
 
-Protect the /etc/resolv.conf
+Protect the '/etc/resolv.conf'
 
     chattr +i /etc/resolv.conf
 
@@ -29,5 +29,5 @@ If you use systemd:
     systemctl enable dnsmasq && systemctl start dnsmasq
 
 
-Create the directory /etc/dnsmasq.d and select/copy the files in the
+Create the directory '/etc/dnsmasq.d' and select/copy the files in the
 directory data/dnsmasq.d
