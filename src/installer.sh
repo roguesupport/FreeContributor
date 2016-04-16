@@ -3,8 +3,13 @@
 # (c) 2016 by TBDS
 # https://github.com/tbds/FreeContributor
 #
+# FreeContributor is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 # Simple script that pulls ad blocking host files from different providers 
 # and combines them to use as a dnsmasq resolver file.
+#
 #
 # A, --address=/<domain>/ [domain/] <ipaddr>
 #              Specify an IP address to  return  for  any  host  in  the  given
@@ -21,18 +26,16 @@
 #              or  DHCP  and  not sent to an upstream nameserver by a more spe-
 #              cific --server directive."
 #
-# FreeContributor is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
+#
+#
 # Dependencies:
 #  * curl
 #  * dnsmasq
 #  * GNU coreutils
 
-# Declair variables
-resolv=/etc/resolv.conf
+# variables
+resolvconf=/etc/resolv.conf
+resolvconfbak=/etc/resolv.conf.bak
 dnsmasqdir=/etc/dnsmasq.d
 dnsmasqconf=/etc/dnsmasq.conf
 dnsmasqconfbak=/etc/dnsmasq.conf.bak
@@ -55,15 +58,17 @@ echo "
 "
 }
 
+ 
 rootcheck(){
   if [[ $UID -ne 0 ]]; then
-    echo "Please run this script as root"
+    echo "You need root or su rights to access /etc directory"
+    echo "Please run this script as root (like a boss)"
     exit 1
   fi
 }
 
 dependencies(){
-programs=( wget curl sed unzip 7z dnsmasq )
+programs=( wget curl sed dnsmasq ) # unzip 7z 
 for prg in "${programs[@]}"
 do
 	type -P $prg &>/dev/null || { echo "Error: FreeConributor requires the program $prg... Aborting."; echo; exit 192; }
@@ -71,11 +76,19 @@ done
 }
 
 backup(){
-if [ ! -f "$dnsmasqconf" ] ; then
-  echo "Backing up your previous dnsmasq file"
+if [ ! -f "$resolvconf" ] && [ ! -f "$dnsmasqconf" ]; then
+  echo "Backing up your previous resolv and dnsmasq file"
+  sudo cp $resolvconf  $resolvconfbak
   sudo cp $dnsmasqconf $dnsmasqconfbak
 fi
 }
+
+config(){
+if [ ! -d "$dnsmasqdir" ]; then 
+  mkdir -p "$dnsmasqdir"
+fi
+}
+
 
 download_sources(){
 ## See FilterLists for a comprehensive list of filter lists from all over the web
@@ -88,15 +101,18 @@ sources=(\
     'http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext'\
     'http://someonewhocares.org/hosts/hosts'\
     'http://sysctl.org/cameleon/hosts' \
-    'http://securemecca.com/Downloads/hosts.txt' \
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/StevenBlack/hosts' \
-#    'https://hosts.neocities.org/' \
+    'http://securemecca.com/Downloads/hosts.txt
+    'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt' \
     'http://www.malwaredomainlist.com/hostslist/hosts.txt' \
     'http://malwaredomains.lehigh.edu/files/justdomains' \
+    'http://www.joewein.net/dl/bl/dom-bl.txt' \
     'http://adblock.gjtech.net/?format=hostfile' \
+    'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist' \
+    'http://adblock.mahakala.is/' \
     'https://raw.githubusercontent.com/quidsup/notrack/master/trackers.txt'
+
+#    'https://hosts.neocities.org/' \
 #    'https://publicsuffix.org/list/effective_tld_names.dat' \
-#    'http://jansal.googlecode.com/svn/trunk/adblock/hosts' \
 #    'http://malwaredomains.lehigh.edu/files/justdomains' \
 #    'http://cdn.files.trjlive.com/hosts/hosts-v8.txt' \
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt' \
@@ -108,7 +124,6 @@ sources=(\
 #    'https://raw.githubusercontent.com/reek/anti-adblock-killer/master/anti-adblock-killer-filters.txt' \
 #    'http://spam404bl.com/spam404scamlist.txt' \
 #    'http://malwaredomains.lehigh.edu/files/domains.txt' \
-#    'http://www.joewein.net/dl/bl/dom-bl.txt' \
 #    'http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.current' \
 #    'https://easylist-downloads.adblockplus.org/malwaredomains_full.txt' \
 #    'https://easylist-downloads.adblockplus.org/easyprivacy.txt' \
@@ -155,17 +170,39 @@ dnsmasq-conf(){
 	echo domains dnsmasq-domains.conf; wc -l dnsmasq-domains.conf
 }
 
+
 finish(){
+    mv domains-extracted /etc/dnsmaq.d/dnsmasq-block.conf
+    rm tmp
     echo "Done"
 }
 
+start-deamons(){
+#https://github.com/DisplayLink/evdi/issues/11#issuecomment-193877839
+
+INIT=`ls -l /proc/1/exe`
+if [[ $INIT == *"systemd"* ]]; then
+    systemctl enable dnsmasq.service && systemctl start dnsmasq.service
+elif [[ $INIT == *"upstart"* ]]; then
+    service dnsmasq start
+elif [[ $INIT == *"/sbin/init"* ]]; then
+    INIT=`/sbin/init --version`
+    if [[ $INIT == *"systemd"* ]]; then
+      systemctl enable dnsmasq.service && systemctl start dnsmasq.service
+    elif [[ $INIT == *"upstart"* ]]; then
+      service dnsmasq start
+    fi
+fi
+}
 
 
 #welcome
 #rootcheck
 #dependencies
 #backup
+#config
 download_sources
 extract_domains
 dnsmasq-conf
 finish
+#start-deamons

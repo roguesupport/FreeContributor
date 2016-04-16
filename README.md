@@ -44,6 +44,40 @@ Enjoy a safe and faster web experience
  - [GNU coreutils](http://www.gnu.org/software/coreutils)
  - [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
 
+#### Sources
+
+FreeContributor downloads external files; each has its own license, detailed in the list below.
+
+
+| URL                                                                              | License |
+| -------                                                                          | ------- |
+|[Adaway list](https://adaway.org/hosts.txt)                                       | |
+|[MVPS Hosts](http://winhelp2002.mvps.org/hosts.htm)                               | CC Attribution-NonCommercial-ShareAlike 4.0 |
+|[hpHosts’s ad and tracking servers‎](http://www.hosts-file.net/)                   | |
+|[Peter Lowe’s Ad server list](http://pgl.yoyo.org/adservers/)                     | |
+|[Dan Pollock’s hosts file](http://someonewhocares.org/hosts/)                     | |
+|[CAMELEON](http://sysctl.org/cameleon/)                                           | |
+|[StevenBlack/hosts](https://github.com/StevenBlack/hosts/)                        | |
+|[quidsup/notrack](https://github.com/quidsup/notrack)                             | |
+|[gorhill's uMatrix Blocklist](https://github.com/gorhill/uMatrix/umatrix)         | |
+|[Malware Domain List ](http://www.malwaredomainlist.com/hostslist/hosts.txt)      | |
+|[AdBlock Manager](http://adblock.gjtech.net/?format=unix-hosts)                   | CC Attribution 3.0 |
+|[David Alexander Harvey, Henry Hertz Hobbit, Danny R Johnston and Eric Phelps](http://hostsfile.org/hosts.html) hostfile project | LGPL as GPLv2 |
+|[Airelle's host file](http://rlwpx.free.fr/WPFF/hosts.htm)                        | |
+|[The Hosts File Project](http://hostsfile.mine.nu)                                | LGPL |
+|[Mahakala](http://adblock.mahakala.is/)                                           | |
+|[Secure Mecca](http://securemecca.com/Downloads/hosts.txt)                        | |
+|[Neocities](https://hosts.neocities.org/)                                         | |
+|[spam404scamlist](http://spam404bl.com/spam404scamlist.txt)                       | |
+|[malwaredomains.lehigh.edu](http://malwaredomains.lehigh.edu/files/domains.txt)   | |
+|[mirror1.malwaredomains.com](http://mirror1.malwaredomains.com/files/justdomains) | |
+|[adzhosts - 1](http://tcpdiag.dl.sourceforge.net/project/adzhosts/HOSTS.txt)      | |
+|[adzhosts - 2](http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt)     | |
+|[zeustracker](https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist)| |
+|[hosts.eladkarako.com](http://hosts.eladkarako.com/hosts.txt)                     | |
+|[Malekal](http: //www.malekal.com/HOSTS_filtre/HOSTS.txt)                         | |
+|[GDS Hosts File](http://accs-net.com/hosts/get_hosts.html)                        | |
+
 ## License
 
 FreeContributor is licensed under the [General Public License (GPL) version 3](https://www.gnu.org/licenses/gpl.html)
