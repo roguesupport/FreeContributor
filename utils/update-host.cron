@@ -1,0 +1,18 @@
+# FreeContributor: Enjoy a safe and faster web experience
+# (c) 2016 by TBDS
+# https://github.com/tbds/FreeContributor
+#
+# FreeContributor is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This is a cron job line to get the hosts list every 7 days
+#minute (0-59)
+#|   hour (0-23)
+#|   |    day of the month (1-31)
+#|   |    |   month of the year (1-12 or Jan-Dec)
+#|   |    |   |   day of the week (0-6 with 0=Sun or Sun-Sat)
+#|   |    |   |   |   commands
+#|   |    |   |   |   |
+*   *    *   *   6  root /usr/local/bin/freecontributor-updater.sh

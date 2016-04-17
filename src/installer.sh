@@ -34,6 +34,7 @@
 #  * GNU coreutils
 
 # variables
+version=0.3
 resolvconf=/etc/resolv.conf
 resolvconfbak=/etc/resolv.conf.bak
 dnsmasqdir=/etc/dnsmasq.d
@@ -93,37 +94,50 @@ fi
 download_sources(){
 ## See FilterLists for a comprehensive list of filter lists from all over the web
 ## https://filterlists.com/
+##
+## Use StevenBlack/hosts mirrors to save bandwidth from original projects
+## https://github.com/StevenBlack/hosts/tree/master/data
 
 sources=(\
-    'https://adaway.org/hosts.txt'\
-    'http://winhelp2002.mvps.org/hosts.txt'\
-    'http://hosts-file.net/.\ad_servers.txt'\
-    'http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext'\
-    'http://someonewhocares.org/hosts/hosts'\
+#   'https://adaway.org/hosts.txt'\
+    'https://github.com/StevenBlack/hosts/blob/master/data/adaway.org/hosts'\
+#   'http://www.malwaredomainlist.com/hostslist/hosts.txt' \
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/malwaredomainlist.com/hosts' \
+#   'http://winhelp2002.mvps.org/hosts.txt'\
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts'\
+#   'http://someonewhocares.org/hosts/hosts'\
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/someonewhocares.org/hosts'\
+#    'http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext'\
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/yoyo.org/hosts'\
+    'http://hosts-file.net/ad_servers.txt'\
+    'http://hosts-file.net/hphosts-partial.txt' \
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/tyzbit/hosts'\
     'http://sysctl.org/cameleon/hosts' \
-    'http://securemecca.com/Downloads/hosts.txt
-    'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt' \
-    'http://www.malwaredomainlist.com/hostslist/hosts.txt' \
-    'http://malwaredomains.lehigh.edu/files/justdomains' \
-    'http://www.joewein.net/dl/bl/dom-bl.txt' \
+    'http://securemecca.com/Downloads/hosts.txt'\
+    'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt'\
+    'http://malwaredomains.lehigh.edu/files/justdomains'\
+    'http://www.joewein.net/dl/bl/dom-bl.txt'\
     'http://adblock.gjtech.net/?format=hostfile' \
     'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist' \
     'http://adblock.mahakala.is/' \
+    'http://malwaredomains.lehigh.edu/files/justdomains' \
+#    'http://mirror1.malwaredomains.com/files/justdomains' \
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/extensions/gambling/hosts' \
+    'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt' \
+    'https://elbinario.net/wp-content/uploads/2015/02/BloquearPubli.txt' \
+    'http://hostsfile.mine.nu/Hosts' \
     'https://raw.githubusercontent.com/quidsup/notrack/master/trackers.txt'
 
+#    'http://support.it-mate.co.uk/downloads/HOSTS.txt' \
 #    'https://hosts.neocities.org/' \
 #    'https://publicsuffix.org/list/effective_tld_names.dat' \
-#    'http://malwaredomains.lehigh.edu/files/justdomains' \
 #    'http://cdn.files.trjlive.com/hosts/hosts-v8.txt' \
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt' \
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt' \
-#    'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist' \
 #    'http://tcpdiag.dl.sourceforge.net/project/adzhosts/HOSTS.txt' \
 #    'http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt' \
-#    'http://mirror1.malwaredomains.com/files/justdomains' \
 #    'https://raw.githubusercontent.com/reek/anti-adblock-killer/master/anti-adblock-killer-filters.txt' \
 #    'http://spam404bl.com/spam404scamlist.txt' \
-#    'http://malwaredomains.lehigh.edu/files/domains.txt' \
 #    'http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.current' \
 #    'https://easylist-downloads.adblockplus.org/malwaredomains_full.txt' \
 #    'https://easylist-downloads.adblockplus.org/easyprivacy.txt' \
@@ -160,21 +174,21 @@ extract_domains(){
 	sed -e 's/^[ \t]*//' | \
 	# remove ^M
         sed 's/\r//g' | grep -Ev '^$' > domains-extracted
-	
-	echo domains extracted; wc -l domains-extracted
 }
 
 dnsmasq-conf(){
 	cat  domains-extracted | sort | uniq | \
 	awk '{print "address=/"$1"/"}' > dnsmasq-domains.conf
-	echo domains dnsmasq-domains.conf; wc -l dnsmasq-domains.conf
+	echo "dnsmasq-domains.conf domains: $(wc -l dnsmasq-domains.conf)"
 }
 
 
 finish(){
-    mv domains-extracted /etc/dnsmaq.d/dnsmasq-block.conf
-    rm tmp
+    mv dnsmasq-domains.conf /etc/dnsmaq.d/dnsmasq-block.conf
+    rm tmp domains-extracted
     echo "Done"
+    echo "FreeContributor sucessufull installed"
+    echo "Enjoy surfing in the web"
 }
 
 start-deamons(){
@@ -196,11 +210,11 @@ fi
 }
 
 
-#welcome
-#rootcheck
-#dependencies
+welcome
+rootcheck
+dependencies
 #backup
-#config
+config
 download_sources
 extract_domains
 dnsmasq-conf

@@ -9,11 +9,13 @@
 
 Enjoy a safe and faster web experience
 
+TL:DR `cat domains-{ads,tracking,malware} > dev/null`
+
 ## Intro
 
-    This bash script intends to extract domains lists from various sources.
-    It is a replacement for ad blocking extensions in your browser.
-    It blocks ads, malware, trackers at DNS level.
+This bash script intends to extract domains lists from various sources.
+It is a replacement for ad blocking extensions in your browser.
+It blocks ads, malware, trackers at DNS level.
 
 ## Why
 
@@ -37,12 +39,22 @@ Enjoy a safe and faster web experience
 
 ## Dependencies
 
- - [curl](http://curl.haxx.se/)
+
  - [GNU bash](http://www.gnu.org/software/bash/bash.html)
  - [GNU sed](http://www.gnu.org/software/sed)
  - [GNU grep](http://www.gnu.org/software/grep/grep.html)
  - [GNU coreutils](http://www.gnu.org/software/coreutils)
+ - [curl](http://curl.haxx.se/)
  - [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
+
+## Install
+
+```sh
+git clone https://github.com/tbds/FreeContibutor
+cd FreeContibutor/src
+sudo ./installer.sh
+```
+
 
 #### Sources
 
@@ -67,16 +79,12 @@ FreeContributor downloads external files; each has its own license, detailed in 
 |[The Hosts File Project](http://hostsfile.mine.nu)                                | LGPL |
 |[Mahakala](http://adblock.mahakala.is/)                                           | |
 |[Secure Mecca](http://securemecca.com/Downloads/hosts.txt)                        | |
-|[Neocities](https://hosts.neocities.org/)                                         | |
 |[spam404scamlist](http://spam404bl.com/spam404scamlist.txt)                       | |
-|[malwaredomains.lehigh.edu](http://malwaredomains.lehigh.edu/files/domains.txt)   | |
-|[mirror1.malwaredomains.com](http://mirror1.malwaredomains.com/files/justdomains) | |
-|[adzhosts - 1](http://tcpdiag.dl.sourceforge.net/project/adzhosts/HOSTS.txt)      | |
-|[adzhosts - 2](http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt)     | |
-|[zeustracker](https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist)| |
+|[Malwaredomains](http://malwaredomains.lehigh.edu/files/domains.txt)              | |
+|[Adzhosts](http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt)         | |
+|[Zeustracker](https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist)| |
 |[hosts.eladkarako.com](http://hosts.eladkarako.com/hosts.txt)                     | |
 |[Malekal](http: //www.malekal.com/HOSTS_filtre/HOSTS.txt)                         | |
-|[GDS Hosts File](http://accs-net.com/hosts/get_hosts.html)                        | |
 
 ## License
 
