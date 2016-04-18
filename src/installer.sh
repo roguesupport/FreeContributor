@@ -64,30 +64,65 @@ rootcheck(){
   if [[ $UID -ne 0 ]]; then
     echo "You need root or su rights to access /etc directory"
     echo "Please run this script as root (like a boss)"
+    echo "sudo ./installer.sh (tip: sudo !! is fast to type)"
     exit 1
   fi
 }
 
-dependencies(){
-programs=( wget curl sed dnsmasq ) # unzip 7z 
-for prg in "${programs[@]}"
-do
-	type -P $prg &>/dev/null || { echo "Error: FreeConributor requires the program $prg... Aborting."; echo; exit 192; }
-done
+install_packages(){
+#    pacman        by Arch Linux/Parabola, ArchBang, Manjaro, Antergos, Apricity OS
+#    dpkg/apt-get  by Debian, Ubuntu, ElementaryOS, Linux Mint, etc ...
+#    yum/rpm/dnf   by Redhat, CentOS, Fedora, etc ...
+#    zypper        by OpenSUSE
+#    portage       by Gentoo (this guys don't need this script)
+#
+# Find out the package manager
+# https://github.com/icy/pacapt
+# https://github.com/quidsup/notrack/blob/master/install.sh
+
+  if [[ -x "/usr/bin/pacman" ]]; then
+    pacman -S --noconfirm dnsmasq
+
+  elif [[ -x "/usr/bin/dnf" ]]; then
+    dnf -y install dnsmasq
+
+  elif [[ -x "/usr/bin/apt-get" ]]; then
+    apt-get -y install dnsmasq
+
+  elif [[ -x "/usr/bin/yum" ]]; then
+    yum -y install dnsmasq
+
+#  elif [[ -x "/usr/bin/zypper" ]]; then
+  else
+    echo "Unable to work out which package manage is being used."
+
+  fi
 }
 
+dependencies(){
+  programs=( wget curl sed dnsmasq ) # unzip 7z
+  for prg in "${programs[@]}"
+  do
+    type -P $prg &>/dev/null || \
+    { echo "Error: FreeConributor requires the program $prg...";
+      echo "FreeContributor will install $prg";
+      install_packages}
+  done
+}
+
+
 backup(){
-if [ ! -f "$resolvconf" ] && [ ! -f "$dnsmasqconf" ]; then
-  echo "Backing up your previous resolv and dnsmasq file"
-  sudo cp $resolvconf  $resolvconfbak
-  sudo cp $dnsmasqconf $dnsmasqconfbak
-fi
+  if [ ! -f "$resolvconf" ] && [ ! -f "$dnsmasqconf" ]; then
+    echo "Backing up your previous resolv and dnsmasq file"
+    cp $resolvconf  $resolvconfbak
+    cp $dnsmasqconf $dnsmasqconfbak
+  fi
 }
 
 config(){
-if [ ! -d "$dnsmasqdir" ]; then 
-  mkdir -p "$dnsmasqdir"
-fi
+  if [ ! -d "$dnsmasqdir" ]; then 
+    mkdir -p "$dnsmasqdir"
+  fi
 }
 
 
@@ -98,36 +133,38 @@ download_sources(){
 ## Use StevenBlack/hosts mirrors to save bandwidth from original projects
 ## https://github.com/StevenBlack/hosts/tree/master/data
 
-sources=(\
-#   'https://adaway.org/hosts.txt'\
-    'https://github.com/StevenBlack/hosts/blob/master/data/adaway.org/hosts'\
-#   'http://www.malwaredomainlist.com/hostslist/hosts.txt' \
+sources1=(\
+##   'https://adaway.org/hosts.txt' \
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/adaway.org/hosts' \
+##   'http://www.malwaredomainlist.com/hostslist/hosts.txt' \
     'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/malwaredomainlist.com/hosts' \
-#   'http://winhelp2002.mvps.org/hosts.txt'\
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts'\
-#   'http://someonewhocares.org/hosts/hosts'\
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/someonewhocares.org/hosts'\
-#    'http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext'\
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/yoyo.org/hosts'\
-    'http://hosts-file.net/ad_servers.txt'\
-    'http://hosts-file.net/hphosts-partial.txt' \
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/tyzbit/hosts'\
+##   'http://winhelp2002.mvps.org/hosts.txt' \
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts' \
+##   'http://someonewhocares.org/hosts/hosts' \
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/someonewhocares.org/hosts' \
+##    'http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext' \
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/yoyo.org/hosts' \
+## Terms of Use of hpHosts
+## This service is free to use, however, any and ALL automated use is 
+## strictly forbidden without express permission from ourselves 
+##    'http://hosts-file.net/ad_servers.txt' \
+##    'http://hosts-file.net/hphosts-partial.txt' \
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/tyzbit/hosts' \
     'http://sysctl.org/cameleon/hosts' \
-    'http://securemecca.com/Downloads/hosts.txt'\
-    'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt'\
-    'http://malwaredomains.lehigh.edu/files/justdomains'\
-    'http://www.joewein.net/dl/bl/dom-bl.txt'\
-    'http://adblock.gjtech.net/?format=hostfile' \
-    'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist' \
-    'http://adblock.mahakala.is/' \
+#error    'http://securemecca.com/Downloads/hosts.txt' \
+    'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt' \
     'http://malwaredomains.lehigh.edu/files/justdomains' \
+    'http://www.joewein.net/dl/bl/dom-bl.txt' \
+#    'http://adblock.gjtech.net/?format=hostfile' \
+#    'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist' \
+    'http://adblock.mahakala.is/' \
 #    'http://mirror1.malwaredomains.com/files/justdomains' \
     'https://raw.githubusercontent.com/StevenBlack/hosts/master/extensions/gambling/hosts' \
     'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt' \
-    'https://elbinario.net/wp-content/uploads/2015/02/BloquearPubli.txt' \
+#SSL cerificate 'https://elbinario.net/wp-content/uploads/2015/02/BloquearPubli.txt' \
     'http://hostsfile.mine.nu/Hosts' \
     'https://raw.githubusercontent.com/quidsup/notrack/master/trackers.txt'
-
+#requires unzip 'http://hostsfile.org/Downloads/BadHosts.unx.zip' \
 #    'http://support.it-mate.co.uk/downloads/HOSTS.txt' \
 #    'https://hosts.neocities.org/' \
 #    'https://publicsuffix.org/list/effective_tld_names.dat' \
@@ -136,8 +173,10 @@ sources=(\
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt' \
 #    'http://tcpdiag.dl.sourceforge.net/project/adzhosts/HOSTS.txt' \
 #    'http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt' \
+)
+
+sources2=(\
 #    'https://raw.githubusercontent.com/reek/anti-adblock-killer/master/anti-adblock-killer-filters.txt' \
-#    'http://spam404bl.com/spam404scamlist.txt' \
 #    'http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.current' \
 #    'https://easylist-downloads.adblockplus.org/malwaredomains_full.txt' \
 #    'https://easylist-downloads.adblockplus.org/easyprivacy.txt' \
@@ -145,15 +184,14 @@ sources=(\
 #    'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt' \
 #    'http://www.fanboy.co.nz/adblock/opera/urlfilter.ini' \
 #    'http://www.fanboy.co.nz/adblock/fanboy-tracking.txt' \
-    )
+)
 
-for item in ${sources[*]}
-do
-    echo "---------------------"
-    echo "Downloading $item ..."
+  for item in ${sources1[*]}
+  do
+    echo "# -- Downloading from: $item ..."
     curl $item >> tmp || { echo -e "\nError downloading $item"; exit 1; }
-    echo "---------------------"
-done
+
+  done
 
 }
 
@@ -161,62 +199,67 @@ extract_domains(){
 # clean this code with better regex
 # https://blog.mister-muffin.de/2011/11/14/adblocking-with-a-hosts-file/
 
-	echo "Extract domains from lists"
-	# remove empty lines and comments
-	grep -Ev '^$' tmp | \
-	grep -o '^[^#]*'  | \
-	# exclude locahost entries
-	grep -v "localhost" | \
-	# remove 127.0.0.1 and 0.0.0.0
-	sed 's/127.0.0.1//' | \
-        sed 's/0.0.0.0//' | \
-	# remove tab and spaces in the begining
-	sed -e 's/^[ \t]*//' | \
-	# remove ^M
-        sed 's/\r//g' | grep -Ev '^$' > domains-extracted
+  echo "Extracting domains from lists"
+  # remove empty lines and comments
+  grep -Ev '^$' tmp | \
+  grep -o '^[^#]*'  | \
+  # exclude locahost entries
+  grep -v "localhost" | \
+  # remove 127.0.0.1 and 0.0.0.0
+  sed 's/127.0.0.1//' | \
+  sed 's/0.0.0.0//' | \
+  # remove tab and spaces in the begining
+  sed -e 's/^[ \t]*//' | \
+  # remove ^M
+  sed 's/\r//g' | grep -Ev '^$' | \
+  sort | uniq > domains-extracted
 }
 
-dnsmasq-conf(){
-	cat  domains-extracted | sort | uniq | \
-	awk '{print "address=/"$1"/"}' > dnsmasq-domains.conf
-	echo "dnsmasq-domains.conf domains: $(wc -l dnsmasq-domains.conf)"
+dnsmasq-format(){
+  cat domains-extracted | awk '{print "address=/"$1"/"}' > dnsmasq-block.conf
+  echo "dnsmasq-block.conf domains added: $(wc -l dnsmasq-block.conf)"
+}
+
+hosts-format(){
+  cat domains-extracted | awk '{print "0.0.0.0 "$1}' > hosts
+  echo "hosts domains added: $(wc -l hosts)"
 }
 
 
 finish(){
-    mv dnsmasq-domains.conf /etc/dnsmaq.d/dnsmasq-block.conf
-    rm tmp domains-extracted
-    echo "Done"
-    echo "FreeContributor sucessufull installed"
-    echo "Enjoy surfing in the web"
+  mv dnsmasq-block.conf /etc/dnsmasq.d/dnsmasq-block.conf
+  rm tmp domains-extracted
+  echo "Done"
+  echo "FreeContributor sucessufull installed"
+  echo "Enjoy surfing in the web"
 }
 
 start-deamons(){
 #https://github.com/DisplayLink/evdi/issues/11#issuecomment-193877839
 
 INIT=`ls -l /proc/1/exe`
-if [[ $INIT == *"systemd"* ]]; then
+  if [[ $INIT == *"systemd"* ]]; then
     systemctl enable dnsmasq.service && systemctl start dnsmasq.service
-elif [[ $INIT == *"upstart"* ]]; then
+  elif [[ $INIT == *"upstart"* ]]; then
     service dnsmasq start
-elif [[ $INIT == *"/sbin/init"* ]]; then
+  elif [[ $INIT == *"/sbin/init"* ]]; then
     INIT=`/sbin/init --version`
     if [[ $INIT == *"systemd"* ]]; then
       systemctl enable dnsmasq.service && systemctl start dnsmasq.service
     elif [[ $INIT == *"upstart"* ]]; then
       service dnsmasq start
     fi
-fi
+  fi
 }
-
 
 welcome
 rootcheck
 dependencies
-#backup
+backup
 config
 download_sources
 extract_domains
-dnsmasq-conf
+dnsmasq-format
+#hosts-format
 finish
 #start-deamons

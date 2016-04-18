@@ -9,7 +9,7 @@
 
 Enjoy a safe and faster web experience
 
-TL:DR `cat domains-{ads,tracking,malware} > dev/null`
+TL:DR `cat domains-{ads,tracking,malware} > /dev/null`
 
 ## Intro
 
@@ -44,7 +44,7 @@ It blocks ads, malware, trackers at DNS level.
  - [GNU sed](http://www.gnu.org/software/sed)
  - [GNU grep](http://www.gnu.org/software/grep/grep.html)
  - [GNU coreutils](http://www.gnu.org/software/coreutils)
- - [curl](http://curl.haxx.se/)
+ - [GNU wget](https://www.gnu.org/software/wget/)  or [curl](http://curl.haxx.se/)
  - [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
 
 ## Install
@@ -63,27 +63,27 @@ FreeContributor downloads external files; each has its own license, detailed in 
 
 | URL                                                                              | License |
 | -------                                                                          | ------- |
-|[Adaway list](https://adaway.org/hosts.txt)                                       | |
+|[Adaway list](https://adaway.org/hosts.txt)                                       | CC Attribution 3.0|
 |[MVPS Hosts](http://winhelp2002.mvps.org/hosts.htm)                               | CC Attribution-NonCommercial-ShareAlike 4.0 |
-|[hpHosts’s ad and tracking servers‎](http://www.hosts-file.net/)                   | |
-|[Peter Lowe’s Ad server list](http://pgl.yoyo.org/adservers/)                     | |
-|[Dan Pollock’s hosts file](http://someonewhocares.org/hosts/)                     | |
-|[CAMELEON](http://sysctl.org/cameleon/)                                           | |
-|[StevenBlack/hosts](https://github.com/StevenBlack/hosts/)                        | |
-|[quidsup/notrack](https://github.com/quidsup/notrack)                             | |
-|[gorhill's uMatrix Blocklist](https://github.com/gorhill/uMatrix/umatrix)         | |
-|[Malware Domain List ](http://www.malwaredomainlist.com/hostslist/hosts.txt)      | |
+|[hpHosts’s ad and tracking servers‎](http://www.hosts-file.net/)                   | *Read [Terms of Use](http://www.hosts-file.net/)* |
+|[Peter Lowe’s Ad server list](http://pgl.yoyo.org/adservers/)                     | ? |
+|[Dan Pollock’s hosts file](http://someonewhocares.org/hosts/)                     | non-commercial |
+|[CAMELEON](http://sysctl.org/cameleon/)                                           | ? |
+|[StevenBlack/hosts](https://github.com/StevenBlack/hosts/)                        | ? |
+|[quidsup/notrack](https://github.com/quidsup/notrack)                             | ? |
+|[gorhill's uMatrix Blocklist](https://github.com/gorhill/uMatrix)                 | ? |
+|[Malware Domain List](http://www.malwaredomainlist.com/hostslist/hosts.txt)       | |
 |[AdBlock Manager](http://adblock.gjtech.net/?format=unix-hosts)                   | CC Attribution 3.0 |
-|[David Alexander Harvey, Henry Hertz Hobbit, Danny R Johnston and Eric Phelps](http://hostsfile.org/hosts.html) hostfile project | LGPL as GPLv2 |
-|[Airelle's host file](http://rlwpx.free.fr/WPFF/hosts.htm)                        | |
+|[hostfile project](http://hostsfile.org/hosts.html)                               | LGPL as GPLv2 |
+|[Airelle's host file](http://rlwpx.free.fr/WPFF/hosts.htm)                        | CC Attribution 3.0 |
 |[The Hosts File Project](http://hostsfile.mine.nu)                                | LGPL |
-|[Mahakala](http://adblock.mahakala.is/)                                           | |
-|[Secure Mecca](http://securemecca.com/Downloads/hosts.txt)                        | |
+|[Mahakala](http://adblock.mahakala.is/)                                           | ? |
+|[Secure Mecca](http://securemecca.com/Downloads/hosts.txt)                        | LGPL as GPLv2 |
 |[spam404scamlist](http://spam404bl.com/spam404scamlist.txt)                       | |
 |[Malwaredomains](http://malwaredomains.lehigh.edu/files/domains.txt)              | |
 |[Adzhosts](http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt)         | |
-|[Zeustracker](https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist)| |
-|[hosts.eladkarako.com](http://hosts.eladkarako.com/hosts.txt)                     | |
+|[Zeustracker](hhttps://zeustracker.abuse.ch/blocklist.php)                        | |
+|[hosts.eladkarako.com](http://hosts.eladkarako.com/)                              | |
 |[Malekal](http: //www.malekal.com/HOSTS_filtre/HOSTS.txt)                         | |
 
 ## License
