@@ -15,12 +15,13 @@ TL:DR `cat domains-{ads,tracking,malware} > /dev/null`
 
 This bash script intends to extract domains lists from various sources.
 It is a replacement for ad blocking extensions in your browser.
-It blocks ads, malware, trackers at DNS level.
+It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DNSBL).
 
 ## Why
 
  - [Major sites including New York Times and BBC hit by 'ransomware' malvertising](http://www.theguardian.com/technology/2016/mar/16/major-sites-new-york-times-bbc-ransomware-malvertising)
  - [Adblocking: advertising 'accounts for half of data used to read articles'](http://www.theguardian.com/media/2016/mar/16/ad-blocking-advertising-half-of-data-used-articles)
+ - [The Verge's web sucks](http://blog.lmorchard.com/2015/07/22/the-verge-web-sucks/) and [The web is Doom](https://mobiforge.com/research-analysis/the-web-is-doom)
 
 ## What the scripts does?
 
@@ -28,24 +29,27 @@ It blocks ads, malware, trackers at DNS level.
  - Download and merge domains lists from various sources.
  - Create a cron job to automaticly update the hosts file, default every week (optional)
 
-## Benefits
+## Benefits and Features
 
  - Low CPU and RAM usage.
- - Speeds up your Internet use since the local dnsmasq file is checked first, before send a DNS request.
- - Data savings since the ad content is never downloaded.
- - Not just for browsers, it blocks ads and malware across the entire operative system.
+ - **Speeds up your Internet** use since the local file is checked first, before send a DNS request.
+ - **Data savings** since the ad content is never downloaded.
  - Stops ad tracking.
  - Blocks spyware and malware. That increases the safety of your networking experience.
+ - Not just for browsers, it blocks ads and malware across the entire operative system.
+
 
 ## Dependencies
-
 
  - [GNU bash](http://www.gnu.org/software/bash/bash.html)
  - [GNU sed](http://www.gnu.org/software/sed)
  - [GNU grep](http://www.gnu.org/software/grep/grep.html)
  - [GNU coreutils](http://www.gnu.org/software/coreutils)
- - [GNU wget](https://www.gnu.org/software/wget/)  or [curl](http://curl.haxx.se/)
- - [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
+ - [GNU wget](https://www.gnu.org/software/wget/) or [cURL](http://curl.haxx.se/) (default)
+ - DNS cacher: [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) (default), [Unbound](https://unbound.net/) or [Pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/index.html)
+ - Caching web proxy: [Polipo](https://www.irif.univ-paris-diderot.fr/~jch//software/polipo/) (optional)
+ - Filtering web proxy: [Privoxy](http://www.privoxy.org/) (optional)
+
 
 ## Install
 
@@ -55,8 +59,9 @@ cd FreeContibutor/src
 sudo ./installer.sh
 ```
 
+FreeContributor has some scripts, such as, exporting uBlock or uMatrix rules to dnsmasq format
 
-#### Sources
+## Sources
 
 FreeContributor downloads external files; each has its own license, detailed in the list below.
 
@@ -70,21 +75,95 @@ FreeContributor downloads external files; each has its own license, detailed in 
 |[Dan Pollock’s hosts file](http://someonewhocares.org/hosts/)                     | non-commercial |
 |[CAMELEON](http://sysctl.org/cameleon/)                                           | ? |
 |[StevenBlack/hosts](https://github.com/StevenBlack/hosts/)                        | ? |
-|[quidsup/notrack](https://github.com/quidsup/notrack)                             | ? |
-|[gorhill's uMatrix Blocklist](https://github.com/gorhill/uMatrix)                 | ? |
+|[Quidsup/notrack](https://github.com/quidsup/notrack)                             | ? |
+|[Gorhill's uMatrix Blocklist](https://github.com/gorhill/uMatrix)                 | ? |
 |[Malware Domain List](http://www.malwaredomainlist.com/hostslist/hosts.txt)       | |
 |[AdBlock Manager](http://adblock.gjtech.net/?format=unix-hosts)                   | CC Attribution 3.0 |
-|[hostfile project](http://hostsfile.org/hosts.html)                               | LGPL as GPLv2 |
+|[Hostfile project](http://hostsfile.org/hosts.html)                               | LGPL as GPLv2 |
 |[Airelle's host file](http://rlwpx.free.fr/WPFF/hosts.htm)                        | CC Attribution 3.0 |
 |[The Hosts File Project](http://hostsfile.mine.nu)                                | LGPL |
 |[Mahakala](http://adblock.mahakala.is/)                                           | ? |
-|[Secure Mecca](http://securemecca.com/Downloads/hosts.txt)                        | LGPL as GPLv2 |
-|[spam404scamlist](http://spam404bl.com/spam404scamlist.txt)                       | |
-|[Malwaredomains](http://malwaredomains.lehigh.edu/files/domains.txt)              | |
-|[Adzhosts](http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt)         | |
+|[Secure Mecca](http://securemecca.com/)                                           | LGPL as GPLv2 |
+|[Spam404scamlist](http://spam404bl.com/)                                          | |
+|[Malwaredomains](http://malwaredomains.lehigh.edu/)                               | |
+|[Adzhosts](https://sourceforge.net/projects/adzhosts/)                            | |
 |[Zeustracker](hhttps://zeustracker.abuse.ch/blocklist.php)                        | |
 |[hosts.eladkarako.com](http://hosts.eladkarako.com/)                              | |
-|[Malekal](http: //www.malekal.com/HOSTS_filtre/HOSTS.txt)                         | |
+|[Malekal](http://www.malekal.com/)                                                | |
+
+## DNS 101
+
+Without an custom DNS Server
+
+----
++----+      +------------+      +------------------+      +------------------------+
+| PC | <==> | DNS Server | <==> | Other DNS Server | <==> | example.tld = ip adress|
++----+      +------------+      +------------------+      +------------------------+
+
+then
+
++----+      +-------------------------- + 
+| PC | <==> | ip adress of example.tld  |
++----+      +---------------------------+ 
+----
+
+With a local DNS resolver
+
+----
++----+      +----------------+      +------------------+      +------------------+
+| PC |      | DNS Server     | <==> | Other DNS Server | <==> | goodwebsite.tld  |
++----+      +----------------+      +------------------+      +------------------+
+  ^^             ^^                                                    ||
+  ||             ||                                                    || 
+  vv             ||                                                    ||
++--------------------+      +----------------------------------------------------+
+| local DNS resolver | <==> | ads.example.tld = 127.0.0.1 or 0.0.0.0 or NXDOMAIN | 
++--------------------+      +----------------------------------------------------+
+                                                     +------------+    ||
+                                                     | DNS cache  |  <= /
+                                                     +------------+
+
+future requests of goodwebsite.tld
+
++----+      +--------------------+      +------------------------------------------+
+| PC | <==> | local DNS resolver | <==> | DNS cache of goodwebsite.tld = ip adress |
++----+      +--------------------+      +------------------------------------------+
+----
+
+## Hosts vs DNS resolver
+
+The hosts blocking method can not use wildcards (*) and and therefore someone must keep track 
+of each subdomain that should be blocked. Some DNS caching servers can block the domain and
+subdomains with just one rule. For example `/etc/hosts`
+
+   127.0.0.1 example.tld
+   0.0.0.0 example.tld
+
+Will redirect example.tld to the localhost, but not ads.example.tld. With a dns caching server,
+such as Dnsmasq, for example `/etc/dnsmasq.conf`
+
+   address=/example.tld/127.0.0.1
+   address=/example.tld/0.0.0.0
+   server=/example.tld/
+ 
+Will redirect example.tld and all subdomains to 127.0.0.1 or 0.0.0.0. Better yet, it can 
+return NXDOMAIN.
+
+
+## Comparasion
+
+
+| Program              | Language      | Adblocking Method                              |
+| :-------------       | :-------------| :----------------------------------------------|
+| FreeContributor      | Bash          | DNS caching server (Dnsmasq, Unbound or Pdnsd) |
+| Pi-Hole              | Bash, Php     | Hosts with Dnsmasq (for cache only)            |
+| NoTrack              | Bash, Php     | Hosts with Dnsmasq (for cache only)            |
+| Hostsblock           | Bash          | Hosts with Dnsmasq (for cache only)            |
+| dnsgate              | Python        | Hosts or Dnsmasq                               |
+| StevenBlack/hosts    | Python        | Hosts                                          |
+| adsuck               | C             | DNS server                                     |
+| pfBlockerNG          | Sh, PHP       | DNS caching server: Unbound                    |
+
 
 ## License
 

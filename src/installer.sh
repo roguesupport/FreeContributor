@@ -10,36 +10,47 @@
 # Simple script that pulls ad blocking host files from different providers 
 # and combines them to use as a dnsmasq resolver file.
 #
-#
-# A, --address=/<domain>/ [domain/] <ipaddr>
-#              Specify an IP address to  return  for  any  host  in  the  given
-#              domains.   Queries in the domains are never forwarded and always
-#              replied to with the specified IP address which may  be  IPv4  or
-#              IPv6.  To  give  both  IPv4 and IPv6 addresses for a domain, use
-#              repeated -A flags.  Note that /etc/hosts and DHCP  leases  over-
-#              ride this for individual names. A common use of this is to redi-
-#              rect the entire doubleclick.net domain to  some  friendly  local
-#              web  server  to avoid banner ads. The domain specification works
-#              in the same was as for --server, with  the  additional  facility
-#              that  /#/  matches  any  domain.  Thus --address=/#/1.2.3.4 will
-#              always return 1.2.3.4 for any query not answered from /etc/hosts
-#              or  DHCP  and  not sent to an upstream nameserver by a more spe-
-#              cific --server directive."
-#
-#
-#
 # Dependencies:
-#  * curl
-#  * dnsmasq
+#  * cURL
 #  * GNU coreutils
+#  * dnsmasq or Unbound or Pdnsd
+#  * polipo
+#  * privoxy
 
 # variables
 version=0.3
+
+# resolv
 resolvconf=/etc/resolv.conf
 resolvconfbak=/etc/resolv.conf.bak
+
+# hosts
+hostsconf=/etc/hosts
+hostsconfbak=/etc/hosts.bak
+
+# dnsmasq
 dnsmasqdir=/etc/dnsmasq.d
 dnsmasqconf=/etc/dnsmasq.conf
 dnsmasqconfbak=/etc/dnsmasq.conf.bak
+
+# unbound
+unboundconf=/etc/unbound/unbound.conf
+unboundconfbak=/etc/unbound/unbound.conf.bak
+unbounddir=/etc/unbound
+
+# pdnsd
+pdnsdconf=/etc/pdnsd.conf
+pdnsdconfbak=/etc/pdnsd.conf.bak
+
+# polipo
+polipoconf=/etc/polipo/config
+polipoconfbak=/etc/polipo/config.bak
+polipodir=/etc/polipo
+
+# privoxy
+privoxy=/etc/privoxy/config
+privoxybak=/etc/privoxy/config.bak
+privoxydir=/etc/ptivoxy
 
 welcome(){
 echo "
@@ -59,15 +70,29 @@ echo "
 "
 }
 
+usage()
+{
+  echo -e "\nFreeContributor is a script to extract and convert extract domains lists from various sources.\n"
+  echo "Options:"
+  echo "      -help   :    Show this help."
+  echo "      -hosts   :   Use hosts format"
+  echo "      -dnsmasq:    Use dnsmasq as DNS cache"
+  echo "      -unbound:    Use unbound as DNS cache"
+  echo "      -pdnsd  :    Use pdnsd as DNS cache"
+  echo "      -polipo :    Install polipo"
+  echo "      -privoxy:    Install privoxy"
+}
+
  
 rootcheck(){
   if [[ $UID -ne 0 ]]; then
     echo "You need root or su rights to access /etc directory"
-    echo "Please run this script as root (like a boss)"
-    echo "sudo ./installer.sh (tip: sudo !! is fast to type)"
+    echo "Please run this script as root"
+    usage
     exit 1
   fi
 }
+
 
 install_packages(){
 #    pacman        by Arch Linux/Parabola, ArchBang, Manjaro, Antergos, Apricity OS
@@ -100,28 +125,24 @@ install_packages(){
 }
 
 dependencies(){
-  programs=( wget curl sed dnsmasq ) # unzip 7z
+  programs=( wget curl sed ) #unzip 7z
+#TODO 
+## option to select dsnmasq unbound pdnsd
+
   for prg in "${programs[@]}"
   do
-    type -P $prg &>/dev/null || \
-    { echo "Error: FreeConributor requires the program $prg...";
-      echo "FreeContributor will install $prg";
-      install_packages}
+    type -P $prg &>/dev/null || install_packages 
+    #echo "Error: FreeConributor requires the program $prg ..."
+    #echo "FreeContributor will install $prg " }
+    #
   done
 }
 
 
-backup(){
+backup-resolv(){
   if [ ! -f "$resolvconf" ] && [ ! -f "$dnsmasqconf" ]; then
-    echo "Backing up your previous resolv and dnsmasq file"
+    echo "Backing up your previous resolv file"
     cp $resolvconf  $resolvconfbak
-    cp $dnsmasqconf $dnsmasqconfbak
-  fi
-}
-
-config(){
-  if [ ! -d "$dnsmasqdir" ]; then 
-    mkdir -p "$dnsmasqdir"
   fi
 }
 
@@ -150,6 +171,7 @@ sources1=(\
 ##    'http://hosts-file.net/ad_servers.txt' \
 ##    'http://hosts-file.net/hphosts-partial.txt' \
     'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/tyzbit/hosts' \
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/extensions/gambling/hosts' \
     'http://sysctl.org/cameleon/hosts' \
 #error    'http://securemecca.com/Downloads/hosts.txt' \
     'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt' \
@@ -159,11 +181,12 @@ sources1=(\
 #    'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist' \
     'http://adblock.mahakala.is/' \
 #    'http://mirror1.malwaredomains.com/files/justdomains' \
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/extensions/gambling/hosts' \
-    'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt' \
+#    'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt' \
 #SSL cerificate 'https://elbinario.net/wp-content/uploads/2015/02/BloquearPubli.txt' \
-    'http://hostsfile.mine.nu/Hosts' \
+#    'https://www.dshield.org/feeds/suspiciousdomains_High.txt' \
+#     'http://hostsfile.mine.nu/Hosts' \
     'https://raw.githubusercontent.com/quidsup/notrack/master/trackers.txt'
+
 #requires unzip 'http://hostsfile.org/Downloads/BadHosts.unx.zip' \
 #    'http://support.it-mate.co.uk/downloads/HOSTS.txt' \
 #    'https://hosts.neocities.org/' \
@@ -188,7 +211,7 @@ sources2=(\
 
   for item in ${sources1[*]}
   do
-    echo "# -- Downloading from: $item ..."
+    echo "# -- Downloading from URL: $item -- |"
     curl $item >> tmp || { echo -e "\nError downloading $item"; exit 1; }
 
   done
@@ -205,7 +228,7 @@ extract_domains(){
   grep -o '^[^#]*'  | \
   # exclude locahost entries
   grep -v "localhost" | \
-  # remove 127.0.0.1 and 0.0.0.0
+  # remove 127.0.0.* and 0.0.0.0
   sed 's/127.0.0.1//' | \
   sed 's/0.0.0.0//' | \
   # remove tab and spaces in the begining
@@ -215,19 +238,89 @@ extract_domains(){
   sort | uniq > domains-extracted
 }
 
-dnsmasq-format(){
-  cat domains-extracted | awk '{print "address=/"$1"/"}' > dnsmasq-block.conf
-  echo "dnsmasq-block.conf domains added: $(wc -l dnsmasq-block.conf)"
-}
+## hosts
+### TODO 
+### option 127.0.0.1 or 0.0.0.0 (default)
 
 hosts-format(){
-  cat domains-extracted | awk '{print "0.0.0.0 "$1}' > hosts
+  if [ ! -f "$hostsconf" ]; then
+    echo "Backing up your previous hosts file"
+    cp $hostsconf $hostsconfbak
+  fi
+
+  awk '{print "0.0.0.0 "$1}' domains-extracted > hosts
   echo "hosts domains added: $(wc -l hosts)"
+  #mv hosts /etc/hosts
 }
+
+
+## dnsmasq --------------------------------------------------------------------
+#
+# A, --address=/<domain>/ [domain/] <ipaddr>
+#              Specify an IP address to  return  for  any  host  in  the  given
+#              domains.   Queries in the domains are never forwarded and always
+#              replied to with the specified IP address which may  be  IPv4  or
+#              IPv6.  To  give  both  IPv4 and IPv6 addresses for a domain, use
+#              repeated -A flags.  Note that /etc/hosts and DHCP  leases  over-
+#              ride this for individual names. A common use of this is to redi-
+#              rect the entire doubleclick.net domain to  some  friendly  local
+#              web  server  to avoid banner ads. The domain specification works
+#              in the same was as for --server, with  the  additional  facility
+#              that  /#/  matches  any  domain.  Thus --address=/#/1.2.3.4 will
+#              always return 1.2.3.4 for any query not answered from /etc/hosts
+#              or  DHCP  and  not sent to an upstream nameserver by a more spe-
+#              cific --server directive."
+#
+
+dnsmasq-config(){
+  if [ ! -d "$dnsmasqdir" ]; then 
+    mkdir -p "$dnsmasqdir"
+  fi
+
+  if [ ! -f "$dnsmasqconf" ]; then
+    echo "Backing up your previous dnsmasq file"
+    cp $dnsmasqconf $dnsmasqconfbak
+  fi
+
+  awk '{print "address=/"$1"/"}' domains-extracted > dnsmasq-block.conf
+  echo "dnsmasq-block.conf domains added: $(wc -l dnsmasq-block.conf)"
+  mv dnsmasq-block.conf /etc/dnsmasq.d/dnsmasq-block.conf
+}
+
+## unbound -----------------------------------------------------------------
+
+unbound-config(){
+#https://github.com/jodrell/unbound-block-hosts/
+#https://pgl.yoyo.org/adservers/serverlist.php?hostformat=unbound
+#local-zone: "example.tld" redirect
+#local-data: "example.tld A 127.0.0.1"
+
+#use nxdomain
+#local-zone: "testdomain.test" static
+#http://www.unixcl.com/2012/07/print-double-quotes-in-unix-awk.html
+
+
+  awk '{print "local-zone: ""\x22"$1"\x22"" static"}' domains-extracted > unbound-block.conf
+  echo "unbound-block.conf domains added: $(wc -l unbound-block.conf)"
+  #mv unbound-block.conf /etc/unbound/unbound-block.conf
+}
+
+## pdnsd -------------------------------------------------------------------
+
+pdnsd-config(){
+#https://news.ycombinator.com/item?id=3035825
+#https://pgl.yoyo.org/adservers/serverlist.php?hostformat=pdnsd
+#neg { name=example.tld; types=domain; }
+
+  awk '{print "{ name="$1"; types=domain; }"}' domains-extracted > pdnsd-block.conf
+  echo "pdnsd-block.conf domains added: $(wc -l pdnsd-block.conf)"
+  #mv pdnsd-block.conf /etc/pdnsd/pdnsd-block.conf
+}
+
 
 
 finish(){
-  mv dnsmasq-block.conf /etc/dnsmasq.d/dnsmasq-block.conf
+  #clean up
   rm tmp domains-extracted
   echo "Done"
   echo "FreeContributor sucessufull installed"
@@ -236,30 +329,39 @@ finish(){
 
 start-deamons(){
 #https://github.com/DisplayLink/evdi/issues/11#issuecomment-193877839
+## TODO
+## for each case: dnsmasq, unbound and pdnsd
 
 INIT=`ls -l /proc/1/exe`
   if [[ $INIT == *"systemd"* ]]; then
-    systemctl enable dnsmasq.service && systemctl start dnsmasq.service
+    systemctl enable dnsmasq.service && systemctl restart dnsmasq.service
   elif [[ $INIT == *"upstart"* ]]; then
     service dnsmasq start
   elif [[ $INIT == *"/sbin/init"* ]]; then
     INIT=`/sbin/init --version`
     if [[ $INIT == *"systemd"* ]]; then
-      systemctl enable dnsmasq.service && systemctl start dnsmasq.service
+      systemctl enable dnsmasq.service && systemctl restart dnsmasq.service
     elif [[ $INIT == *"upstart"* ]]; then
       service dnsmasq start
     fi
   fi
 }
 
-welcome
-rootcheck
-dependencies
-backup
-config
-download_sources
-extract_domains
-dnsmasq-format
-#hosts-format
-finish
-#start-deamons
+main(){
+   welcome
+   rootcheck
+   #menu
+   dependencies
+   backup-resolv
+   #config
+   download_sources
+   extract_domains
+   hosts-format
+   dnsmasq-config
+   unbound-config
+   pdnsd-config
+   finish
+   #start-deamons
+}
+
+main
