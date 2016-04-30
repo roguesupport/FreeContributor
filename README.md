@@ -132,16 +132,16 @@ The hosts blocking method can not use wildcards (*) and and therefore someone mu
 of each subdomain that should be blocked. Some DNS caching servers can block the domain and
 subdomains with just one rule. For example `/etc/hosts`
 
-   127.0.0.1 example.tld
-   0.0.0.0 example.tld
+    127.0.0.1 example.tld
+    0.0.0.0 example.tld
 
 
 Will redirect example.tld to the localhost, but not ads.example.tld. With a dns caching server,
 such as Dnsmasq, for example `/etc/dnsmasq.conf`
 
-   address=/example.tld/127.0.0.1
-   address=/example.tld/0.0.0.0
-   server=/example.tld/
+    address=/example.tld/127.0.0.1
+    address=/example.tld/0.0.0.0
+    server=/example.tld/
 
 
 Will redirect example.tld and all subdomains to 127.0.0.1 or 0.0.0.0. Better yet, it can 
