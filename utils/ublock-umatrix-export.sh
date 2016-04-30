@@ -76,7 +76,7 @@ dnsmasq(){
   tail -n +$((header + 1)) $FILE | \
   grep "block" | \
   sort | uniq | \
-  awk '{print "address=/"$2"/"}' > dnsmasq-umatrix.conf
+  awk '{print "server=/"$2"/"}' > dnsmasq-umatrix.conf
 
   info dnsmasq-umatrix.conf
 }

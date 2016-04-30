@@ -275,7 +275,7 @@ dnsmasq-config(){
     cp $dnsmasqconf $dnsmasqconfbak
   fi
 
-  awk '{print "address=/"$1"/"}' domains-extracted > dnsmasq-block.conf
+  awk '{print "server=/"$1"/"}' domains-extracted > dnsmasq-block.conf
   echo "dnsmasq-block.conf domains added: $(wc -l dnsmasq-block.conf)"
   mv dnsmasq-block.conf /etc/dnsmasq.d/dnsmasq-block.conf
 }
