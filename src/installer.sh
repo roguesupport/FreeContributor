@@ -7,18 +7,21 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
+#
 # Simple script that pulls ad blocking host files from different providers 
 # and combines them to use as a dnsmasq resolver file.
 #
 # Dependencies:
-#  * cURL
+#  * GNU bash
+#  * GNU sed
+#  * GNU grep
 #  * GNU coreutils
-#  * dnsmasq or Unbound or Pdnsd
-#  * polipo
-#  * privoxy
-
-# variables
+#  * cURL or wget
+#  * Dnsmasq or Unbound or Pdnsd
+#
+## variables--------------------------------------------------------------------
 version=0.3
+OPT=$1   # option dnsmasq hosts...
 
 # resolv
 resolvconf=/etc/resolv.conf
@@ -42,15 +45,7 @@ unbounddir=/etc/unbound
 pdnsdconf=/etc/pdnsd.conf
 pdnsdconfbak=/etc/pdnsd.conf.bak
 
-# polipo
-polipoconf=/etc/polipo/config
-polipoconfbak=/etc/polipo/config.bak
-polipodir=/etc/polipo
-
-# privoxy
-privoxy=/etc/privoxy/config
-privoxybak=/etc/privoxy/config.bak
-privoxydir=/etc/ptivoxy
+## ----------------------------------------------------------------------------
 
 welcome(){
 echo "
@@ -75,12 +70,10 @@ usage()
   echo -e "\nFreeContributor is a script to extract and convert extract domains lists from various sources.\n"
   echo "Options:"
   echo "      -help   :    Show this help."
-  echo "      -hosts   :   Use hosts format"
+  echo "      -hosts  :    Use hosts format"
   echo "      -dnsmasq:    Use dnsmasq as DNS cache"
   echo "      -unbound:    Use unbound as DNS cache"
   echo "      -pdnsd  :    Use pdnsd as DNS cache"
-  echo "      -polipo :    Install polipo"
-  echo "      -privoxy:    Install privoxy"
 }
 
  
@@ -250,7 +243,7 @@ hosts-format(){
 
   awk '{print "0.0.0.0 "$1}' domains-extracted > hosts
   echo "hosts domains added: $(wc -l hosts)"
-  #mv hosts /etc/hosts
+  mv hosts /etc/hosts
 }
 
 
@@ -350,16 +343,20 @@ INIT=`ls -l /proc/1/exe`
 main(){
    welcome
    rootcheck
-   #menu
    dependencies
    backup-resolv
-   #config
    download_sources
    extract_domains
-   hosts-format
-   dnsmasq-config
-   unbound-config
-   pdnsd-config
+
+   case $OPT in
+     help) usage ;;
+     hosts) hosts-format ;;
+     dnsmasq) dnsmasq-config ;;
+     unbound) unbound-config;;
+     pdnsd) pdnsd-config ;;
+     *) echo "Bad argument!"; usage ; exit 1;;
+   esac
+
    finish
    #start-deamons
 }

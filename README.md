@@ -47,8 +47,6 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
  - [GNU coreutils](http://www.gnu.org/software/coreutils)
  - [GNU wget](https://www.gnu.org/software/wget/) or [cURL](http://curl.haxx.se/) (default)
  - DNS cacher: [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) (default), [Unbound](https://unbound.net/) or [Pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/index.html)
- - Caching web proxy: [Polipo](https://www.irif.univ-paris-diderot.fr/~jch//software/polipo/) (optional)
- - Filtering web proxy: [Privoxy](http://www.privoxy.org/) (optional)
 
 
 ## Install
@@ -59,7 +57,7 @@ cd FreeContibutor/src
 sudo ./installer.sh
 ```
 
-FreeContributor has some scripts, such as, exporting uBlock or uMatrix rules to dnsmasq format
+FreeContributor has some scripts, such as, exporting uBlock/uMatrix rules to various formats: hosts, dnsmasq, pdnsd and unbound.
 
 ## Sources
 
@@ -95,40 +93,38 @@ FreeContributor downloads external files; each has its own license, detailed in 
 
 Without an custom DNS Server
 
-----
-+----+      +------------+      +------------------+      +------------------------+
-| PC | <==> | DNS Server | <==> | Other DNS Server | <==> | example.tld = ip adress|
-+----+      +------------+      +------------------+      +------------------------+
+<!-- language: lang-none -->
+    +----+      +------------+      +------------------+      +------------------------+
+    | PC | <==> | DNS Server | <==> | Other DNS Server | <==> | example.tld = ip adress|
+    +----+      +------------+      +------------------+      +------------------------+
 
-then
+    +----+      +-------------------------- + 
+    | PC | <==> | ip adress of example.tld  |
+    +----+      +---------------------------+ 
 
-+----+      +-------------------------- + 
-| PC | <==> | ip adress of example.tld  |
-+----+      +---------------------------+ 
-----
 
 With a local DNS resolver
 
-----
-+----+      +----------------+      +------------------+      +------------------+
-| PC |      | DNS Server     | <==> | Other DNS Server | <==> | goodwebsite.tld  |
-+----+      +----------------+      +------------------+      +------------------+
-  ^^             ^^                                                    ||
-  ||             ||                                                    || 
-  vv             ||                                                    ||
-+--------------------+      +----------------------------------------------------+
-| local DNS resolver | <==> | ads.example.tld = 127.0.0.1 or 0.0.0.0 or NXDOMAIN | 
-+--------------------+      +----------------------------------------------------+
-                                                     +------------+    ||
-                                                     | DNS cache  |  <= /
-                                                     +------------+
+<!-- language: lang-none -->
+    +----+      +----------------+      +------------------+      +------------------+
+    | PC |      | DNS Server     | <==> | Other DNS Server | <==> | goodwebsite.tld  |
+    +----+      +----------------+      +------------------+      +------------------+
+      ^^             ^^                                                    ||
+      ||             ||                                                    || 
+      vv             ||                                                    ||
+    +--------------------+      +----------------------------------------------------+
+    | local DNS resolver | <==> | ads.example.tld = 127.0.0.1 or 0.0.0.0 or NXDOMAIN | 
+    +--------------------+      +----------------------------------------------------+
+                                                         +------------+    ||
+                                                         | DNS cache  |  <= /
+                                                         +------------+
+    future requests of goodwebsite.tld
 
-future requests of goodwebsite.tld
+    +----+      +--------------------+      +------------------------------------------+
+    | PC | <==> | local DNS resolver | <==> | DNS cache of goodwebsite.tld = ip adress |
+    +----+      +--------------------+      +------------------------------------------+
 
-+----+      +--------------------+      +------------------------------------------+
-| PC | <==> | local DNS resolver | <==> | DNS cache of goodwebsite.tld = ip adress |
-+----+      +--------------------+      +------------------------------------------+
-----
+
 
 ## Hosts vs DNS resolver
 
