@@ -27,7 +27,7 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
 
  - Backup the original configuration file
  - Download and merge domains lists from various sources.
- - Create a cron job to automaticly update the hosts file, default every week (optional)
+ - Create a cron job to automaticly update the lists (default every month)
 
 ## Benefits and Features
 
@@ -57,7 +57,19 @@ cd FreeContibutor/src
 sudo ./installer.sh
 ```
 
-FreeContributor has some scripts, such as, exporting uBlock/uMatrix rules to various formats: hosts, dnsmasq, pdnsd and unbound.
+```
+$ ./installer.sh
+Usage: installer.sh [OPTIONS]
+
+Options:
+  --help                          Show help message and exit.
+  --hosts|dnsmasq|unbound|pdnsd   [required]
+
+```
+
+
+
+FreeContributor has some scripts, such as, exporting `[uBlock Origin](https://github.com/gorhill/uBlock)/[uMatrix](https://github.com/gorhill/uMatrix)` rules to various formats: hosts, dnsmasq, pdnsd and unbound.
 
 ## Sources
 
@@ -91,7 +103,7 @@ FreeContributor downloads external files; each has its own license, detailed in 
 
 ## DNS 101
 
-Without an custom DNS Server
+### Without an custom DNS Server
 
 <!-- language: lang-none -->
     +----+      +------------+      +------------------+      +------------------------+
@@ -103,21 +115,19 @@ Without an custom DNS Server
     +----+      +---------------------------+ 
 
 
-With a local DNS resolver
+### With a local DNS resolver
 
 <!-- language: lang-none -->
     +----+      +----------------+      +------------------+      +------------------+
     | PC |      | DNS Server     | <==> | Other DNS Server | <==> | goodwebsite.tld  |
     +----+      +----------------+      +------------------+      +------------------+
-      ^^             ^^                                                    ||
-      ||             ||                                                    || 
-      vv             ||                                                    ||
+      ^^             ^^                                  +------------+    ||
+      ||             ||                                  | DNS cache  |  <= / 
+      vv             ||                                  +------------+
     +--------------------+      +----------------------------------------------------+
     | local DNS resolver | <==> | ads.example.tld = 127.0.0.1 or 0.0.0.0 or NXDOMAIN | 
     +--------------------+      +----------------------------------------------------+
-                                                         +------------+    ||
-                                                         | DNS cache  |  <= /
-                                                         +------------+
+
     future requests of goodwebsite.tld
 
     +----+      +--------------------+      +------------------------------------------+

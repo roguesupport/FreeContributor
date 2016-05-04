@@ -270,7 +270,7 @@ dnsmasq-config(){
     mkdir -p "$dnsmasqdir"
   fi
 
-  if [ ! -f "$dnsmasqconf" ]; then
+  if [ -f "$dnsmasqconf" ]; then
     echo "Backing up your previous dnsmasq file"
     cp $dnsmasqconf $dnsmasqconfbak
   fi
@@ -349,11 +349,11 @@ main(){
    extract_domains
 
    case $OPT in
-     help) usage ;;
-     hosts) hosts-format ;;
-     dnsmasq) dnsmasq-config ;;
-     unbound) unbound-config;;
-     pdnsd) pdnsd-config ;;
+     --help|help) usage ; exit 1;;
+     --hosts|hosts) hosts-format ;;
+     --dnsmasq|dnsmasq) dnsmasq-config ;;
+     --unbound|unbound) unbound-config;;
+     --pdnsd|pdnsd) pdnsd-config ;;
      *) echo "Bad argument!"; usage ; exit 1;;
    esac
 

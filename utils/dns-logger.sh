@@ -21,6 +21,8 @@
 #
 #
 
+DATE=`date +%Y-%m-%d`
+
 rootcheck(){
   if [[ $UID -ne 0 ]]; then
     echo "You need root or su rights acess internet card"
@@ -31,7 +33,7 @@ rootcheck(){
 
 scan_dns_queries() {
     tcpdump -vvv -s 0 -l -n port 53 | \
-    php parse-tcpdump-udp-port-53.php -f >> dns-queries &
+    php parse-tcpdump-udp-port-53.php -f >> dns-queries-${DATE} &
 }
 
 rootcheck
