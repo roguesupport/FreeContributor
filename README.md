@@ -1,3 +1,5 @@
+This project is still in beta! It currently works well, but some changes may be expected.
+
 <!-- language: lang-none -->
       ______              _____            _        _ _           _             
      |  ____|            / ____|          | |      (_) |         | |            
@@ -53,13 +55,13 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
 
 ```sh
 git clone https://github.com/tbds/FreeContibutor
-cd FreeContibutor/src
-sudo ./installer.sh
+cd FreeContibutor
+sudo ./FreeContibutor.sh
 ```
 
 ```
-$ ./installer.sh
-Usage: installer.sh [OPTIONS]
+$ ./FreeContibutor.sh
+Usage: FreeContibutor.sh [OPTIONS]
 
 Options:
   --help                          Show help message and exit.
@@ -167,10 +169,19 @@ return NXDOMAIN.
 | Pi-Hole              | Bash, Php     | Hosts with Dnsmasq (for cache only)            |
 | NoTrack              | Bash, Php     | Hosts with Dnsmasq (for cache only)            |
 | Hostsblock           | Bash          | Hosts with Dnsmasq (for cache only)            |
+| hBlock               | Sh            | Hosts                                          |
 | dnsgate              | Python        | Hosts or Dnsmasq                               |
 | StevenBlack/hosts    | Python        | Hosts                                          |
 | adsuck               | C             | DNS server                                     |
+| dnswhisperer         | C             | DNS proxy                                      |
 | pfBlockerNG          | Sh, PHP       | DNS caching server: Unbound                    |
+| Hosts Updater        | Ruby          | Hosts                                          |
+
+
+## Disclaimer
+
+- **Read the script** to make sure it is what you need.
+- This script needs acess to `/etc` directory of your system. I am not responsible for any damage or loss, always make backups.
 
 
 ## License

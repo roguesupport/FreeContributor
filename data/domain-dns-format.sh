@@ -18,6 +18,7 @@ domain_list=$1
 FORMAT=$2
 
 hosts(){
+  echo "Exporting to hosts format"
   grep -v '^#' $domain_list | \
   awk '{print "0.0.0.0 "$1}' > ./hosts.d/hosts-${domain_list}
 }
@@ -25,15 +26,17 @@ hosts(){
 dnsmasq(){
   echo "Exporting to dnsmasq format"
   grep -v '^#' $domain_list | \
-  awk '{print "address=/"$1"/"}' > ./dnsmasq.d/dnsmasq-${domain_list}.conf
+  awk '{print "server=/"$1"/"}' > ./dnsmasq.d/dnsmasq-${domain_list}.conf
 }
 
 unbound(){
+  echo "Exporting to unbound format"
   grep -v '^#' $domain_list | \
   awk '{print "local-zone: ""\x22"$1"\x22"" static"}'> ./unbound.d/unbound-${domain_list}.conf
 }
 
 pdnsd(){
+  echo "Exporting to pdnsd format"
   grep -v '^#' $domain_list | \
   awk '{print "{ name="$1"; types=domain; }"}' > ./pdnsd.d/pdnsd-${domain_list}.conf
 }
