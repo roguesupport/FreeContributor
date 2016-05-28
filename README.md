@@ -29,7 +29,6 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
 
  - Backup the original configuration file
  - Download and merge domains lists from various sources.
- - Create a cron job to automaticly update the lists (default every month)
 
 ## Benefits and Features
 
@@ -148,7 +147,7 @@ subdomains with just one rule. For example `/etc/hosts`
     0.0.0.0 example.tld
 
 
-Will redirect example.tld to the localhost, but not ads.example.tld. With a dns caching server,
+Will redirect `example.tld` to the localhost, but not `ads.example.tld`. With a dns caching server,
 such as Dnsmasq, for example `/etc/dnsmasq.conf`
 
     address=/example.tld/127.0.0.1
@@ -163,19 +162,19 @@ return NXDOMAIN.
 ## Comparison
 
 
-| Program              | Language      | Adblocking Method                              |
-| :-------------       | :-------------| :----------------------------------------------|
-| FreeContributor      | Bash          | DNS caching server (Dnsmasq, Unbound or Pdnsd) |
-| Pi-Hole              | Bash, Php     | Hosts with Dnsmasq (for cache only)            |
-| NoTrack              | Bash, Php     | Hosts with Dnsmasq (for cache only)            |
-| Hostsblock           | Bash          | Hosts with Dnsmasq (for cache only)            |
-| hBlock               | Sh            | Hosts                                          |
-| dnsgate              | Python        | Hosts or Dnsmasq                               |
-| StevenBlack/hosts    | Python        | Hosts                                          |
-| adsuck               | C             | DNS server                                     |
-| dnswhisperer         | C             | DNS proxy                                      |
-| pfBlockerNG          | Sh, PHP       | DNS caching server: Unbound                    |
-| Hosts Updater        | Ruby          | Hosts                                          |
+| Program                                                         | Language      | Adblocking Method                              |
+| :-------------                                                  | :-------------| :----------------------------------------------|
+| [FreeContributor](https://github.com/tbds/FreeContributor)      | Bash          | DNS caching server (Dnsmasq, Unbound or Pdnsd) |
+| [Pi-Hole](https://pi-hole.net/)                                 | Bash, Php     | Hosts with Dnsmasq                             |
+| [NoTrack](https://github.com/quidsup/notrack)                   | Bash, Php     | Hosts with Dnsmasq                             |
+| [Hostsblock](https://gaenserich.github.io/hostsblock/)          | Bash          | Hosts with Dnsmasq (for cache only)            |
+| [hBlock](https://github.com/zant95/hBlock)                      | Shell         | Hosts                                          |
+| [dnsgate](https://github.com/jakeogh/dnsgate)                   | Python        | Hosts or Dnsmasq                               |
+| [StevenBlack/hosts](https://github.com/StevenBlack/hosts)       | Python        | Hosts                                          |
+| [adsuck](https://github.com/conformal/adsuck)                   | C             | DNS server                                     |
+| [dnswhisperer](https://github.com/apankrat/dnswhisperer)        | C             | DNS proxy                                      |
+| [pfBlockerNG](https://forum.pfsense.org/index.php?topic=86212.0)| Shell, PHP    | DNS caching server: Unbound                    |
+| [Hosts Updater](https://github.com/imanel/hosts_updater)        | Ruby          | Hosts                                          |
 
 
 ## Disclaimer
