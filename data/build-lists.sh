@@ -9,9 +9,16 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-mkdir -p dnsmasq.d unbound.d pdnsd.d hosts.d
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-lists=$(ls *.list)
+formatsdir=${dir}/formats
+
+mkdir -p "${formatsdir}"/dnsmasq.d \
+         "${formatsdir}"/unbound.d \
+         "${formatsdir}"/pdnsd.d   \
+         "${formatsdir}"/hosts.d
+
+lists=$(find ${dir}/corporations -type f -printf "%f\n")
 formats=(hosts dnsmasq unbound pdnsd)
 
 for list in ${lists[@]}; do

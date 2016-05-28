@@ -71,7 +71,7 @@ Options:
 
 
 
-FreeContributor has some scripts, such as, exporting `[uBlock Origin](https://github.com/gorhill/uBlock)/[uMatrix](https://github.com/gorhill/uMatrix)` rules to various formats: hosts, dnsmasq, pdnsd and unbound.
+FreeContributor has some scripts, such as, exporting [uBlock Origin](https://github.com/gorhill/uBlock)/[uMatrix](https://github.com/gorhill/uMatrix) rules to various formats: hosts, dnsmasq, pdnsd and unbound.
 
 ## Sources
 
@@ -160,7 +160,7 @@ Will redirect example.tld and all subdomains to 127.0.0.1 or 0.0.0.0. Better yet
 return NXDOMAIN.
 
 
-## Comparasion
+## Comparison
 
 
 | Program              | Language      | Adblocking Method                              |
