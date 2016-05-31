@@ -40,17 +40,17 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
  - Not just for browsers, it blocks ads and malware across the entire operative system.
 
 
-## Dependencies
+## Requirements
 
  - [GNU bash](http://www.gnu.org/software/bash/bash.html)
  - [GNU sed](http://www.gnu.org/software/sed)
  - [GNU grep](http://www.gnu.org/software/grep/grep.html)
  - [GNU coreutils](http://www.gnu.org/software/coreutils)
  - [GNU wget](https://www.gnu.org/software/wget/) or [cURL](http://curl.haxx.se/) (default)
- - DNS cacher: [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) (default), [Unbound](https://unbound.net/) or [Pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/index.html)
+ - DNS resolver: [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) (default), [Unbound](https://unbound.net/) or [Pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/index.html)
 
 
-## Install
+## Installation
 
 ```sh
 git clone https://github.com/tbds/FreeContibutor
@@ -69,12 +69,14 @@ Options:
 ```
 
 
-
-FreeContributor has some scripts, such as, exporting [uBlock Origin](https://github.com/gorhill/uBlock)/[uMatrix](https://github.com/gorhill/uMatrix) rules to various formats: hosts, dnsmasq, pdnsd and unbound.
+FreeContributor comes with some scripts, such as exporting [uBlock Origin](https://github.com/gorhill/uBlock)/[uMatrix](https://github.com/gorhill/uMatrix) rules to various formats: hosts, dnsmasq, pdnsd and unbound.
 
 ## Sources
 
 FreeContributor downloads external files; each has its own license, detailed in the list below.
+Thanks to the people working hard to maintain the filter lists below that FreeContributor is using.
+
+**You can also contribute with your own lists**, see [CONTRIBUTING](https://github.com/tbds/FreeContributor/blob/master/CONTRIBUTING.md).
 
 
 | URL                                                                              | License |
@@ -88,19 +90,19 @@ FreeContributor downloads external files; each has its own license, detailed in 
 |[StevenBlack/hosts](https://github.com/StevenBlack/hosts/)                        | ? |
 |[Quidsup/notrack](https://github.com/quidsup/notrack)                             | ? |
 |[Gorhill's uMatrix Blocklist](https://github.com/gorhill/uMatrix)                 | ? |
-|[Malware Domain List](http://www.malwaredomainlist.com/hostslist/hosts.txt)       | |
+|[Malware Domain List](http://www.malwaredomainlist.com/hostslist/hosts.txt)       | ? |
 |[AdBlock Manager](http://adblock.gjtech.net/?format=unix-hosts)                   | CC Attribution 3.0 |
 |[Hostfile project](http://hostsfile.org/hosts.html)                               | LGPL as GPLv2 |
 |[Airelle's host file](http://rlwpx.free.fr/WPFF/hosts.htm)                        | CC Attribution 3.0 |
 |[The Hosts File Project](http://hostsfile.mine.nu)                                | LGPL |
 |[Mahakala](http://adblock.mahakala.is/)                                           | ? |
 |[Secure Mecca](http://securemecca.com/)                                           | LGPL as GPLv2 |
-|[Spam404scamlist](http://spam404bl.com/)                                          | |
-|[Malwaredomains](http://malwaredomains.lehigh.edu/)                               | |
-|[Adzhosts](https://sourceforge.net/projects/adzhosts/)                            | |
-|[Zeustracker](hhttps://zeustracker.abuse.ch/blocklist.php)                        | |
-|[hosts.eladkarako.com](http://hosts.eladkarako.com/)                              | |
-|[Malekal](http://www.malekal.com/)                                                | |
+|[Spam404scamlist](http://spam404bl.com/)                                          | ? |
+|[Malwaredomains](http://malwaredomains.lehigh.edu/)                               | ? |
+|[Adzhosts](https://sourceforge.net/projects/adzhosts/)                            | ? |
+|[Zeustracker](hhttps://zeustracker.abuse.ch/blocklist.php)                        | ? |
+|[hosts.eladkarako.com](http://hosts.eladkarako.com/)                              | ? |
+|[Malekal](http://www.malekal.com/)                                                | ? |
 
 ## DNS 101
 
@@ -175,6 +177,7 @@ return NXDOMAIN.
 | [dnswhisperer](https://github.com/apankrat/dnswhisperer)        | C             | DNS proxy                                      |
 | [pfBlockerNG](https://forum.pfsense.org/index.php?topic=86212.0)| Shell, PHP    | DNS caching server: Unbound                    |
 | [Hosts Updater](https://github.com/imanel/hosts_updater)        | Ruby          | Hosts                                          |
+| [Rescached](https://github.com/shuLhan/rescached)               | C++           | Hosts                                          |
 
 
 ## Disclaimer

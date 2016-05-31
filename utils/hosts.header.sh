@@ -13,14 +13,40 @@ cat > hosts.header <<EOF
 #
 # /etc/hosts
 #
-
+# Last updated : $(date +"%m-%d-%Y")
+#
+# This hosts file is a merged collection of hosts from reputable sources
+# using FreeContributor
+# (c) 2016 by TBDS
+# https://github.com/tbds/FreeContributor
+# 
+# All Credits:
+# Peter Lowe - pgl [at] yoyo.org - https://pgl.yoyo.org/
+# AdAway: Kicelo, Dominik Schuermann - https://free-software-for-android.github.io/AdAway/
+# MalwareDomainList.com Hosts List - http://www.malwaredomainlist.com
+# MVPS HOSTS - http://winhelp2002.mvps.org/hosts.htm
+# Dan Pollock - hosts [at] someonewhocares.org - http://someonewhocares.org/hosts
+# DShield.org Suspicious Domain List - info [at] dshield.org - http://www.dshield.org/
+# Ransomware Domain Blocklist - https://ransomwaretracker.abuse.ch/blocklist/
+# Airelle - http://rlwpx.free.fr/WPFF/hosts.htm
+# Disconnect -  support [at] disconnect.me
+#
+#
 #<ip-adress>    <hostname.domain.org>   <hostname>
 127.0.0.1       localhost
-127.0.1.1       $(hostname -f)    $(hostname)
+127.0.0.1       $(hostname -f)    $(hostname)
+127.0.0.1       localhost.localdomain
+127.0.0.1       local
+255.255.255.255 broadcasthost
+
 # The following lines are desirable for IPv6 capable hosts
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
+::1         localhost
+fe80::1%lo0 localhost
+::1         ip6-localhost ip6-loopback
+fe00::0     ip6-localnet
+ff00::0     ip6-mcastprefix
+ff02::1     ip6-allnodes
+ff02::2     ip6-allrouters
+#
+#
 EOF

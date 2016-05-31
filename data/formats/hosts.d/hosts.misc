@@ -46,10 +46,6 @@
 127.0.0.0 s.amazon-adsystem.com
 127.0.0.0 fls-na.amazon.com
 
-# tabblo.com
-127.0.0.0 tabblo.com
-127.0.0.0 www.tabblo.com
-
 # etracker.com
 127.0.0.0 etracker.com
 127.0.0.0 www.etracker.com
@@ -112,7 +108,6 @@
 
 127.0.0.0 tribalfusion.com
 127.0.0.0 fimserve.com
-127.0.0.0 taobao.com
 127.0.0.0 cnzz.com
 127.0.0.0 alimama.com
 127.0.0.0 adultfriendfinder.com
@@ -163,27 +158,27 @@
 127.0.0.1 vencerocasino.com
 
 # https://www.reddit.com/r/privacy/comments/2q0lr2/new_manual_additions_to_my_hosts_file/
-127.0.0.1   web-service.bugs3.com #Phishing ?
-127.0.0.1   webupgradee.bugs3.com   #Phishing ?
-127.0.0.1   dwnld.uk.to #Phishing           
-127.0.0.1   mehmetcomert.net    #Phishing           
-127.0.0.1   flixtoday.info  #Phishing           
-127.0.0.1   pryan.web.id    #Phishing           
-127.0.0.1   ucpanel.bugs3.com   #Phishing
-127.0.0.1   members.bet365.com  #hijack         
-127.0.0.1   noobroom9.com   #hijack     new 
-127.0.0.1   hdonly.anatoly.net  #hijack     new
-127.0.0.1   superfish.com       # new   
-127.0.0.1   app.datafastguru.info       # new
-127.0.0.1   cloud.net           # WTF?
-127.0.0.1   www.binarymethods4u.com # new
-127.0.0.1   www.nzsale.co.nz        # new FB advertizer
-127.0.0.1   www.be2.co.nz       # new FB advertizer
-127.0.0.1   www.club777.com     # new advertising
-127.0.0.1   sex-journey.com     # new advertising
-127.0.0.1   www.fashion-method.com    # new advertising
-127.0.0.1   fbprizes.com        # new advertising window
-127.0.0.1   www.aufoxnews.com     # new advertising window
+127.0.0.1   web-service.bugs3.com 
+127.0.0.1   webupgradee.bugs3.com
+127.0.0.1   dwnld.uk.to           
+127.0.0.1   mehmetcomert.net           
+127.0.0.1   flixtoday.info           
+127.0.0.1   pryan.web.id           
+127.0.0.1   ucpanel.bugs3.com
+127.0.0.1   members.bet365.com         
+127.0.0.1   noobroom9.com 
+127.0.0.1   hdonly.anatoly.net
+127.0.0.1   superfish.com  
+127.0.0.1   app.datafastguru.info
+127.0.0.1   cloud.net
+127.0.0.1   www.binarymethods4u.com
+127.0.0.1   www.nzsale.co.nz
+127.0.0.1   www.be2.co.nz
+127.0.0.1   www.club777.com
+127.0.0.1   sex-journey.com
+127.0.0.1   www.fashion-method.com
+127.0.0.1   fbprizes.com
+127.0.0.1   www.aufoxnews.com
 
 # uTorrent / Bittorrent, Inc host file blocklist
 # http://www.angelfire.com/comics2/fatboy9175/uthosts.txt

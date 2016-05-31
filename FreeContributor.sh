@@ -19,10 +19,10 @@
 #  * cURL or wget
 #  * Dnsmasq or Unbound or Pdnsd
 #
-## variables------------------------------------------------------------------
-VERSION=0.3
+## Global Variables------------------------------------------------------------
+export FREECONTRIBUTOR_VERSION='0.3'
+
 OPT=$1
-SERVICE=$1
 
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -48,7 +48,6 @@ unbounddir=/etc/unbound
 unboundconf=/etc/unbound/unbound.conf
 unboundconfbak=/etc/unbound/unbound.conf.bak
 
-
 # pdnsd
 pdnsddir=/etc/pdnsd
 pdnsdconf=/etc/pdnsd.conf
@@ -57,7 +56,8 @@ pdnsdconfbak=/etc/pdnsd.conf.bak
 ## ----------------------------------------------------------------------------
 
 welcome(){
-echo "
+cat <<'EOF'
+
      _____               ____            _        _ _           _             
     |  ___| __ ___  ___ / ___|___  _ __ | |_ _ __(_) |__  _   _| |_ ___  _ __ 
     | |_ | '__/ _ \/ _ \ |   / _ \| '_ \| __| '__| | '_ \| | | | __/ _ \| '__|
@@ -71,24 +71,35 @@ echo "
     Released under the GPLv3 license
     (c) 2016 tbds and contributors
 
-"
+EOF
 }
 
 usage(){
-  echo -e "\nFreeContributor is a script to extract and convert extract domains lists from various sources.\n"
-  echo "Options:"
-  echo "      help   :    Show this help"
-  echo "      hosts  :    Use hosts format"
-  echo "      dnsmasq:    Use dnsmasq as DNS cache"
-  echo "      unbound:    Use unbound as DNS cache"
-  echo "      pdnsd  :    Use pdnsd as DNS cache"
+cat <<'EOF'
+    FreeContributor is a script to extract and convert extract domains lists from various sources.
+
+    Usage: ./FreeContibutor.sh [options]
+
+    OPTIONS:
+
+       help        Show this help
+       hosts       Use hosts format
+       dnsmasq     Use dnsmasq as DNS resolver
+       unbound     Use unbound as DNS resolver
+       pdnsd       Use pdnsd as DNS resolver
+
+    EXAMPLES:
+
+      $ sudo ./FreeContibutor.sh dnsmasq
+
+EOF
 }
 
  
 rootcheck(){
   if [[ $UID -ne 0 ]]; then
-    echo "You need root or su rights to access /etc directory"
-    echo "Please run this script as root"
+    echo -e "\nYou need root or su rights to access /etc directory"
+    echo -e "Please install sudo or run this as root.\n"
     usage
     exit 1
   fi
@@ -96,55 +107,60 @@ rootcheck(){
 
 
 install_packages(){
-#    pacman        by Arch Linux/Parabola, ArchBang, Manjaro, Antergos, Apricity OS
-#    dpkg/apt-get  by Debian, Ubuntu, ElementaryOS, Linux Mint, etc ...
-#    yum/rpm/dnf   by Redhat, CentOS, Fedora, etc ...
-#    zypper        by OpenSUSE
-#    portage       by Gentoo (this guys don't need this script)
+# need a universal installer 
+# https://xkcd.com/1654/
 #
-# Find out the package manager
+#    pacman        by ArchLinux/Parabola, ArchBang, Manjaro, Antergos, Apricity OS
+#    dpkg/apt-get  by Debian, Ubuntu, ElementaryOS, Linux Mint, etc ...
+#    yum/rpm/dnf   by Red Hat, CentOS, Fedora, etc ...
+#    zypper        by OpenSUSE
+#    portage       by Gentoo/Funtoo (these guys don't need this script)
+#    xbps          by Void (these guys don't need this script)
+#
+#
+# Determine which package manager is being used
 # https://github.com/icy/pacapt
-# https://github.com/quidsup/notrack/blob/master/install.sh
+#
+  echo -e "\t Status: Error"
+  echo -e "\n\t FreeConributor requires the program $prg"
+  echo -e "\t FreeContributor will install $prg  ...  \n"
 
   if [[ -x "/usr/bin/pacman" ]]; then
-    pacman -S --noconfirm dnsmasq
+    pacman -S --noconfirm $prg
 
   elif [[ -x "/usr/bin/dnf" ]]; then
-    dnf -y install dnsmasq
+    dnf -y install $prg
 
   elif [[ -x "/usr/bin/apt-get" ]]; then
-    apt-get -y install dnsmasq
+    apt-get -y install $prg
 
   elif [[ -x "/usr/bin/yum" ]]; then
-    yum -y install dnsmasq
+    yum -y install $prg
 
-#  elif [[ -x "/usr/bin/zypper" ]]; then
   else
-    echo "Unable to work out which package manage is being used."
+    echo -e "\n\t Unable to work out which package manage is being used."
+    echo -e "\n\t Ensure you have the following packages installed: $prg"
 
   fi
 }
 
 dependencies(){
-  programs=( wget curl sed ) #unzip 7z
-#TODO 
-## option to select dsnmasq unbound pdnsd
+  programs=( curl sed $OPT )
 
   for prg in "${programs[@]}"
   do
-    type -P $prg &>/dev/null || install_packages 
-    #echo "Error: FreeConributor requires the program $prg ..."
-    #echo "FreeContributor will install $prg " }
-    #
+    echo -e "\n\t Checking if $prg is installed ..."
+    type -P $prg &>/dev/null && echo -e "\t Status: Ok" || install_packages
   done
 }
 
-
 backup-resolv(){
-  if [ ! -f "$resolvconf" ] && [ ! -f "$dnsmasqconf" ]; then
-    echo "Backing up your previous resolv file"
+  if [ -f "$resolvconf" ]; then
+    echo -e "\n\t Backing up your previous resolv file"
     cp $resolvconf  $resolvconfbak
   fi
+# change resolv file to add fastest two opennic servers
+
 }
 
 
@@ -154,8 +170,13 @@ download_sources(){
 ##
 ## Use StevenBlack/hosts mirrors to save bandwidth from original projects
 ## https://github.com/StevenBlack/hosts/tree/master/data
+##
+## why download the files twice?
+##
 
-sources1=(\
+#put the links in a file instead (more portable)
+
+sources=(\
 ##   'https://adaway.org/hosts.txt' \
     'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/adaway.org/hosts' \
 ##   'http://www.malwaredomainlist.com/hostslist/hosts.txt' \
@@ -174,13 +195,13 @@ sources1=(\
     'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/tyzbit/hosts' \
     'https://raw.githubusercontent.com/StevenBlack/hosts/master/extensions/gambling/hosts' \
     'http://sysctl.org/cameleon/hosts' \
-#error    'http://securemecca.com/Downloads/hosts.txt' \
+## error 'http://securemecca.com/Downloads/hosts.txt' \
     'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt' \
     'http://malwaredomains.lehigh.edu/files/justdomains' \
     'http://www.joewein.net/dl/bl/dom-bl.txt' \
 #    'http://adblock.gjtech.net/?format=hostfile' \
 #    'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist' \
-    'http://adblock.mahakala.is/' \
+#    'http://adblock.mahakala.is/' \
 #    'http://mirror1.malwaredomains.com/files/justdomains' \
 #    'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt' \
 #SSL cerificate 'https://elbinario.net/wp-content/uploads/2015/02/BloquearPubli.txt' \
@@ -199,7 +220,7 @@ sources1=(\
 #
 # https://github.com/brucebot/pisoft
 #
-    'http://code.taobao.org/svn/adblock/trunk/hosts.txt' \
+#    'http://code.taobao.org/svn/adblock/trunk/hosts.txt' \
     'https://raw.githubusercontent.com/quidsup/notrack/master/trackers.txt'
 
 #requires unzip 'http://hostsfile.org/Downloads/BadHosts.unx.zip' \
@@ -222,20 +243,22 @@ sources2=(\
 #    'http://www.fanboy.co.nz/adblock/fanboy-tracking.txt' \
 )
 
-  for item in ${sources1[*]}
+  echo -e "\n\t FreeContributor is downloading data ..."
+  for item in ${sources[*]}
   do
-    echo "# -- Downloading from URL: $item -- |"
-    curl $item >> $tmp || { echo -e "\nError downloading $item"; exit 1; }
-
+    echo -e "\n\t :: Downloading from URL: $item"
+    curl -s $item >> $tmp || { echo -e "\n\t Error downloading $item"; exit 1; }
+    #wget -q  $item -O $tmp || { echo -e "\n\t Error downloading $item"; exit 1; }
   done
-
 }
 
 extract_domains(){
 # clean this code with better regex
 # https://blog.mister-muffin.de/2011/11/14/adblocking-with-a-hosts-file/
+# sed 's/\([^#]*\)#.*/\1/;s/[ \t]*$//;s/^[ \t]*//;s/[ \t]\+/ /g'
+#
 
-  echo "Extracting domains from lists"
+  echo -e "\n\t Extracting domains from lists ..."
   # remove empty lines and comments
   grep -Ev '^$' $tmp | \
   grep -o '^[^#]*'  | \
@@ -255,13 +278,17 @@ extract_domains(){
 
 hosts-format(){
   if [ -f "${hostsconf}" ]; then
-    echo "Backing up your previous hosts file"
+    echo -e "\n\t Backing up your previous hosts file"
     cp "${hostsconf}" "${hostsconfbak}"
   fi
 
-  awk '{print "0.0.0.0 "$1}' $domains > hosts
-  echo "hosts domains added: $(wc -l hosts)"
-  mv hosts "${hostsconf}"
+  #Generate hosts header
+  ./utils/hosts.header.sh 
+
+  mv hosts.header $hostsconf
+
+  awk '{print "0.0.0.0 "$1}' $domains >> $hostsconf #ipv4
+  #awk '{print ":: "$1}' $domains >> $hostsconf      #ipv6
 }
 
 
@@ -273,15 +300,15 @@ dnsmasq-config(){
   fi
 
   if [ -f "${dnsmasqconf}" ]; then
-    echo "Backing up your previous dnsmasq file"
+    echo -e "\n\t Backing up your previous dnsmasq file"
     cp "${dnsmasqconf}" "${dnsmasqconfbak}"
   fi
 
   awk '{print "server=/"$1"/"}' $domains > dnsmasq-block.conf
-  echo "dnsmasq-block.conf domains added: $(wc -l dnsmasq-block.conf)"
+  echo -e "\n\t Domains blocked: $(wc -l dnsmasq-block.conf)"
   mv dnsmasq-block.conf "${dnsmasqdir}"/dnsmasq-block.conf
 
-  cp "${dir}"/data/dnsmasq.d/*.conf "${dnsmasqdir}"
+  cp "${dir}"/data/formats/dnsmasq.d/*.conf "${dnsmasqdir}"
 }
 
 ## unbound -----------------------------------------------------------------
@@ -311,35 +338,43 @@ pdnsd-config(){
 
   awk '{print "{ name="$1"; types=domain; }"}' $domains-extracted > pdnsd-block.conf
   echo "pdnsd-block.conf domains added: $(wc -l pdnsd-block.conf)"
-  mv pdnsd-block.conf "${pdnsddir}"/etc/pdnsd/pdnsd-block.conf
+  mv pdnsd-block.conf "${pdnsddir}"/pdnsd-block.conf
 }
 
 
-
-finish(){
-  echo "FreeContributor sucessufull installed"
-  echo "Enjoy surfing in the web"
-}
-
-start-deamons(){
+start-daemons(){
 #https://github.com/DisplayLink/evdi/issues/11#issuecomment-193877839
 ## TODO
 ## for each case: dnsmasq, unbound and pdnsd
-
+#
+# this will one day work
+#
 INIT=`ls -l /proc/1/exe`
   if [[ $INIT == *"systemd"* ]]; then
-    systemctl enable "${SERVICE}".service && systemctl restart "${SERVICE}".service
+    systemctl enable "${OPT}" && systemctl restart "${OPT}"
   elif [[ $INIT == *"upstart"* ]]; then
-    service "${SERVICE}" start
+    service "${OPT}" start
   elif [[ $INIT == *"/sbin/init"* ]]; then
     INIT=`/sbin/init --version`
     if [[ $INIT == *"systemd"* ]]; then
-      systemctl enable "${SERVICE}".service && systemctl restart "${SERVICE}".service
+      systemctl enable "${OPT}" && systemctl restart "${OPT}"
     elif [[ $INIT == *"upstart"* ]]; then
-      service "${SERVICE}" start
+      service "${OPT}" start
     fi
   fi
 }
+
+finish(){
+cat <<'EOF'
+
+    FreeContributor successfully installed
+    Enjoy surfing in the web
+
+EOF
+}
+
+
+## Main --------------------------------------------------------------------
 
 processing(){
   backup-resolv
@@ -347,23 +382,20 @@ processing(){
   extract_domains
 }
 
-
 main(){
    welcome
    rootcheck
-   dependencies
    
    case $OPT in
      --help|help) usage ; exit 1;;
      --hosts|hosts) processing ; hosts-format ;;
-     --dnsmasq|dnsmasq) processing ; dnsmasq-config ;;
-     --unbound|unbound) processing ; unbound-config;;
-     --pdnsd|pdnsd) processing ; pdnsd-config ;;
-     *) echo "Bad argument!"; usage ; exit 1;;
+     --dnsmasq|dnsmasq) dependencies ; processing ; dnsmasq-config ; start-daemons  ;;
+     --unbound|unbound) dependencies ; processing ; unbound-config ; start-daemons ;;
+     --pdnsd|pdnsd) dependencies ; processing ; pdnsd-config ; start-daemons ;;
+     *) usage ; exit 1;;
    esac
 
    finish
-   #start-deamons
 }
 
 main

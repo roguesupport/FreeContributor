@@ -13,6 +13,9 @@
 # Mirrors sources
 #
 
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+echo "
 curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/adaway.org/hosts'            --output ./mirrors/adaway
 curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/malwaredomainlist.com/hosts' --output ./mirrors/malwaredomainlist
 curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts'              --output ./mirrors/mvps
@@ -35,6 +38,21 @@ curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt'               
 curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'                        --output ./mirrors/disconnect_malvertising
 curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt'                             --output ./mirrors/disconnect_malware
 curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'                            --output ./mirrors/disconnect_tracking
+"
 
+# requires p7zip
+#curl 'http://rlwpx.free.fr/WPFF/htrc.7z'                             --output ./mirrors/htrc.7z 
+curl 'http://rlwpx.free.fr/WPFF/hpub.7z'                              --output ./mirrors/hpub.7z
+curl 'http://rlwpx.free.fr/WPFF/hrsk.7z'                              --output ./mirrors/hrsk.7z
+curl 'http://rlwpx.free.fr/WPFF/hsex.7z'                              --output ./mirrors/hsex.7z
+curl 'http://rlwpx.free.fr/WPFF/hmis.7z'                              --output ./mirrors/hmis.7z
+curl 'http://hostsfile.org/Downloads/BadHosts.unx.zip'                --output ./mirrors/BadHosts.zip && \
+unzip ./mirrors/BadHosts.zip -d ./mirrors/ && rm ./mirrors/BadHosts.zip
+
+
+for file in ${dir}/mirrors/*.7z
+do
+    7z x "${file}" -o${dir}/mirrors/ && rm "${file}"
+done
 
 
