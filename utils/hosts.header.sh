@@ -27,9 +27,15 @@ cat > hosts.header <<EOF
 # MVPS HOSTS - http://winhelp2002.mvps.org/hosts.htm
 # Dan Pollock - hosts [at] someonewhocares.org - http://someonewhocares.org/hosts
 # DShield.org Suspicious Domain List - info [at] dshield.org - http://www.dshield.org/
-# Ransomware Domain Blocklist - https://ransomwaretracker.abuse.ch/blocklist/
+# Ransomware tracker - https://ransomwaretracker.abuse.ch/blocklist/
+# Zeus tracker - https://zeustracker.abuse.ch/
+# Palevo tracker - https://palevotracker.abuse.ch/
+# Feodo tracker - https://feodotracker.abuse.ch/
 # Airelle - http://rlwpx.free.fr/WPFF/hosts.htm
 # Disconnect -  support [at] disconnect.me
+# Spam404 - admin [at] spam404.com - http://www.spam404.com/
+# AdBlock filter - http://www.gjtech.net/
+# WindowsSpyBlocker - webmaster [at] crazyws.fr - https://github.com/crazy-max/WindowsSpyBlocker
 #
 #
 #<ip-adress>    <hostname.domain.org>   <hostname>

@@ -15,7 +15,6 @@
 
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo "
 curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/adaway.org/hosts'            --output ./mirrors/adaway
 curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/malwaredomainlist.com/hosts' --output ./mirrors/malwaredomainlist
 curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts'              --output ./mirrors/mvps
@@ -38,7 +37,8 @@ curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt'               
 curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'                        --output ./mirrors/disconnect_malvertising
 curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt'                             --output ./mirrors/disconnect_malware
 curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'                            --output ./mirrors/disconnect_tracking
-"
+curl -A 'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0' -e http://forum.xda-developers.com/ http://adblock.mahakala.is/ \
+| grep -v "#" | awk '{print $2}' | sort >> ./mirrors/adblock
 
 # requires p7zip
 #curl 'http://rlwpx.free.fr/WPFF/htrc.7z'                             --output ./mirrors/htrc.7z 

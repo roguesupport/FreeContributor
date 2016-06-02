@@ -1,4 +1,4 @@
-This project is still in beta! It currently works well, but some changes may be expected.
+This project is still in **beta**! It currently works well, but some changes may be expected.
 
 <!-- language: lang-none -->
       ______              _____            _        _ _           _             
@@ -15,8 +15,10 @@ TL:DR `cat domains-{ads,tracking,malware} > /dev/null`
 
 ## Intro
 
-This bash script intends to extract domains lists from various sources.
-It is a replacement for ad blocking extensions in your browser.
+More and more people use "adblocker" plugins within their desktop browsers.
+FreeContributor is an alternative for "ad blocking extensions" in your browser.
+
+FreeContributor intends to extract domains lists from various sources.
 It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DNSBL).
 
 ## Why
@@ -27,7 +29,7 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
 
 ## What the scripts does?
 
- - Backup the original configuration file
+ - Backup the original configuration files.
  - Download and merge domains lists from various sources.
 
 ## Benefits and Features
@@ -35,7 +37,7 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
  - Low CPU and RAM usage.
  - **Speeds up your Internet** use since the local file is checked first, before send a DNS request.
  - **Data savings** since the ad content is never downloaded.
- - Stops ad tracking.
+ - Stops ad tracking and protect your privacy.
  - Blocks spyware and malware. That increases the safety of your networking experience.
  - Not just for browsers, it blocks ads and malware across the entire operative system.
 
@@ -50,15 +52,12 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
  - DNS resolver: [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) (default), [Unbound](https://unbound.net/) or [Pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/index.html)
 
 
-## Installation
+## Installation and Usage
 
 ```sh
 git clone https://github.com/tbds/FreeContibutor
 cd FreeContibutor
-sudo ./FreeContibutor.sh
-```
 
-```
 $ ./FreeContibutor.sh
 Usage: FreeContibutor.sh [OPTIONS]
 
@@ -73,36 +72,47 @@ FreeContributor comes with some scripts, such as exporting [uBlock Origin](https
 
 ## Sources
 
-FreeContributor downloads external files; each has its own license, detailed in the list below.
+Inspired by [jmdugan's blocklists project](https://github.com/jmdugan/blocklists), FreeContributor project comes with a catalog of corporation domain names that people may want to block.
+
+FreeContributor also downloads external files, each has its own license, detailed in the list below.
 Thanks to the people working hard to maintain the filter lists below that FreeContributor is using.
 
 **You can also contribute with your own lists**, see [CONTRIBUTING](https://github.com/tbds/FreeContributor/blob/master/CONTRIBUTING.md).
 
 
-| URL                                                                              | License |
-| -------                                                                          | ------- |
-|[Adaway list](https://adaway.org/hosts.txt)                                       | CC Attribution 3.0|
-|[MVPS Hosts](http://winhelp2002.mvps.org/hosts.htm)                               | CC Attribution-NonCommercial-ShareAlike 4.0 |
-|[hpHosts’s ad and tracking servers‎](http://www.hosts-file.net/)                   | *Read [Terms of Use](http://www.hosts-file.net/)* |
-|[Peter Lowe’s Ad server list](http://pgl.yoyo.org/adservers/)                     | ? |
-|[Dan Pollock’s hosts file](http://someonewhocares.org/hosts/)                     | non-commercial |
-|[CAMELEON](http://sysctl.org/cameleon/)                                           | ? |
-|[StevenBlack/hosts](https://github.com/StevenBlack/hosts/)                        | ? |
-|[Quidsup/notrack](https://github.com/quidsup/notrack)                             | ? |
-|[Gorhill's uMatrix Blocklist](https://github.com/gorhill/uMatrix)                 | ? |
-|[Malware Domain List](http://www.malwaredomainlist.com/hostslist/hosts.txt)       | ? |
-|[AdBlock Manager](http://adblock.gjtech.net/?format=unix-hosts)                   | CC Attribution 3.0 |
-|[Hostfile project](http://hostsfile.org/hosts.html)                               | LGPL as GPLv2 |
-|[Airelle's host file](http://rlwpx.free.fr/WPFF/hosts.htm)                        | CC Attribution 3.0 |
-|[The Hosts File Project](http://hostsfile.mine.nu)                                | LGPL |
-|[Mahakala](http://adblock.mahakala.is/)                                           | ? |
-|[Secure Mecca](http://securemecca.com/)                                           | LGPL as GPLv2 |
-|[Spam404scamlist](http://spam404bl.com/)                                          | ? |
-|[Malwaredomains](http://malwaredomains.lehigh.edu/)                               | ? |
-|[Adzhosts](https://sourceforge.net/projects/adzhosts/)                            | ? |
-|[Zeustracker](hhttps://zeustracker.abuse.ch/blocklist.php)                        | ? |
-|[hosts.eladkarako.com](http://hosts.eladkarako.com/)                              | ? |
-|[Malekal](http://www.malekal.com/)                                                | ? |
+| URL                                                                              | Details                                                 | License |
+| -------                                                                          | -------                                                 | ------- |
+|[Adaway list](https://adaway.org/hosts.txt)                                       | Infrequent updates, approx. 400 entries                 | CC Attribution 3.0 |
+|[Disconnect](https://disconnect.me/)                                              | Numerous updates on the same day, approx. 6.500 entries | ?                  |
+|[MVPS Hosts](http://winhelp2002.mvps.org/hosts.htm)                               | Infrequent updates, approx. 15.000 entries              | CC Attribution-NonCommercial-ShareAlike 4.0 |
+|[hpHosts’s ad and tracking servers‎](http://www.hosts-file.net/)                   |                                                         | *Read [Terms of Use](http://www.hosts-file.net/)* |
+|[Peter Lowe’s Ad server list](http://pgl.yoyo.org/adservers/)                     | Weekly updates, approx. 2.500 entries                   | ? |
+|[Dan Pollock’s hosts file](http://someonewhocares.org/hosts/)                     | Weekly updates, approx. 12.000 entries                  | non-commercial |
+|[CAMELEON](http://sysctl.org/cameleon/)                                           | Weekly updates, approx. 21.000 entries                  | ? |
+|[StevenBlack/hosts](https://github.com/StevenBlack/hosts/)                        |                                                         | ? |
+|[Quidsup/notrack](https://github.com/quidsup/notrack)                             |                                                         | ? |
+|[Gorhill's uMatrix Blocklist](https://github.com/gorhill/uMatrix)                 |                                                         | ? |
+|[Malware Domain List](http://www.malwaredomainlist.com/)                          | Daily updates, approx. 1.500 entries                    | ? |
+|[AdBlock filter](http://adblock.gjtech.net/)                                      |                                                         | CC Attribution 3.0 |
+|[Hostfile project](http://hostsfile.org/hosts.html)                               |                                                         | LGPL as GPLv2 |
+|[Airelle's host file](http://rlwpx.free.fr/WPFF/hosts.htm)                        |                                                         | CC Attribution 3.0 |
+|[The Hosts File Project](http://hostsfile.mine.nu)                                |                                                         | LGPL |
+|[Mahakala](http://adblock.mahakala.is/)                                           |                                                         | ? |
+|[Secure Mecca](http://securemecca.com/)                                           |                                                         | LGPL as GPLv2 |
+|[Spam404scamlist](http://spam404bl.com/)                                          | Infrequent updates, approx. 5.000 entries               | CC Attribution-ShareAlike 4.0 International |
+|[Malwaredomains](http://www.malwaredomains.com)                                   | Daily updates, approx. 16.000 entries                   | ? |
+|[Adzhosts](https://sourceforge.net/projects/adzhosts/)                            |                                                         | ? |
+|[hosts.eladkarako.com](http://hosts.eladkarako.com/)                              |                                                         | ? |
+|[Malekal](http://www.malekal.com/)                                                |                                                         | ? |
+|[dshield](http://dshield.org/)                                                    | Daily updates, approx. 4.500 entries                    | NonCommercial-ShareAlike 2.5 Generic |
+|[openphish](feodotracker)                                                         | Numerous updates on the same day, approx. 1.800 entries | ? |
+|[Zeustracker](https://zeustracker.abuse.ch/)                                      | Daily updates, approx. 440 entries                      | ? |
+|[Feodotracker](https://feodotracker.abuse.ch/)                                    | Daily updates, approx. 0-10 entries                     | ? |
+|[Palevo tracker](https://palevotracker.abuse.ch/)                                 | Daily updates, approx. 15 entries                       | ? |
+|[Ransomware tracker](https://ransomwaretracker.abuse.ch/)                         | Daily updates, approx. 150 entries                      | ? |
+|[Shalla's Blacklists ](https://ransomwaretracker.abuse.ch/)                       | Daily updates, approx. 32.000 entries [description](http://www.shallalist.de/categories.html)  | ? |                     | ? |
+|[Windows Spy Blocker](https://github.com/crazy-max/WindowsSpyBlocker)             | Infrequent updates, approx. 120 entries                 | ? |
+
 
 ## DNS 101
 
@@ -178,6 +188,7 @@ return NXDOMAIN.
 | [pfBlockerNG](https://forum.pfsense.org/index.php?topic=86212.0)| Shell, PHP    | DNS caching server: Unbound                    |
 | [Hosts Updater](https://github.com/imanel/hosts_updater)        | Ruby          | Hosts                                          |
 | [Rescached](https://github.com/shuLhan/rescached)               | C++           | Hosts                                          |
+| [OpenWRT package](https://github.com/openwrt/packages/tree/master/net/adblock/files)   | Shell       | Dnsmasq                   |
 
 
 ## Disclaimer

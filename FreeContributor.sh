@@ -9,19 +9,20 @@
 # (at your option) any later version.
 #
 # Simple script that pulls ad blocking host files from different providers 
-# and combines them to use as a dnsmasq resolver file.
+# and combines them to use as a DNS resolver file.
 #
 # Dependencies:
 #  * GNU bash
 #  * GNU sed
 #  * GNU grep
 #  * GNU coreutils
-#  * cURL or wget
+#  * GNU wget or cURL
 #  * Dnsmasq or Unbound or Pdnsd
 #
 ## Global Variables------------------------------------------------------------
-export FREECONTRIBUTOR_VERSION='0.3'
-
+FREECONTRIBUTOR_VERSION='0.3'
+REDIRECTIP4="0.0.0.0"
+REDIRECTIP6="::"
 OPT=$1
 
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -55,7 +56,8 @@ pdnsdconfbak=/etc/pdnsd.conf.bak
 
 ## ----------------------------------------------------------------------------
 
-welcome(){
+welcome()
+{
 cat <<'EOF'
 
      _____               ____            _        _ _           _             
@@ -74,11 +76,12 @@ cat <<'EOF'
 EOF
 }
 
-usage(){
+usage()
+{
 cat <<'EOF'
     FreeContributor is a script to extract and convert extract domains lists from various sources.
 
-    Usage: ./FreeContibutor.sh [options]
+    Usage: sudo ./FreeContibutor.sh [options]
 
     OPTIONS:
 
@@ -96,7 +99,8 @@ EOF
 }
 
  
-rootcheck(){
+rootcheck()
+{
   if [[ $UID -ne 0 ]]; then
     echo -e "\nYou need root or su rights to access /etc directory"
     echo -e "Please install sudo or run this as root.\n"
@@ -106,7 +110,8 @@ rootcheck(){
 }
 
 
-install_packages(){
+install_packages()
+{
 # need a universal installer 
 # https://xkcd.com/1654/
 #
@@ -116,7 +121,6 @@ install_packages(){
 #    zypper        by OpenSUSE
 #    portage       by Gentoo/Funtoo (these guys don't need this script)
 #    xbps          by Void (these guys don't need this script)
-#
 #
 # Determine which package manager is being used
 # https://github.com/icy/pacapt
@@ -144,7 +148,8 @@ install_packages(){
   fi
 }
 
-dependencies(){
+dependencies()
+{
   programs=( curl sed $OPT )
 
   for prg in "${programs[@]}"
@@ -154,52 +159,71 @@ dependencies(){
   done
 }
 
-backup-resolv(){
+backup-resolv()
+{
   if [ -f "$resolvconf" ]; then
     echo -e "\n\t Backing up your previous resolv file"
     cp $resolvconf  $resolvconfbak
   fi
-# change resolv file to add fastest two opennic servers
 
+  #cp ./conf/resolv.conf $resolvconf
+  #chattr +i $resolvconf
 }
 
 
-download_sources(){
+download_sources()
+{
+##
 ## See FilterLists for a comprehensive list of filter lists from all over the web
 ## https://filterlists.com/
 ##
-## Use StevenBlack/hosts mirrors to save bandwidth from original projects
+
+sources=(
+##
+## Use StevenBlack/hosts mirrors to save bandwidth from original servers
 ## https://github.com/StevenBlack/hosts/tree/master/data
+##  'https://adaway.org/hosts.txt'
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/adaway.org/hosts'
+##  'http://www.malwaredomainlist.com/hostslist/hosts.txt'
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/malwaredomainlist.com/hosts'
+##  'http://winhelp2002.mvps.org/hosts.txt'
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts'
+##  'http://someonewhocares.org/hosts/hosts'
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/someonewhocares.org/hosts'
+##  'http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext'
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/yoyo.org/hosts'
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/extensions/gambling/hosts'
+    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/tyzbit/hosts'
+    'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt'
+    'https://raw.githubusercontent.com/quidsup/notrack/master/trackers.txt'
+    'https://raw.githubusercontent.com/Dawsey21/Lists/master/main-blacklist.txt'
+    'http://sysctl.org/cameleon/hosts'
+    'http://malwaredomains.lehigh.edu/files/justdomains'
+    'https://isc.sans.edu/feeds/suspiciousdomains_High.txt'
+    'https://raw.githubusercontent.com/zant95/hosts/master/hosts'
+    'https://www.dshield.org/feeds/suspiciousdomains_Low.txt'
+    'https://feodotracker.abuse.ch/blocklist/?download=domainblocklist'
+    'https://palevotracker.abuse.ch/blocklists.php?download=domainblocklist'
+    'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt'
+    'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'
+    'http://adblock.gjtech.net/?format=unix-hosts'
 ##
-## why download the files twice?
+## https://github.com/crazy-max/WindowsSpyBlocker
 ##
-
-#put the links in a file instead (more portable)
-
-sources=(\
-##   'https://adaway.org/hosts.txt' \
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/adaway.org/hosts' \
-##   'http://www.malwaredomainlist.com/hostslist/hosts.txt' \
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/malwaredomainlist.com/hosts' \
-##   'http://winhelp2002.mvps.org/hosts.txt' \
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts' \
-##   'http://someonewhocares.org/hosts/hosts' \
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/someonewhocares.org/hosts' \
-##    'http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext' \
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/yoyo.org/hosts' \
+    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_extra.txt'
+    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_spy.txt'
+    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_update.txt'
+##
 ## Terms of Use of hpHosts
 ## This service is free to use, however, any and ALL automated use is 
 ## strictly forbidden without express permission from ourselves 
-##    'http://hosts-file.net/ad_servers.txt' \
-##    'http://hosts-file.net/hphosts-partial.txt' \
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/tyzbit/hosts' \
-    'https://raw.githubusercontent.com/StevenBlack/hosts/master/extensions/gambling/hosts' \
-    'http://sysctl.org/cameleon/hosts' \
+##    'http://hosts-file.net/ad_servers.txt'
+##    'http://hosts-file.net/hphosts-partial.txt'
+
+
+
 ## error 'http://securemecca.com/Downloads/hosts.txt' \
-    'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt' \
-    'http://malwaredomains.lehigh.edu/files/justdomains' \
-    'http://www.joewein.net/dl/bl/dom-bl.txt' \
-#    'http://adblock.gjtech.net/?format=hostfile' \
+#    'http://www.joewein.net/dl/bl/dom-bl.txt' \
 #    'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist' \
 #    'http://adblock.mahakala.is/' \
 #    'http://mirror1.malwaredomains.com/files/justdomains' \
@@ -208,11 +232,6 @@ sources=(\
 #    'https://www.dshield.org/feeds/suspiciousdomains_High.txt' \
 #     'http://hostsfile.mine.nu/Hosts' \
 #
-# https://github.com/zant95/hBlock/blob/master/hblock
-#
-    'https://isc.sans.edu/feeds/suspiciousdomains_High.txt' \
-    'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt' \
-    'https://raw.githubusercontent.com/zant95/hosts/master/hosts' \
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt' \
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt' \
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt' \
@@ -221,8 +240,6 @@ sources=(\
 # https://github.com/brucebot/pisoft
 #
 #    'http://code.taobao.org/svn/adblock/trunk/hosts.txt' \
-    'https://raw.githubusercontent.com/quidsup/notrack/master/trackers.txt'
-
 #requires unzip 'http://hostsfile.org/Downloads/BadHosts.unx.zip' \
 #    'http://support.it-mate.co.uk/downloads/HOSTS.txt' \
 #    'https://hosts.neocities.org/' \
@@ -230,9 +247,10 @@ sources=(\
 #    'http://cdn.files.trjlive.com/hosts/hosts-v8.txt' \
 #    'http://tcpdiag.dl.sourceforge.net/project/adzhosts/HOSTS.txt' \
 #    'http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt' \
-)
-
-sources2=(\
+#https://openphish.com/feed.txt
+#https://easylist-downloads.adblockplus.org/rolist+easylist.txt
+#http://www.shallalist.de/Downloads/shallalist.tar.gz
+#http://support.it-mate.co.uk/downloads/HOSTS.txt
 #    'https://raw.githubusercontent.com/reek/anti-adblock-killer/master/anti-adblock-killer-filters.txt' \
 #    'http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.current' \
 #    'https://easylist-downloads.adblockplus.org/malwaredomains_full.txt' \
@@ -252,13 +270,14 @@ sources2=(\
   done
 }
 
-extract_domains(){
+extract_domains()
+{
 # clean this code with better regex
 # https://blog.mister-muffin.de/2011/11/14/adblocking-with-a-hosts-file/
 # sed 's/\([^#]*\)#.*/\1/;s/[ \t]*$//;s/^[ \t]*//;s/[ \t]\+/ /g'
 #
 
-  echo -e "\n\t Extracting domains from lists ..."
+  echo -e "\n\t Extracting domains from previous lists ..."
   # remove empty lines and comments
   grep -Ev '^$' $tmp | \
   grep -o '^[^#]*'  | \
@@ -276,7 +295,8 @@ extract_domains(){
 
 ## hosts ------------------------------------------------------------------
 
-hosts-format(){
+hosts()
+{
   if [ -f "${hostsconf}" ]; then
     echo -e "\n\t Backing up your previous hosts file"
     cp "${hostsconf}" "${hostsconfbak}"
@@ -287,33 +307,39 @@ hosts-format(){
 
   mv hosts.header $hostsconf
 
-  awk '{print "0.0.0.0 "$1}' $domains >> $hostsconf #ipv4
+  while read line; do
+    echo "${REDIRECTIP4} ${line}" >> $hostsconf    #ipv4
+    #echo "${REDIRECTIP6} ${line}" >> $hostsconf   #ipv6
+  done < $domains
+
+  #awk '{print "0.0.0.0 "$1}' $domains >> $hostsconf #ipv4
   #awk '{print ":: "$1}' $domains >> $hostsconf      #ipv6
 }
 
 
 ## dnsmasq -----------------------------------------------------------------
 
-dnsmasq-config(){
+dnsmasq()
+{
   if [ ! -d "${dnsmasqdir}" ]; then
     mkdir -p "${dnsmasqdir}"
   fi
 
   if [ -f "${dnsmasqconf}" ]; then
-    echo -e "\n\t Backing up your previous dnsmasq file"
     cp "${dnsmasqconf}" "${dnsmasqconfbak}"
   fi
 
-  awk '{print "server=/"$1"/"}' $domains > dnsmasq-block.conf
-  echo -e "\n\t Domains blocked: $(wc -l dnsmasq-block.conf)"
-  mv dnsmasq-block.conf "${dnsmasqdir}"/dnsmasq-block.conf
+  awk '{print "server=/"$1"/"}' $domains > dnsmasq-master.conf
+  echo -e "\n\t Domains blocked: $(wc -l dnsmasq-master.conf)"
+  mv dnsmasq-master.conf "${dnsmasqdir}"/dnsmasq-master.conf
 
   cp "${dir}"/data/formats/dnsmasq.d/*.conf "${dnsmasqdir}"
 }
 
 ## unbound -----------------------------------------------------------------
 
-unbound-config(){
+unbound()
+{
 #https://github.com/jodrell/unbound-block-hosts/
 #https://pgl.yoyo.org/adservers/serverlist.php?hostformat=unbound
 #local-zone: "example.tld" redirect
@@ -324,25 +350,27 @@ unbound-config(){
 #http://www.unixcl.com/2012/07/print-double-quotes-in-unix-awk.html
 
 
-  awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $domains > unbound-block.conf
-  echo "unbound-block.conf domains added: $(wc -l unbound-block.conf)"
-  mv unbound-block.conf "${unbounddir}"/unbound-block.conf
+  awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $domains > unbound-master.conf
+  echo "unbound-master.conf domains added: $(wc -l unbound-master.conf)"
+  mv unbound-master.conf "${unbounddir}"/unbound-master.conf
 }
 
 ## pdnsd -------------------------------------------------------------------
 
-pdnsd-config(){
+pdnsd()
+{
 #https://news.ycombinator.com/item?id=3035825
 #https://pgl.yoyo.org/adservers/serverlist.php?hostformat=pdnsd
 #neg { name=example.tld; types=domain; }
 
-  awk '{print "{ name="$1"; types=domain; }"}' $domains-extracted > pdnsd-block.conf
-  echo "pdnsd-block.conf domains added: $(wc -l pdnsd-block.conf)"
-  mv pdnsd-block.conf "${pdnsddir}"/pdnsd-block.conf
+  awk '{print "{ name="$1"; types=domain; }"}' $domains-extracted > pdnsd-master.conf
+  echo "pdnsd-master.conf domains added: $(wc -l pdnsd-master.conf)"
+  mv pdnsd-master.conf "${pdnsddir}"/pdnsd-master.conf
 }
 
 
-start-daemons(){
+start-daemons()
+{
 #https://github.com/DisplayLink/evdi/issues/11#issuecomment-193877839
 ## TODO
 ## for each case: dnsmasq, unbound and pdnsd
@@ -364,7 +392,8 @@ INIT=`ls -l /proc/1/exe`
   fi
 }
 
-finish(){
+finish()
+{
 cat <<'EOF'
 
     FreeContributor successfully installed
@@ -376,26 +405,28 @@ EOF
 
 ## Main --------------------------------------------------------------------
 
-processing(){
+processing()
+{
   backup-resolv
   download_sources
   extract_domains
 }
 
-main(){
+main()
+{
    welcome
    rootcheck
-   
+
    case $OPT in
-     --help|help) usage ; exit 1;;
-     --hosts|hosts) processing ; hosts-format ;;
-     --dnsmasq|dnsmasq) dependencies ; processing ; dnsmasq-config ; start-daemons  ;;
-     --unbound|unbound) dependencies ; processing ; unbound-config ; start-daemons ;;
-     --pdnsd|pdnsd) dependencies ; processing ; pdnsd-config ; start-daemons ;;
+     help) usage ; exit 1;;
+     hosts) processing ; hosts ;;
+     dnsmasq) dependencies ; processing ; dnsmasq ;;
+     unbound) dependencies ; processing ; unbound ;;
+     pdnsd) dependencies ; processing ; pdnsd ;;
      *) usage ; exit 1;;
    esac
 
-   finish
+  finish
 }
 
 main
