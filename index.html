@@ -101,16 +101,18 @@ $ ./FreeContibutor.sh
 Usage: FreeContibutor.sh [OPTIONS]
 
 Options:
-  --help                          Show <span class="pl-c1">help</span> message and <span class="pl-c1">exit</span>.
-  --hosts<span class="pl-k">|</span>dnsmasq<span class="pl-k">|</span>unbound<span class="pl-k">|</span>pdnsd   [required]
+  <span class="pl-c1">help</span>                          Show this <span class="pl-c1">help</span> message and <span class="pl-c1">exit</span>.
+  hosts<span class="pl-k">|</span>dnsmasq<span class="pl-k">|</span>unbound<span class="pl-k">|</span>pdnsd   [required]
 </pre></div>
 
-<p>FreeContributor comes with some scripts, such as exporting <a href="https://github.com/gorhill/uBlock">uBlock Origin</a>/<a href="https://github.com/gorhill/uMatrix">uMatrix</a> rules to various formats: hosts, dnsmasq, pdnsd and unbound.</p>
+<p>FreeContributor comes with some scripts, such as exporting <a href="https://github.com/gorhill/uBlock">uBlock Origin</a>/<a href="https://github.com/gorhill/uMatrix">uMatrix</a> rules 
+to various formats: hosts, dnsmasq, pdnsd and unbound.</p>
 
 <h2>
 <a id="sources" class="anchor" href="#sources" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sources</h2>
 
-<p>Inspired by <a href="https://github.com/jmdugan/blocklists">jmdugan's blocklists project</a>, FreeContributor project comes with a catalog of corporation domain names that people may want to block.</p>
+<p>Inspired by <a href="https://github.com/jmdugan/blocklists">jmdugan's blocklists project</a>, FreeContributor project comes with a 
+<a href="https://github.com/tbds/FreeContributor/tree/master/data">catalog of corporation domain names</a> that people may want to block. </p>
 
 <p>FreeContributor also downloads external files, each has its own license, detailed in the list below.
 Thanks to the people working hard to maintain the filter lists below that FreeContributor is using.</p>
@@ -356,17 +358,17 @@ return NXDOMAIN.</p>
 <tr>
 <td align="left"><a href="https://github.com/tbds/FreeContributor">FreeContributor</a></td>
 <td align="left">Bash</td>
-<td align="left">DNS caching server (Dnsmasq, Unbound or Pdnsd)</td>
+<td align="left">DNS resolver (Dnsmasq, Unbound or Pdnsd)</td>
 </tr>
 <tr>
 <td align="left"><a href="https://pi-hole.net/">Pi-Hole</a></td>
 <td align="left">Bash, Php</td>
-<td align="left">Hosts with Dnsmasq</td>
+<td align="left">Dnsmasq</td>
 </tr>
 <tr>
 <td align="left"><a href="https://github.com/quidsup/notrack">NoTrack</a></td>
 <td align="left">Bash, Php</td>
-<td align="left">Hosts with Dnsmasq</td>
+<td align="left">Dnsmasq</td>
 </tr>
 <tr>
 <td align="left"><a href="https://gaenserich.github.io/hostsblock/">Hostsblock</a></td>
@@ -384,7 +386,7 @@ return NXDOMAIN.</p>
 <td align="left">Hosts or Dnsmasq</td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/StevenBlack/hosts">StevenBlack/hosts</a></td>
+<td align="left"><a href="https://github.com/StevenBlack/hosts">StevenBlack hosts</a></td>
 <td align="left">Python</td>
 <td align="left">Hosts</td>
 </tr>
@@ -401,7 +403,7 @@ return NXDOMAIN.</p>
 <tr>
 <td align="left"><a href="https://forum.pfsense.org/index.php?topic=86212.0">pfBlockerNG</a></td>
 <td align="left">Shell, PHP</td>
-<td align="left">DNS caching server: Unbound</td>
+<td align="left">DNS resolver: Unbound</td>
 </tr>
 <tr>
 <td align="left"><a href="https://github.com/imanel/hosts_updater">Hosts Updater</a></td>
@@ -417,6 +419,11 @@ return NXDOMAIN.</p>
 <td align="left"><a href="https://github.com/openwrt/packages/tree/master/net/adblock/files">OpenWRT package</a></td>
 <td align="left">Shell</td>
 <td align="left">Dnsmasq</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/looterz/grimd">grimd</a></td>
+<td align="left">Go</td>
+<td align="left"><a href="https://github.com/kenshinx/godns">goDNS</a></td>
 </tr>
 </tbody>
 </table>
