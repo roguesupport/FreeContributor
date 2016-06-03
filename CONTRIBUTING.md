@@ -1,8 +1,8 @@
 # Contribution
 
-You can contribute by running [uBlock Origin](https://github.com/gorhill/uBlock) in Advanced mode [1] and/or [uMatrix](https://github.com/gorhill/uMatrix).
+You can contribute by running [uBlock Origin](https://github.com/gorhill/uBlock) in Advanced mode and/or [uMatrix](https://github.com/gorhill/uMatrix).
 
-To change to uBlock Advanced-user mode, go to Click To Open Dashboard and select the checkbox I am an advanced user
+To change to uBlock Advanced-user mode, go to `Click To Open Dashboard` and select the checkbox `I am an advanced user`
 
 Basic mode | Advanced-user mode
 :----------:|:------------------:

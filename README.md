@@ -62,17 +62,19 @@ $ ./FreeContibutor.sh
 Usage: FreeContibutor.sh [OPTIONS]
 
 Options:
-  --help                          Show help message and exit.
-  --hosts|dnsmasq|unbound|pdnsd   [required]
+  help                          Show this help message and exit.
+  hosts|dnsmasq|unbound|pdnsd   [required]
 
 ```
 
 
-FreeContributor comes with some scripts, such as exporting [uBlock Origin](https://github.com/gorhill/uBlock)/[uMatrix](https://github.com/gorhill/uMatrix) rules to various formats: hosts, dnsmasq, pdnsd and unbound.
+FreeContributor comes with some scripts, such as exporting [uBlock Origin](https://github.com/gorhill/uBlock)/[uMatrix](https://github.com/gorhill/uMatrix) rules 
+to various formats: hosts, dnsmasq, pdnsd and unbound.
 
 ## Sources
 
-Inspired by [jmdugan's blocklists project](https://github.com/jmdugan/blocklists), FreeContributor project comes with a catalog of corporation domain names that people may want to block.
+Inspired by [jmdugan's blocklists project](https://github.com/jmdugan/blocklists), FreeContributor project comes with a 
+[catalog of corporation domain names](https://github.com/tbds/FreeContributor/tree/master/data) that people may want to block. 
 
 FreeContributor also downloads external files, each has its own license, detailed in the list below.
 Thanks to the people working hard to maintain the filter lists below that FreeContributor is using.
@@ -175,20 +177,21 @@ return NXDOMAIN.
 
 
 | Program                                                         | Language      | Adblocking Method                              |
-| :-------------                                                  | :-------------| :----------------------------------------------|
-| [FreeContributor](https://github.com/tbds/FreeContributor)      | Bash          | DNS caching server (Dnsmasq, Unbound or Pdnsd) |
-| [Pi-Hole](https://pi-hole.net/)                                 | Bash, Php     | Hosts with Dnsmasq                             |
-| [NoTrack](https://github.com/quidsup/notrack)                   | Bash, Php     | Hosts with Dnsmasq                             |
+| :-------------                                                  | :-------------| :--------------------------------------------  |
+| [FreeContributor](https://github.com/tbds/FreeContributor)      | Bash          | DNS resolver (Dnsmasq, Unbound or Pdnsd)       |
+| [Pi-Hole](https://pi-hole.net/)                                 | Bash, Php     | Dnsmasq                                        |
+| [NoTrack](https://github.com/quidsup/notrack)                   | Bash, Php     | Dnsmasq                                        |
 | [Hostsblock](https://gaenserich.github.io/hostsblock/)          | Bash          | Hosts with Dnsmasq (for cache only)            |
 | [hBlock](https://github.com/zant95/hBlock)                      | Shell         | Hosts                                          |
 | [dnsgate](https://github.com/jakeogh/dnsgate)                   | Python        | Hosts or Dnsmasq                               |
-| [StevenBlack/hosts](https://github.com/StevenBlack/hosts)       | Python        | Hosts                                          |
+| [StevenBlack hosts](https://github.com/StevenBlack/hosts)       | Python        | Hosts                                          |
 | [adsuck](https://github.com/conformal/adsuck)                   | C             | DNS server                                     |
 | [dnswhisperer](https://github.com/apankrat/dnswhisperer)        | C             | DNS proxy                                      |
-| [pfBlockerNG](https://forum.pfsense.org/index.php?topic=86212.0)| Shell, PHP    | DNS caching server: Unbound                    |
+| [pfBlockerNG](https://forum.pfsense.org/index.php?topic=86212.0)| Shell, PHP    | DNS resolver: Unbound                          |
 | [Hosts Updater](https://github.com/imanel/hosts_updater)        | Ruby          | Hosts                                          |
 | [Rescached](https://github.com/shuLhan/rescached)               | C++           | Hosts                                          |
 | [OpenWRT package](https://github.com/openwrt/packages/tree/master/net/adblock/files)   | Shell       | Dnsmasq                   |
+| [grimd](https://github.com/looterz/grimd)                       | Go            | [goDNS](https://github.com/kenshinx/godns)     |
 
 
 ## Disclaimer

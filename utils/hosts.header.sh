@@ -44,8 +44,9 @@ cat > hosts.header <<EOF
 127.0.0.1       localhost.localdomain
 127.0.0.1       local
 255.255.255.255 broadcasthost
-
+#
 # The following lines are desirable for IPv6 capable hosts
+#
 ::1         localhost
 fe80::1%lo0 localhost
 ::1         ip6-localhost ip6-loopback

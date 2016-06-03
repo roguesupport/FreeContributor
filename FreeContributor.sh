@@ -25,6 +25,9 @@ REDIRECTIP4="0.0.0.0"
 REDIRECTIP6="::"
 OPT=$1
 
+DNSSERVER1=""
+DNSSERVER2=""
+
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # make temp files
@@ -291,6 +294,8 @@ extract_domains()
   # remove ^M
   sed 's/\r//g' | grep -Ev '^$' | \
   sort | uniq > $domains
+
+  echo -e "\n\t Domains extracted using ${OPT} format: $(cat $domains | wc -l )"
 }
 
 ## hosts ------------------------------------------------------------------
@@ -329,9 +334,7 @@ dnsmasq()
     cp "${dnsmasqconf}" "${dnsmasqconfbak}"
   fi
 
-  awk '{print "server=/"$1"/"}' $domains > dnsmasq-master.conf
-  echo -e "\n\t Domains blocked: $(wc -l dnsmasq-master.conf)"
-  mv dnsmasq-master.conf "${dnsmasqdir}"/dnsmasq-master.conf
+  awk '{print "server=/"$1"/"}' $domains > "${dnsmasqdir}"/dnsmasq-master.conf
 
   cp "${dir}"/data/formats/dnsmasq.d/*.conf "${dnsmasqdir}"
 }
@@ -349,10 +352,7 @@ unbound()
 #local-zone: "testdomain.test" static
 #http://www.unixcl.com/2012/07/print-double-quotes-in-unix-awk.html
 
-
-  awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $domains > unbound-master.conf
-  echo "unbound-master.conf domains added: $(wc -l unbound-master.conf)"
-  mv unbound-master.conf "${unbounddir}"/unbound-master.conf
+  awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $domains > "${unbounddir}"/unbound-master.conf
 }
 
 ## pdnsd -------------------------------------------------------------------
@@ -363,9 +363,7 @@ pdnsd()
 #https://pgl.yoyo.org/adservers/serverlist.php?hostformat=pdnsd
 #neg { name=example.tld; types=domain; }
 
-  awk '{print "{ name="$1"; types=domain; }"}' $domains-extracted > pdnsd-master.conf
-  echo "pdnsd-master.conf domains added: $(wc -l pdnsd-master.conf)"
-  mv pdnsd-master.conf "${pdnsddir}"/pdnsd-master.conf
+  awk '{print "{ name="$1"; types=domain; }"}' $domains > "${pdnsddir}"/pdnsd-master.conf
 }
 
 
