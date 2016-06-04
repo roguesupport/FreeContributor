@@ -55,11 +55,11 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
 ## Installation and Usage
 
 ```sh
-git clone https://github.com/tbds/FreeContibutor
-cd FreeContibutor
+git clone https://github.com/tbds/FreeContributor.git
+cd FreeContributor
 
-$ ./FreeContibutor.sh
-Usage: FreeContibutor.sh [OPTIONS]
+$ ./FreeContributor.sh
+Usage: FreeContributor.sh [OPTIONS]
 
 Options:
   help                          Show this help message and exit.
