@@ -84,7 +84,7 @@ usage()
 cat <<'EOF'
     FreeContributor is a script to extract and convert extract domains lists from various sources.
 
-    Usage: sudo ./FreeContibutor.sh [options]
+    Usage: sudo ./FreeContributor.sh [options]
 
     OPTIONS:
 
@@ -96,7 +96,7 @@ cat <<'EOF'
 
     EXAMPLES:
 
-      $ sudo ./FreeContibutor.sh dnsmasq
+      $ sudo ./FreeContributor.sh dnsmasq
 
 EOF
 }
@@ -129,7 +129,7 @@ install_packages()
 # https://github.com/icy/pacapt
 #
   echo -e "\t Status: Error"
-  echo -e "\n\t FreeConributor requires the program $prg"
+  echo -e "\n\t FreeContributor requires the program $prg"
   echo -e "\t FreeContributor will install $prg  ...  \n"
 
   if [[ -x "/usr/bin/pacman" ]]; then
@@ -210,6 +210,7 @@ sources=(
     'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt'
     'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'
     'http://adblock.gjtech.net/?format=unix-hosts'
+    'http://hostsfile.mine.nu/Hosts'
 ##
 ## https://github.com/crazy-max/WindowsSpyBlocker
 ##
@@ -227,13 +228,10 @@ sources=(
 
 ## error 'http://securemecca.com/Downloads/hosts.txt' \
 #    'http://www.joewein.net/dl/bl/dom-bl.txt' \
-#    'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist' \
 #    'http://adblock.mahakala.is/' \
 #    'http://mirror1.malwaredomains.com/files/justdomains' \
 #    'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt' \
 #SSL cerificate 'https://elbinario.net/wp-content/uploads/2015/02/BloquearPubli.txt' \
-#    'https://www.dshield.org/feeds/suspiciousdomains_High.txt' \
-#     'http://hostsfile.mine.nu/Hosts' \
 #
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt' \
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt' \
@@ -282,20 +280,19 @@ extract_domains()
 
   echo -e "\n\t Extracting domains from previous lists ..."
   # remove empty lines and comments
-  grep -Ev '^$' $tmp | \
+  grep -Ev '^$' $tmp | \                                 #sed '/^$/d'
   grep -o '^[^#]*'  | \
   # exclude locahost entries
   grep -v "localhost" | \
-  # remove 127.0.0.* and 0.0.0.0
-  sed 's/127.0.0.1//' | \
-  sed 's/0.0.0.0//' | \
+  # remove 127.0.0.1 and 0.0.0.0
+  sed 's/127.0.0.1//;s/0.0.0.0//' | \
   # remove tab and spaces in the begining
   sed -e 's/^[ \t]*//' | \
   # remove ^M
   sed 's/\r//g' | grep -Ev '^$' | \
   sort | uniq > $domains
 
-  echo -e "\n\t Domains extracted using ${OPT} format: $(cat $domains | wc -l )"
+  echo -e "\n\t Domains extracted using ${OPT} format: $(cat ${domains} | wc -l )"
 }
 
 ## hosts ------------------------------------------------------------------

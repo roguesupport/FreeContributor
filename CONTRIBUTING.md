@@ -1,6 +1,26 @@
 # Contribution
 
-You can contribute by running [uBlock Origin](https://github.com/gorhill/uBlock) in Advanced mode and/or [uMatrix](https://github.com/gorhill/uMatrix).
+This is your friendly guide to contributing to FreeContributor.
+
+## Obtain the FreeContributor source code
+
+
+    git clone git@github.com:tbds/FreeContributor.git
+
+
+## Make your changes
+
+
+    git fetch origin
+    git checkout -b my-local-branch origin/master
+    # make changes
+    git add ...
+    git commit -m "Super awesome commit"
+
+
+## Bad domains 
+
+You can also contribute by running [uBlock Origin](https://github.com/gorhill/uBlock) in Advanced mode and/or [uMatrix](https://github.com/gorhill/uMatrix).
 
 To change to uBlock Advanced-user mode, go to `Click To Open Dashboard` and select the checkbox `I am an advanced user`
 
