@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#
 # FreeContributor: Enjoy a safe and faster web experience
 # (c) 2016 by TBDS
 # https://github.com/tbds/FreeContributor
@@ -20,48 +21,50 @@
 #  * Dnsmasq or Unbound or Pdnsd
 #
 ## Global Variables------------------------------------------------------------
-FREECONTRIBUTOR_VERSION='0.3'
-REDIRECTIP4="0.0.0.0"
-REDIRECTIP6="::"
-OPT=$1
+FREECONTRIBUTOR_VERSION='0.4'
+REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
+REDIRECTIP6="${REDIRECTIP6:=::}"
 
-DNSSERVER1=""
-DNSSERVER2=""
+DNSSERVER1="${DNSSERVER1:=}"
+DNSSERVER2="${DNSSERVER2:=}"
 
-dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+TARGET="${TARGET:=$REDIRECTIP4}"
+FORMAT="${FORMAT:=dnsmasq}"
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # make temp files
-tmp=$(mktemp /tmp/data.XXXXX)
-domains=$(mktemp /tmp/domains.XXXXX)
+TMP=$(mktemp /tmp/data.XXXXX)
+DOMAINS=$(mktemp /tmp/domains.XXXXX)
 
 # resolv
-resolvconf=/etc/resolv.conf
-resolvconfbak=/etc/resolv.conf.bak
+RESOLVCONF="${RESOLVCONF:=/etc/resolv.conf}"
+RESOLVCONFBAK="${RESOLVCONFBAK:=/etc/resolv.conf.bak}"
 
 # hosts
-hostsconf=/etc/hosts
-hostsconfbak=/etc/hosts.bak
+HOSTSCONF="${HOSTSCONF:=/etc/hosts}"
+HOSTSCONFBAK="${HOSTSCONFBAK:=/etc/hosts.bak}"
 
 # dnsmasq
-dnsmasqdir=/etc/dnsmasq.d
-dnsmasqconf=/etc/dnsmasq.conf
-dnsmasqconfbak=/etc/dnsmasq.conf.bak
+DNSMASQDIR="${DNSMASQDIR:=/etc/dnsmasq.d}"
+DNSMASQCONF="${DNSMASQCONF:=/etc/dnsmasq.conf}"
+DNSMASQCONFBAK="${DNSMASQCONFBAK:=/etc/dnsmasq.conf.bak}"
 
 # unbound
-unbounddir=/etc/unbound
-unboundconf=/etc/unbound/unbound.conf
-unboundconfbak=/etc/unbound/unbound.conf.bak
+UNBOUNNDDIR="${UNBOUNNDDIR:=/etc/unbound}"
+UNBOUNNDCONF="${UNBOUNNDCONF:=/etc/unbound/unbound.conf}"
+UNBOUNNDCONFBAK="${UNBOUNNDCONFBAK:=/etc/unbound/unbound.conf.bak}"
 
 # pdnsd
-pdnsddir=/etc/pdnsd
-pdnsdconf=/etc/pdnsd.conf
-pdnsdconfbak=/etc/pdnsd.conf.bak
+PDNSDDIR="${PDNSDDIR:=/etc/pdnsd}"
+PDNSDCONF="${PDNSDCONF:=/etc/pdnsd.conf}"
+PDNSDCONFBAK="${PDNSDCONFBAK:=/etc/pdnsd.conf.bak}"
 
 ## ----------------------------------------------------------------------------
 
 welcome()
 {
-cat <<'EOF'
+cat << EOF
 
      _____               ____            _        _ _           _             
     |  ___| __ ___  ___ / ___|___  _ __ | |_ _ __(_) |__  _   _| |_ ___  _ __ 
@@ -81,22 +84,40 @@ EOF
 
 usage()
 {
-cat <<'EOF'
-    FreeContributor is a script to extract and convert extract domains lists from various sources.
+cat << EOF
 
-    Usage: sudo ./FreeContributor.sh [options]
 
-    OPTIONS:
+    FreeContributor is a script to extract and convert domains lists from various sources.
+    
+    USAGE: 
 
-       help        Show this help
-       hosts       Use hosts format
-       dnsmasq     Use dnsmasq as DNS resolver
-       unbound     Use unbound as DNS resolver
-       pdnsd       Use pdnsd as DNS resolver
+      $ $0 [-f format]  [-o out] [-t target]
+
+       -f format: specify an output format:
+
+          none        Extract domains only
+          hosts       Use hosts format
+          dnsmasq     dnsmasq as DNS resolver
+          unbound     unbound as DNS resolver
+          pdnsd       pdnsd as DNS resolver
+
+       -o out: specify an output file
+
+       -t target: specify the target
+    
+          default:     $TARGET
+                       $REDIRECTIP6
+                       NXDOMAIN
+                       custom (e.g. 192.168.1.20)
+
+       -help: show this help
+
 
     EXAMPLES:
 
-      $ sudo ./FreeContributor.sh dnsmasq
+      $ $0 -f hosts -t $TARGET
+
+      $ $0 -f dnsmasq -t $NXDOMAIN
 
 EOF
 }
@@ -133,16 +154,16 @@ install_packages()
   echo -e "\t FreeContributor will install $prg  ...  \n"
 
   if [[ -x "/usr/bin/pacman" ]]; then
-    pacman -S --noconfirm $prg
+    pacman -S --noconfirm $PRG
 
   elif [[ -x "/usr/bin/dnf" ]]; then
-    dnf -y install $prg
+    dnf -y install $PRG
 
   elif [[ -x "/usr/bin/apt-get" ]]; then
-    apt-get -y install $prg
+    apt-get -y install $PRG
 
   elif [[ -x "/usr/bin/yum" ]]; then
-    yum -y install $prg
+    yum -y install $PRG
 
   else
     echo -e "\n\t Unable to work out which package manage is being used."
@@ -153,20 +174,20 @@ install_packages()
 
 dependencies()
 {
-  programs=( curl sed $OPT )
+  programs=( curl $FORMAT )
 
   for prg in "${programs[@]}"
   do
     echo -e "\n\t Checking if $prg is installed ..."
-    type -P $prg &>/dev/null && echo -e "\t Status: Ok" || install_packages
+    type -P $PRG &>/dev/null && echo -e "\t Status: Ok" || install_packages
   done
 }
 
-backup-resolv()
+resolv()
 {
-  if [ -f "$resolvconf" ]; then
-    echo -e "\n\t Backing up your previous resolv file"
-    cp $resolvconf  $resolvconfbak
+  if [ -f "$RESOLVCONF" ]; then
+    #echo -e "\n\t Backing up your previous resolv file"
+    cp $RESOLVCONF  $RESOLVCONFBAK
   fi
 
   #cp ./conf/resolv.conf $resolvconf
@@ -176,6 +197,17 @@ backup-resolv()
 
 download_sources()
 {
+  if command -v curl >/dev/null 2>&1; then
+    download(){
+      curl -s "$1"
+  }
+  elif command -v wget >/dev/null 2>&1; then
+  #doesn't work yet
+    download () {
+      wget -q "$1"
+  }
+  fi
+
 ##
 ## See FilterLists for a comprehensive list of filter lists from all over the web
 ## https://filterlists.com/
@@ -208,9 +240,17 @@ sources=(
     'https://feodotracker.abuse.ch/blocklist/?download=domainblocklist'
     'https://palevotracker.abuse.ch/blocklists.php?download=domainblocklist'
     'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt'
+    'https://ransomwaretracker.abuse.ch/downloads/CW_C2_DOMBL.txt'
+    'https://ransomwaretracker.abuse.ch/downloads/CW_PS_DOMBL.txt'
+    'https://ransomwaretracker.abuse.ch/downloads/TC_C2_DOMBL.txt'
+    'https://ransomwaretracker.abuse.ch/downloads/TC_PS_DOMBL.txt'
+    'https://ransomwaretracker.abuse.ch/downloads/LY_C2_DOMBL.txt'
+    'https://ransomwaretracker.abuse.ch/downloads/LY_PS_DOMBL.txt'
+    'https://ransomwaretracker.abuse.ch/downloads/TL_C2_DOMBL.txt'
+    'https://ransomwaretracker.abuse.ch/downloads/TL_PS_DOMBL.txt'
     'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'
     'http://adblock.gjtech.net/?format=unix-hosts'
-    'http://hostsfile.mine.nu/Hosts'
+#    'http://hostsfile.mine.nu/Hosts'
 ##
 ## https://github.com/crazy-max/WindowsSpyBlocker
 ##
@@ -223,7 +263,6 @@ sources=(
 ## strictly forbidden without express permission from ourselves 
 ##    'http://hosts-file.net/ad_servers.txt'
 ##    'http://hosts-file.net/hphosts-partial.txt'
-
 
 
 ## error 'http://securemecca.com/Downloads/hosts.txt' \
@@ -240,34 +279,33 @@ sources=(
 #
 # https://github.com/brucebot/pisoft
 #
-#    'http://code.taobao.org/svn/adblock/trunk/hosts.txt' \
-#requires unzip 'http://hostsfile.org/Downloads/BadHosts.unx.zip' \
-#    'http://support.it-mate.co.uk/downloads/HOSTS.txt' \
-#    'https://hosts.neocities.org/' \
-#    'https://publicsuffix.org/list/effective_tld_names.dat' \
-#    'http://cdn.files.trjlive.com/hosts/hosts-v8.txt' \
-#    'http://tcpdiag.dl.sourceforge.net/project/adzhosts/HOSTS.txt' \
-#    'http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt' \
-#https://openphish.com/feed.txt
-#https://easylist-downloads.adblockplus.org/rolist+easylist.txt
-#http://www.shallalist.de/Downloads/shallalist.tar.gz
-#http://support.it-mate.co.uk/downloads/HOSTS.txt
-#    'https://raw.githubusercontent.com/reek/anti-adblock-killer/master/anti-adblock-killer-filters.txt' \
-#    'http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.current' \
-#    'https://easylist-downloads.adblockplus.org/malwaredomains_full.txt' \
-#    'https://easylist-downloads.adblockplus.org/easyprivacy.txt' \
-#    'https://easylist-downloads.adblockplus.org/easylist.txt' \
-#    'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt' \
-#    'http://www.fanboy.co.nz/adblock/opera/urlfilter.ini' \
-#    'http://www.fanboy.co.nz/adblock/fanboy-tracking.txt' \
+#    'http://code.taobao.org/svn/adblock/trunk/hosts.txt'
+#    'http://hostsfile.org/Downloads/BadHosts.unx.zip'
+#    'http://support.it-mate.co.uk/downloads/HOSTS.txt'
+#    'https://hosts.neocities.org/'
+#    'https://publicsuffix.org/list/effective_tld_names.dat'
+#    'http://cdn.files.trjlive.com/hosts/hosts-v8.txt'
+#    'http://tcpdiag.dl.sourceforge.net/project/adzhosts/HOSTS.txt'
+#    'http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt'
+#    'https://openphish.com/feed.txt'
+#    'https://easylist-downloads.adblockplus.org/rolist+easylist.txt'
+#    'http://www.shallalist.de/Downloads/shallalist.tar.gz'
+#    'http://support.it-mate.co.uk/downloads/HOSTS.txt'
+#    'https://raw.githubusercontent.com/reek/anti-adblock-killer/master/anti-adblock-killer-filters.txt'
+#    'http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.current'
+#    'https://easylist-downloads.adblockplus.org/malwaredomains_full.txt'
+#    'https://easylist-downloads.adblockplus.org/easyprivacy.txt'
+#    'https://easylist-downloads.adblockplus.org/easylist.txt'
+#    'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt'
+#    'http://www.fanboy.co.nz/adblock/opera/urlfilter.ini'
+#    'http://www.fanboy.co.nz/adblock/fanboy-tracking.txt'
 )
 
   echo -e "\n\t FreeContributor is downloading data ..."
   for item in ${sources[*]}
   do
     echo -e "\n\t :: Downloading from URL: $item"
-    curl -s $item >> $tmp || { echo -e "\n\t Error downloading $item"; exit 1; }
-    #wget -q  $item -O $tmp || { echo -e "\n\t Error downloading $item"; exit 1; }
+    download $item >> $TMP || { echo -e "\n\t Error downloading $item"; exit 1; }
   done
 }
 
@@ -280,7 +318,7 @@ extract_domains()
 
   echo -e "\n\t Extracting domains from previous lists ..."
   # remove empty lines and comments
-  grep -Ev '^$' $tmp | \                                 #sed '/^$/d'
+  grep -Ev '^$' $TMP | \
   grep -o '^[^#]*'  | \
   # exclude locahost entries
   grep -v "localhost" | \
@@ -290,32 +328,37 @@ extract_domains()
   sed -e 's/^[ \t]*//' | \
   # remove ^M
   sed 's/\r//g' | grep -Ev '^$' | \
-  sort | uniq > $domains
+  sort | uniq > $DOMAINS
 
-  echo -e "\n\t Domains extracted using ${OPT} format: $(cat ${domains} | wc -l )"
+  echo -e "\n\t Domains extracted using ${FORMAT} format: $(cat ${DOMAINS} | wc -l )"
+
+}
+
+## none -------------------------------------------------------------------
+
+domains()
+{
+  cat ${DOMAINS} > "${OUTPUTFILE:=$DIR/domains.txt}"
 }
 
 ## hosts ------------------------------------------------------------------
 
 hosts()
 {
-  if [ -f "${hostsconf}" ]; then
+  if [ -f "${HOSTSCONF}" ]; then
     echo -e "\n\t Backing up your previous hosts file"
-    cp "${hostsconf}" "${hostsconfbak}"
+    cp "${HOSTSCONF}" "${HOSTSCONFBAK}"
   fi
 
   #Generate hosts header
   ./utils/hosts.header.sh 
 
-  mv hosts.header $hostsconf
+  mv hosts.header "${OUTPUTFILE:=$HOSTSCONF}"
 
   while read line; do
-    echo "${REDIRECTIP4} ${line}" >> $hostsconf    #ipv4
-    #echo "${REDIRECTIP6} ${line}" >> $hostsconf   #ipv6
-  done < $domains
+    echo "${TARGET} ${line}" >> "${OUTPUTFILE:=$HOSTSCONF}"
+  done < $DOMAINS
 
-  #awk '{print "0.0.0.0 "$1}' $domains >> $hostsconf #ipv4
-  #awk '{print ":: "$1}' $domains >> $hostsconf      #ipv6
 }
 
 
@@ -323,33 +366,46 @@ hosts()
 
 dnsmasq()
 {
-  if [ ! -d "${dnsmasqdir}" ]; then
-    mkdir -p "${dnsmasqdir}"
+  mkdir -p "${DNSMASQDIR}"
+
+  #if [ -f "${DNSMASQCONF}" ]; then
+    #cp "${DNSMASQCONF}" "${DNSMASQCONFBAK}"
+  #fi
+
+  if [ ${TARGET} = "NXDOMAIN" ]; then
+    awk '{print "server=/"$1"/"}' $DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
+
+  else
+    awk -v var="${TARGET}" '{print "address=/"$1"/"var}' $DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
   fi
 
-  if [ -f "${dnsmasqconf}" ]; then
-    cp "${dnsmasqconf}" "${dnsmasqconfbak}"
-  fi
 
-  awk '{print "server=/"$1"/"}' $domains > "${dnsmasqdir}"/dnsmasq-master.conf
-
-  cp "${dir}"/data/formats/dnsmasq.d/*.conf "${dnsmasqdir}"
+  cp "${DIR}"/data/formats/dnsmasq.d/*.conf "${DNSMASQDIR}"
 }
 
 ## unbound -----------------------------------------------------------------
 
 unbound()
 {
+  if [ ${TARGET} = "NXDOMAIN" ]; then
+
+#local-zone: "testdomain.test" static
+#http://www.unixcl.com/2012/07/print-double-quotes-in-unix-awk.html
+
+    awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $DOMAINS > "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
+
+  else
+
 #https://github.com/jodrell/unbound-block-hosts/
 #https://pgl.yoyo.org/adservers/serverlist.php?hostformat=unbound
 #local-zone: "example.tld" redirect
 #local-data: "example.tld A 127.0.0.1"
 
-#use nxdomain
-#local-zone: "testdomain.test" static
-#http://www.unixcl.com/2012/07/print-double-quotes-in-unix-awk.html
-
-  awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $domains > "${unbounddir}"/unbound-master.conf
+    while read line; do
+      echo "local-zone: \"${line}\" redirect" >> "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
+      echo "local-data: \"${line}\" ${TARGET}" >> "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
+    done < $DOMAINS
+  fi
 }
 
 ## pdnsd -------------------------------------------------------------------
@@ -360,29 +416,27 @@ pdnsd()
 #https://pgl.yoyo.org/adservers/serverlist.php?hostformat=pdnsd
 #neg { name=example.tld; types=domain; }
 
-  awk '{print "{ name="$1"; types=domain; }"}' $domains > "${pdnsddir}"/pdnsd-master.conf
+  awk '{print "neg { name="$1"; types=domain; }"}' $DOMAINS > "${OUTPUTFILE:=${UNBOUNNDDIR}/pdnsd-master.conf}"
 }
 
 
-start-daemons()
+daemons()
 {
 #https://github.com/DisplayLink/evdi/issues/11#issuecomment-193877839
-## TODO
-## for each case: dnsmasq, unbound and pdnsd
 #
 # this will one day work
 #
 INIT=`ls -l /proc/1/exe`
   if [[ $INIT == *"systemd"* ]]; then
-    systemctl enable "${OPT}" && systemctl restart "${OPT}"
+    systemctl enable "${FORMAT}" && systemctl restart "${FORMAT}"
   elif [[ $INIT == *"upstart"* ]]; then
-    service "${OPT}" start
+    service "${FORMAT}" start
   elif [[ $INIT == *"/sbin/init"* ]]; then
     INIT=`/sbin/init --version`
     if [[ $INIT == *"systemd"* ]]; then
-      systemctl enable "${OPT}" && systemctl restart "${OPT}"
+      systemctl enable "${FORMAT}" && systemctl restart "${FORMAT}"
     elif [[ $INIT == *"upstart"* ]]; then
-      service "${OPT}" start
+      service "${FORMAT}" start
     fi
   fi
 }
@@ -400,28 +454,79 @@ EOF
 
 ## Main --------------------------------------------------------------------
 
+welcome
+
+#Check the number of arguments. If none are passed, print help and exit.
+NUMARGS=$#
+
+if [ $NUMARGS -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+
+while getopts ":t:f:o:h" opt; do
+  case $opt in
+    h)
+      usage
+      exit 1
+    ;;
+    f)
+      FORMAT="$OPTARG"
+    ;;
+    o)
+      OUTPUTFILE="$OPTARG"
+    ;;
+    t)
+      TARGET="$OPTARG"
+    ;;
+    \?)
+      echo -e "\n\tInvalid option: -$OPTARG" >&2
+      usage
+      exit 1
+    ;;
+  esac
+done
+
+shift "$((OPTIND-1))"
+
+
 processing()
 {
-  backup-resolv
+  #resolv
+  dependencies
   download_sources
   extract_domains
 }
 
-main()
-{
-   welcome
-   rootcheck
+case "$FORMAT" in
+  "none")
+    download_sources
+    extract_domains
+    domains
+  ;;
+  "hosts")
+    download_sources
+    extract_domains
+    hosts
+  ;;
+  "dnsmasq")
+    processing
+    dnsmasq
+  ;;
+  "unbound")
+    processing
+    unbound
+  ;;
+  "pdnsd")
+    processing
+    pdnsd
+  ;;
+   *)
+    echo -e "\n\tInvalid option"
+    usage
+    exit 1
+  ;;
+esac
 
-   case $OPT in
-     help) usage ; exit 1;;
-     hosts) processing ; hosts ;;
-     dnsmasq) dependencies ; processing ; dnsmasq ;;
-     unbound) dependencies ; processing ; unbound ;;
-     pdnsd) dependencies ; processing ; pdnsd ;;
-     *) usage ; exit 1;;
-   esac
-
-  finish
-}
-
-main
+finish

@@ -55,15 +55,43 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
 ## Installation and Usage
 
 ```sh
-git clone https://github.com/tbds/FreeContributor.git
+
+git clone https://github.com/tbds/FreeContributor
 cd FreeContributor
 
-$ ./FreeContributor.sh
-Usage: FreeContributor.sh [OPTIONS]
 
-Options:
-  help                          Show this help message and exit.
-  hosts|dnsmasq|unbound|pdnsd   [required]
+    USAGE: 
+
+      $ ./FreeContributor.sh [-f format]  [-o out] [-t target]
+
+       -f format: specify an output format:
+
+          none        Extract domains only
+          hosts       Use hosts format
+          dnsmasq     dnsmasq as DNS resolver
+          unbound     unbound as DNS resolver
+          pdnsd       pdnsd as DNS resolver
+
+       -o out: specify an output file.
+    
+          Default: <stdout>
+
+       -t target: specify the target
+    
+          default: 0.0.0.0
+                   ::
+                   NXDOMAIN
+                   custom (e.g. 192.168.1.20)
+
+       -help         Show this help
+
+
+    EXAMPLES:
+
+      $ ./FreeContributor.sh -f hosts -t 0.0.0.0
+
+      $ ./FreeContributor.sh -f dnsmasq -t NXDOMAIN
+
 
 ```
 
