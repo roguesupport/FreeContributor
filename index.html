@@ -94,15 +94,41 @@ It <a href="https://en.wikipedia.org/wiki/DNSBL">blocks ads, malware, trackers a
 <h2>
 <a id="installation-and-usage" class="anchor" href="#installation-and-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation and Usage</h2>
 
-<div class="highlight highlight-source-shell"><pre>git clone https://github.com/tbds/FreeContributor.git
+<div class="highlight highlight-source-shell"><pre>
+git clone https://github.com/tbds/FreeContributor
 <span class="pl-c1">cd</span> FreeContributor
+</pre></div>
 
-$ ./FreeContributor.sh
-Usage: FreeContributor.sh [OPTIONS]
+<div class="highlight highlight-source-shell"><pre>
+    USAGE: 
 
-Options:
-  <span class="pl-c1">help</span>                          Show this <span class="pl-c1">help</span> message and <span class="pl-c1">exit</span>.
-  hosts<span class="pl-k">|</span>dnsmasq<span class="pl-k">|</span>unbound<span class="pl-k">|</span>pdnsd   [required]
+      $ ./FreeContributor.sh [-f format]  [-o out] [-t target]
+
+       -f format: specify an output format:
+
+          none        Extract domains only
+          hosts       Use hosts format
+          dnsmasq     dnsmasq as DNS resolver
+          unbound     unbound as DNS resolver
+          pdnsd       pdnsd as DNS resolver
+
+       -o out: specify an output file
+
+       -t target: specify the target
+
+          default: 0.0.0.0
+                   ::
+                   NXDOMAIN
+                   custom (e.g. 192.168.1.20)
+
+       -help         Show this <span class="pl-c1">help</span>
+
+
+    EXAMPLES:
+
+      $ ./FreeContributor.sh -f hosts -t 0.0.0.0
+
+      $ ./FreeContributor.sh -f dnsmasq -t NXDOMAIN
 </pre></div>
 
 <p>FreeContributor comes with some scripts, such as exporting <a href="https://github.com/gorhill/uBlock">uBlock Origin</a>/<a href="https://github.com/gorhill/uMatrix">uMatrix</a> rules 
