@@ -59,6 +59,9 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
 git clone https://github.com/tbds/FreeContributor
 cd FreeContributor
 
+```
+
+```sh
 
     USAGE: 
 
@@ -72,9 +75,7 @@ cd FreeContributor
           unbound     unbound as DNS resolver
           pdnsd       pdnsd as DNS resolver
 
-       -o out: specify an output file.
-    
-          Default: <stdout>
+       -o out: specify an output file
 
        -t target: specify the target
     
@@ -91,7 +92,6 @@ cd FreeContributor
       $ ./FreeContributor.sh -f hosts -t 0.0.0.0
 
       $ ./FreeContributor.sh -f dnsmasq -t NXDOMAIN
-
 
 ```
 
