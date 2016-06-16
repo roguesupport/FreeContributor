@@ -99,6 +99,12 @@ cd FreeContributor
 FreeContributor comes with some scripts, such as exporting [uBlock Origin](https://github.com/gorhill/uBlock)/[uMatrix](https://github.com/gorhill/uMatrix) rules 
 to various formats: hosts, dnsmasq, pdnsd and unbound.
 
+
+## Contributing
+
+FreeContributor is a community project, hence all contributions are more than welcome! For more information, 
+head to [CONTRIBUTING](https://github.com/tbds/FreeContributor/blob/master/CONTRIBUTING.md)
+
 ## Sources
 
 Inspired by [jmdugan's blocklists project](https://github.com/jmdugan/blocklists), FreeContributor project comes with a 
@@ -220,6 +226,7 @@ return NXDOMAIN.
 | [Rescached](https://github.com/shuLhan/rescached)               | C++           | Hosts                                          |
 | [OpenWRT package](https://github.com/openwrt/packages/tree/master/net/adblock/files)   | Shell       | Dnsmasq                   |
 | [grimd](https://github.com/looterz/grimd)                       | Go            | [goDNS](https://github.com/kenshinx/godns)     |
+| [nss-block](https://github.com/dimkr/nss-block)                 | C             | DNS resolver                                   |
 
 
 ## Disclaimer

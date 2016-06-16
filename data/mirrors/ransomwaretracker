@@ -1,6 +1,6 @@
 ##########################################################################
 # Ransomware Domain Blocklist (RW_DOMBL)                                 #
-# Generated on 2016-05-28 16:40:02 UTC                                   #
+# Generated on 2016-06-16 08:40:02 UTC                                   #
 #                                                                        #
 # For questions please refer to:                                         #
 # https://ransomwaretracker.abuse.ch/blocklist/                          #
@@ -46,6 +46,7 @@ as3ws.fopyirr.com
 axnemuevqnstqyflb.work
 b4youfred5485jgsa3453f.italazudda.com
 barjhxoye.info
+bddadevlpkwrrmud.xyz
 bfd45u8ehdklrfqwlhbhjbgqw.niptana.at
 bkdjvmmkwgkvgw.su
 blxbymhjva.info
@@ -58,8 +59,13 @@ cxlgwofgrjfoaa.info
 d34fa.lasmeio.com
 dd7bsndhr45nfksdnkferfer.javakale.at
 de2nuvwegoo32oqv.torbook.li
+de2nuvwegoo32oqv.tordrims.li
+de2nuvwegoo32oqv.torfigth.li
+de2nuvwegoo32oqv.tormilki.li
+de2nuvwegoo32oqv.torminimals.li
 de2nuvwegoo32oqv.torspaces.li
 de2nuvwegoo32oqv.tortelevision.li
+de2nuvwegoo32oqv.tortodorf.li
 de2nuvwegoo32oqv.torworks.li
 dkoipg.pw
 dltvwp.it
@@ -136,8 +142,12 @@ sdwempsovemtr.yt
 sondr5344ygfweyjbfkw4fhsefv.heliofetch.at
 sqrgvbgfyya.org
 stgg5jv6mqiibmax.toradmin.li
+stgg5jv6mqiibmax.toranimals.li
+stgg5jv6mqiibmax.torbrouke.li
+stgg5jv6mqiibmax.torclasses.li
 stgg5jv6mqiibmax.torclever.li
 stgg5jv6mqiibmax.torcreator.li
+stgg5jv6mqiibmax.torking.li
 stgg5jv6mqiibmax.torpice.li
 stgg5jv6mqiibmax.torpoint.ch
 stgg5jv6mqiibmax.torshop.li
@@ -172,4 +182,4 @@ ytcijiooxdtlbevrh.info
 ytrest84y5i456hghadefdsd.pontogrot.com
 ywjgjvpuyitnbiw.info
 yyre45dbvn2nhbefbmh.begumvelic.at
-# 167 entries
+# 177 entries

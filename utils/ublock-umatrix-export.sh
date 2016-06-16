@@ -52,6 +52,8 @@ info(){
 }
 
 
+#'^*' and 'block$'
+
 domains(){
   tail -n +$((header + 1)) $FILE | \
   grep "block" | \

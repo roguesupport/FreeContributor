@@ -21,7 +21,7 @@
 #  * Dnsmasq or Unbound or Pdnsd
 #
 ## Global Variables------------------------------------------------------------
-FREECONTRIBUTOR_VERSION='0.4'
+FREECONTRIBUTOR_VERSION='0.4.1'
 REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
 REDIRECTIP6="${REDIRECTIP6:=::}"
 
@@ -115,9 +115,9 @@ cat << EOF
 
     EXAMPLES:
 
-      $ $0 -f hosts -t $TARGET
+      $ $0 -f hosts -t 0.0.0.0
 
-      $ $0 -f dnsmasq -t $NXDOMAIN
+      $ $0 -f dnsmasq -t NXDOMAIN
 
 EOF
 }
@@ -136,9 +136,9 @@ rootcheck()
 
 install_packages()
 {
-# need a universal installer 
+# need a universal installer -> snap packages - snapcraft.io
 # https://xkcd.com/1654/
-#
+#    
 #    pacman        by ArchLinux/Parabola, ArchBang, Manjaro, Antergos, Apricity OS
 #    dpkg/apt-get  by Debian, Ubuntu, ElementaryOS, Linux Mint, etc ...
 #    yum/rpm/dnf   by Red Hat, CentOS, Fedora, etc ...
@@ -150,8 +150,8 @@ install_packages()
 # https://github.com/icy/pacapt
 #
   echo -e "\t Status: Error"
-  echo -e "\n\t FreeContributor requires the program $prg"
-  echo -e "\t FreeContributor will install $prg  ...  \n"
+  echo -e "\n\t FreeContributor requires the program $PRG"
+  echo -e "\t FreeContributor will install $PRG  ...  \n"
 
   if [[ -x "/usr/bin/pacman" ]]; then
     pacman -S --noconfirm $PRG
@@ -190,8 +190,10 @@ resolv()
     cp $RESOLVCONF  $RESOLVCONFBAK
   fi
 
+  #if [ ${FORMAT} != "none" ] || [ ${FORMAT} != "hosts" ]; then
   #cp ./conf/resolv.conf $resolvconf
   #chattr +i $resolvconf
+  #fi
 }
 
 
@@ -254,9 +256,9 @@ sources=(
 ##
 ## https://github.com/crazy-max/WindowsSpyBlocker
 ##
-    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_extra.txt'
-    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_spy.txt'
-    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_update.txt'
+#    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_extra.txt'
+#    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_spy.txt'
+#    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_update.txt'
 ##
 ## Terms of Use of hpHosts
 ## This service is free to use, however, any and ALL automated use is 
@@ -265,17 +267,17 @@ sources=(
 ##    'http://hosts-file.net/hphosts-partial.txt'
 
 
-## error 'http://securemecca.com/Downloads/hosts.txt' \
-#    'http://www.joewein.net/dl/bl/dom-bl.txt' \
-#    'http://adblock.mahakala.is/' \
-#    'http://mirror1.malwaredomains.com/files/justdomains' \
-#    'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt' \
-#SSL cerificate 'https://elbinario.net/wp-content/uploads/2015/02/BloquearPubli.txt' \
+## error 'http://securemecca.com/Downloads/hosts.txt' 
+#    'http://www.joewein.net/dl/bl/dom-bl.txt' 
+#    'http://adblock.mahakala.is/' 
+#    'http://mirror1.malwaredomains.com/files/justdomains'
+#    'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt'
+#SSL cerificate 'https://elbinario.net/wp-content/uploads/2015/02/BloquearPubli.txt'
 #
-#    'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt' \
-#    'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt' \
-#    'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt' \
-#    'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt' \
+#    'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+#    'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'
+#    'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt'
+#    'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'
 #
 # https://github.com/brucebot/pisoft
 #
@@ -338,7 +340,7 @@ extract_domains()
 
 domains()
 {
-  cat ${DOMAINS} > "${OUTPUTFILE:=$DIR/domains.txt}"
+  cp ${DOMAINS} > "${OUTPUTFILE:=$DIR/domains.txt}"
 }
 
 ## hosts ------------------------------------------------------------------
@@ -368,9 +370,9 @@ dnsmasq()
 {
   mkdir -p "${DNSMASQDIR}"
 
-  #if [ -f "${DNSMASQCONF}" ]; then
-    #cp "${DNSMASQCONF}" "${DNSMASQCONFBAK}"
-  #fi
+  if [ -f "${DNSMASQCONF}" ]; then
+    cp "${DNSMASQCONF}" "${DNSMASQCONFBAK}"
+  fi
 
   if [ ${TARGET} = "NXDOMAIN" ]; then
     awk '{print "server=/"$1"/"}' $DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
@@ -380,7 +382,7 @@ dnsmasq()
   fi
 
 
-  cp "${DIR}"/data/formats/dnsmasq.d/*.conf "${DNSMASQDIR}"
+  #cp "${DIR}"/data/formats/dnsmasq.d/*.conf "${DNSMASQDIR}"
 }
 
 ## unbound -----------------------------------------------------------------
@@ -422,10 +424,6 @@ pdnsd()
 
 daemons()
 {
-#https://github.com/DisplayLink/evdi/issues/11#issuecomment-193877839
-#
-# this will one day work
-#
 INIT=`ls -l /proc/1/exe`
   if [[ $INIT == *"systemd"* ]]; then
     systemctl enable "${FORMAT}" && systemctl restart "${FORMAT}"
@@ -447,6 +445,8 @@ cat <<'EOF'
 
     FreeContributor successfully installed
     Enjoy surfing in the web
+
+    More info at https://tbds.github.io/FreeContributor/
 
 EOF
 }
@@ -513,14 +513,17 @@ case "$FORMAT" in
   "dnsmasq")
     processing
     dnsmasq
+    daemons
   ;;
   "unbound")
     processing
     unbound
+    daemons
   ;;
   "pdnsd")
     processing
     pdnsd
+    daemons
   ;;
    *)
     echo -e "\n\tInvalid option"

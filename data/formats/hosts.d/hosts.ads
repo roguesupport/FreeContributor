@@ -1131,3 +1131,110 @@
 127.0.0.1 z.extreme-dm.com
 127.0.0.1 z0.extreme-dm.com
 127.0.0.1 z1.extreme-dm.com
+
+# Potential Ads
+127.0.0.1	adspirit.de
+127.0.0.1	cdn.adspirit.de
+127.0.0.1	echoban.ru
+127.0.0.1	ads.echo.msk.ru
+127.0.0.1	directadvert.net
+127.0.0.1	directadvert.ru
+127.0.0.1	mediatoday.ru
+127.0.0.1	ad.rambler.ru
+
+# Potential Trackers
+127.0.0.1	mediametrics.ru
+127.0.0.1	relap.io
+127.0.0.1	medianetworks.ru
+127.0.0.1	smi2.ru
+127.0.0.1	lentainform.com
+127.0.0.1	rtarget.ru
+127.0.0.1	ttarget.ru
+127.0.0.1	redtram.com
+127.0.0.1	trackitfast.net
+127.0.0.1	index.ru
+127.0.0.1	mirtesen.ru
+127.0.0.1	ok.ru
+127.0.0.1	vk.com
+127.0.0.1	connect.ok.ru
+127.0.0.1	top100.ru
+127.0.0.1	st.top100.ru
+127.0.0.1	rambler.ru
+127.0.0.1	counter.rambler.ru
+127.0.0.1	cntcerber.rambler.ru
+127.0.0.1	montblanc.rambler.ru
+127.0.0.1	mc.yandex.ru
+127.0.0.1	yastatic.net
+127.0.0.1	lib.rl0.ru
+127.0.0.1	rl0.ru
+127.0.0.1	awaps.yandex.ru
+127.0.0.1	advertur.ru
+
+#source https://github.com/qutorial/angryhostsfile/blob/master/data/Qutorial/qutorialhosts
+# Potential Ads
+127.0.0.1	adspirit.de
+127.0.0.1	cdn.adspirit.de
+127.0.0.1	echoban.ru
+127.0.0.1	ads.echo.msk.ru
+127.0.0.1	directadvert.net
+127.0.0.1	directadvert.ru
+127.0.0.1	mediatoday.ru
+127.0.0.1	ad.rambler.ru
+
+# Potential Trackers
+127.0.0.1	mediametrics.ru
+127.0.0.1	relap.io
+127.0.0.1	medianetworks.ru
+127.0.0.1	smi2.ru
+127.0.0.1	lentainform.com
+127.0.0.1	rtarget.ru
+127.0.0.1	ttarget.ru
+127.0.0.1	redtram.com
+127.0.0.1	trackitfast.net
+127.0.0.1	index.ru
+127.0.0.1	mirtesen.ru
+127.0.0.1	ok.ru
+127.0.0.1	vk.com
+127.0.0.1	connect.ok.ru
+127.0.0.1	top100.ru
+127.0.0.1	st.top100.ru
+127.0.0.1	rambler.ru
+127.0.0.1	counter.rambler.ru
+127.0.0.1	cntcerber.rambler.ru
+127.0.0.1	montblanc.rambler.ru
+127.0.0.1	mc.yandex.ru
+127.0.0.1	yastatic.net
+127.0.0.1	lib.rl0.ru
+127.0.0.1	rl0.ru
+127.0.0.1	awaps.yandex.ru
+127.0.0.1	advertur.ru
+
+
+
+
+# Others
+# Redirected from previously blocked
+127.0.0.1	likes.guru
+
+# Potentially problematic / maybe fishy / maybe untrusted
+127.0.0.1	3nakomstva.ru
+127.0.0.1	loveplanet.ru
+127.0.0.1	duh-vremeni.ru
+127.0.0.1	weborama.io
+127.0.0.1	rootlink.org.ru
+127.0.0.1	rotaban.ru
+
+
+
+# Potential pirateware
+127.0.0.1	mydiv.net
+127.0.0.1	dl.mydiv.net
+127.0.0.1	freesoft.ru
+127.0.0.1	download.ru
+127.0.0.1	www.softportal.com
+127.0.0.1	softportal.com
+
+# Spam and hacked web-sites
+127.0.0.1	marketinglimit.com
+127.0.0.1	sdgounffv.com
+127.0.0.1	padsdel.com
