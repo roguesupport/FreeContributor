@@ -14,17 +14,13 @@
 #
 # Dependencies:
 #  * GNU bash
-#  * GNU sed
-#  * GNU grep
-#  * GNU coreutils
+#  * GNU coreutils (sed, grep)
 #  * GNU wget or cURL
-#  * Dnsmasq or Unbound or Pdnsd
 #
 ## Global Variables------------------------------------------------------------
 FREECONTRIBUTOR_VERSION='0.5.0'
 REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
 REDIRECTIP6="${REDIRECTIP6:=::}"
-
 
 TARGET="${TARGET:=$REDIRECTIP4}"
 FORMAT="${FORMAT:=dnsmasq}"
@@ -34,25 +30,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # make temp files
 TMP=$(mktemp /tmp/data.XXXXX)
 DOMAINS=$(mktemp /tmp/domains.XXXXX)
-
-# hosts
-HOSTSCONF="${HOSTSCONF:=/etc/hosts}"
-HOSTSCONFBAK="${HOSTSCONFBAK:=/etc/hosts.bak}"
-
-# dnsmasq
-DNSMASQDIR="${DNSMASQDIR:=/etc/dnsmasq.d}"
-DNSMASQCONF="${DNSMASQCONF:=/etc/dnsmasq.conf}"
-DNSMASQCONFBAK="${DNSMASQCONFBAK:=/etc/dnsmasq.conf.bak}"
-
-# unbound
-UNBOUNNDDIR="${UNBOUNNDDIR:=/etc/unbound}"
-UNBOUNNDCONF="${UNBOUNNDCONF:=/etc/unbound/unbound.conf}"
-UNBOUNNDCONFBAK="${UNBOUNNDCONFBAK:=/etc/unbound/unbound.conf.bak}"
-
-# pdnsd
-PDNSDDIR="${PDNSDDIR:=/etc/pdnsd}"
-PDNSDCONF="${PDNSDCONF:=/etc/pdnsd.conf}"
-PDNSDCONFBAK="${PDNSDCONFBAK:=/etc/pdnsd.conf.bak}"
 
 ## ----------------------------------------------------------------------------
 
@@ -109,17 +86,17 @@ cat << EOF
 
     EXAMPLES:
 
-      $ $0 -f hosts -t 0.0.0.0
+      $ $0 -f hosts -t 0.0.0.0 -o blacklist.conf
 
-      $ $0 -f dnsmasq -t NXDOMAIN
+      $ $0 -f dnsmasq -t NXDOMAIN -o blacklist.conf
 
 EOF
 }
 
 
-dependencies()
+check_dependencies()
 {
-  programs=( curl $FORMAT )
+  programs=( sed grep curl )
 
   for prg in "${programs[@]}"
   do
@@ -128,19 +105,6 @@ dependencies()
   done
 }
 
-
-download_sources()
-{
-  if command -v curl >/dev/null 2>&1; then
-    download(){
-      curl -s "$1"
-  }
-  elif command -v wget >/dev/null 2>&1; then
-  #doesn't work yet
-    download () {
-      wget -q "$1"
-  }
-  fi
 
 ##
 ## See FilterLists for a comprehensive list of filter lists from all over the web
@@ -238,8 +202,8 @@ sources=(
   echo -e "\n\t FreeContributor is downloading data ..."
   for item in ${sources[*]}
   do
-    echo -e "\n\t :: Downloading from URL: $item"
-    download $item >> $TMP || { echo -e "\n\t Error downloading $item"; exit 1; }
+     echo -e "\n\t :: Downloading from URL: $item"
+     curl -s $item >> $TMP || { echo -e "\n\t Error downloading $item"; exit 1; }
   done
 }
 
@@ -272,25 +236,20 @@ extract_domains()
 
 domains()
 {
-  cp ${DOMAINS} > "${OUTPUTFILE:=$DIR/domains.txt}"
+  cp ${DOMAINS} > "${OUTPUTFILE}"
 }
 
 ## hosts ------------------------------------------------------------------
 
 hosts()
 {
-  if [ -f "${HOSTSCONF}" ]; then
-    echo -e "\n\t Backing up your previous hosts file"
-    cp "${HOSTSCONF}" "${HOSTSCONFBAK}"
-  fi
-
   #Generate hosts header
   ./utils/hosts.header.sh 
 
-  mv hosts.header "${OUTPUTFILE:=$HOSTSCONF}"
+  mv hosts.header "${OUTPUTFILE}"
 
   while read line; do
-    echo "${TARGET} ${line}" >> "${OUTPUTFILE:=$HOSTSCONF}"
+    echo "${TARGET} ${line}" >> "${OUTPUTFILE}"
   done < $DOMAINS
 
 }
@@ -300,21 +259,12 @@ hosts()
 
 dnsmasq()
 {
-  mkdir -p "${DNSMASQDIR}"
-
-  if [ -f "${DNSMASQCONF}" ]; then
-    cp "${DNSMASQCONF}" "${DNSMASQCONFBAK}"
-  fi
-
   if [ ${TARGET} = "NXDOMAIN" ]; then
-    awk '{print "server=/"$1"/"}' $DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
+    awk '{print "server=/"$1"/"}' $DOMAINS > "${OUTPUTFILE}"
 
   else
-    awk -v var="${TARGET}" '{print "address=/"$1"/"var}' $DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
+    awk -v var="${TARGET}" '{print "address=/"$1"/"var}' $DOMAINS > "${OUTPUTFILE}"
   fi
-
-
-  #cp "${DIR}"/data/formats/dnsmasq.d/*.conf "${DNSMASQDIR}"
 }
 
 ## unbound -----------------------------------------------------------------
@@ -326,7 +276,7 @@ unbound()
 #local-zone: "testdomain.test" static
 #http://www.unixcl.com/2012/07/print-double-quotes-in-unix-awk.html
 
-    awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $DOMAINS > "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
+    awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $DOMAINS > "${OUTPUTFILE}"
 
   else
 
@@ -336,8 +286,8 @@ unbound()
 #local-data: "example.tld A 127.0.0.1"
 
     while read line; do
-      echo "local-zone: \"${line}\" redirect" >> "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
-      echo "local-data: \"${line}\" ${TARGET}" >> "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
+      echo "local-zone: \"${line}\" redirect" >> "${OUTPUTFILE}"
+      echo "local-data: \"${line}\" ${TARGET}" >> "${OUTPUTFILE}"
     done < $DOMAINS
   fi
 }
@@ -350,7 +300,7 @@ pdnsd()
 #https://pgl.yoyo.org/adservers/serverlist.php?hostformat=pdnsd
 #neg { name=example.tld; types=domain; }
 
-  awk '{print "neg { name="$1"; types=domain; }"}' $DOMAINS > "${OUTPUTFILE:=${UNBOUNNDDIR}/pdnsd-master.conf}"
+  awk '{print "neg { name="$1"; types=domain; }"}' $DOMAINS > "${OUTPUTFILE}"
 }
 
 
@@ -358,7 +308,7 @@ finish()
 {
 cat <<'EOF'
 
-    FreeContributor successfully installed
+    FreeContributor blocklist generated.
     Enjoy surfing in the web
 
     More info at https://tbds.github.io/FreeContributor/
@@ -405,35 +355,29 @@ done
 
 shift "$((OPTIND-1))"
 
+if [ -z ${OUTPUTFILE+x} ]; then
+  echo -e "\n\tYou must specify an output file"
+  usage
+  exit 1
+fi
 
-processing()
-{
-  dependencies
-  download_sources
-  extract_domains
-}
+check_dependencies
+extract_domains
 
 case "$FORMAT" in
   "none")
-    download_sources
-    extract_domains
     domains
   ;;
   "hosts")
-    download_sources
-    extract_domains
     hosts
   ;;
   "dnsmasq")
-    processing
     dnsmasq
   ;;
   "unbound")
-    processing
     unbound
   ;;
   "pdnsd")
-    processing
     pdnsd
   ;;
    *)
