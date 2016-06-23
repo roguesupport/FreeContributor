@@ -21,7 +21,7 @@
 #  * Dnsmasq or Unbound or Pdnsd
 #
 ## Global Variables------------------------------------------------------------
-FREECONTRIBUTOR_VERSION='0.4.1'
+FREECONTRIBUTOR_VERSION='0.5.0'
 REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
 REDIRECTIP6="${REDIRECTIP6:=::}"
 
@@ -36,10 +36,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # make temp files
 TMP=$(mktemp /tmp/data.XXXXX)
 DOMAINS=$(mktemp /tmp/domains.XXXXX)
-
-# resolv
-RESOLVCONF="${RESOLVCONF:=/etc/resolv.conf}"
-RESOLVCONFBAK="${RESOLVCONFBAK:=/etc/resolv.conf.bak}"
 
 # hosts
 HOSTSCONF="${HOSTSCONF:=/etc/hosts}"
@@ -92,7 +88,7 @@ cat << EOF
     USAGE: 
 
       $ $0 [-f format]  [-o out] [-t target]
-
+                                                            
        -f format: specify an output format:
 
           none        Extract domains only
@@ -122,55 +118,6 @@ cat << EOF
 EOF
 }
 
- 
-rootcheck()
-{
-  if [[ $UID -ne 0 ]]; then
-    echo -e "\nYou need root or su rights to access /etc directory"
-    echo -e "Please install sudo or run this as root.\n"
-    usage
-    exit 1
-  fi
-}
-
-
-install_packages()
-{
-# need a universal installer -> snap packages - snapcraft.io
-# https://xkcd.com/1654/
-#    
-#    pacman        by ArchLinux/Parabola, ArchBang, Manjaro, Antergos, Apricity OS
-#    dpkg/apt-get  by Debian, Ubuntu, ElementaryOS, Linux Mint, etc ...
-#    yum/rpm/dnf   by Red Hat, CentOS, Fedora, etc ...
-#    zypper        by OpenSUSE
-#    portage       by Gentoo/Funtoo (these guys don't need this script)
-#    xbps          by Void (these guys don't need this script)
-#
-# Determine which package manager is being used
-# https://github.com/icy/pacapt
-#
-  echo -e "\t Status: Error"
-  echo -e "\n\t FreeContributor requires the program $PRG"
-  echo -e "\t FreeContributor will install $PRG  ...  \n"
-
-  if [[ -x "/usr/bin/pacman" ]]; then
-    pacman -S --noconfirm $PRG
-
-  elif [[ -x "/usr/bin/dnf" ]]; then
-    dnf -y install $PRG
-
-  elif [[ -x "/usr/bin/apt-get" ]]; then
-    apt-get -y install $PRG
-
-  elif [[ -x "/usr/bin/yum" ]]; then
-    yum -y install $PRG
-
-  else
-    echo -e "\n\t Unable to work out which package manage is being used."
-    echo -e "\n\t Ensure you have the following packages installed: $prg"
-
-  fi
-}
 
 dependencies()
 {
@@ -179,21 +126,8 @@ dependencies()
   for prg in "${programs[@]}"
   do
     echo -e "\n\t Checking if $prg is installed ..."
-    type -P $PRG &>/dev/null && echo -e "\t Status: Ok" || install_packages
+    type -P $prg &>/dev/null || (echo -e "\tmissing: $prg"; exit 1)
   done
-}
-
-resolv()
-{
-  if [ -f "$RESOLVCONF" ]; then
-    #echo -e "\n\t Backing up your previous resolv file"
-    cp $RESOLVCONF  $RESOLVCONFBAK
-  fi
-
-  #if [ ${FORMAT} != "none" ] || [ ${FORMAT} != "hosts" ]; then
-  #cp ./conf/resolv.conf $resolvconf
-  #chattr +i $resolvconf
-  #fi
 }
 
 
@@ -422,23 +356,6 @@ pdnsd()
 }
 
 
-daemons()
-{
-INIT=`ls -l /proc/1/exe`
-  if [[ $INIT == *"systemd"* ]]; then
-    systemctl enable "${FORMAT}" && systemctl restart "${FORMAT}"
-  elif [[ $INIT == *"upstart"* ]]; then
-    service "${FORMAT}" start
-  elif [[ $INIT == *"/sbin/init"* ]]; then
-    INIT=`/sbin/init --version`
-    if [[ $INIT == *"systemd"* ]]; then
-      systemctl enable "${FORMAT}" && systemctl restart "${FORMAT}"
-    elif [[ $INIT == *"upstart"* ]]; then
-      service "${FORMAT}" start
-    fi
-  fi
-}
-
 finish()
 {
 cat <<'EOF'
@@ -493,7 +410,6 @@ shift "$((OPTIND-1))"
 
 processing()
 {
-  #resolv
   dependencies
   download_sources
   extract_domains
@@ -513,17 +429,14 @@ case "$FORMAT" in
   "dnsmasq")
     processing
     dnsmasq
-    daemons
   ;;
   "unbound")
     processing
     unbound
-    daemons
   ;;
   "pdnsd")
     processing
     pdnsd
-    daemons
   ;;
    *)
     echo -e "\n\tInvalid option"
