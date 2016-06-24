@@ -8,17 +8,31 @@
 # Prodiver: Custom
 #
 # Firefox
+accounts.firefox.com
+profile.accounts.firefox.com
 mozillamessaging.com
+marketplace.firefox.com
 services.mozilla.com
 services.addons.mozilla.org
+hello.firefox.com
 blocklist.addons.mozilla.org
 versioncheck-bg.addons.mozilla.org
 versioncheck.addons.mozilla.org
-cdn.mozilla.net
+copy.loop.services.mozilla.com
+token.services.mozilla.com
+setup.services.mozilla.com
+auth.services.mozilla.com
+activations.cdn.mozilla.net
+code.cdn.mozilla.net
 self-repair.mozilla.org
+snippets.cdn.mozilla.net
+malware-error.mozilla.com
+phish-error.mozilla.com
+phish-report.mozilla.com
+detectportal.firefox.com
+tiles.services.mozilla.com
 tiles-cloudfront.cdn.mozilla.net
 ciscobinary.openh264.org
-www.mozilla.org
 data.mozilla.com
 aus1.mozilla.org
 aus2.mozilla.org
@@ -31,5 +45,12 @@ mozilla-europe.org
 self-repair.mozilla.org
 persona.org
 login.persona.org
+mozsocial.cliqz.com
+stats.greasespot.net
+observatory.eff.org
+mibbit.com
 # Services
+getpocket.com
 airbnb.com
+slackhq.com
+slack.com

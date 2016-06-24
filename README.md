@@ -148,7 +148,7 @@ Thanks to the people working hard to maintain the filter lists below that FreeCo
 |[Ransomware tracker](https://ransomwaretracker.abuse.ch/)                         | Daily updates, approx. 150 entries                      | ? |
 |[Shalla's Blacklists ](https://ransomwaretracker.abuse.ch/)                       | Daily updates, approx. 32.000 entries [description](http://www.shallalist.de/categories.html)  | ? |                     | ? |
 |[Windows Spy Blocker](https://github.com/crazy-max/WindowsSpyBlocker)             | Infrequent updates, approx. 120 entries                 | ? |
-
+|[Spamassassin Blacklists](http://www.sa-blacklist.stearns.org/)                   |                                                         | ? |
 
 ## DNS 101
 
