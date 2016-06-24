@@ -20,7 +20,8 @@
 #  * GNU wget or cURL
 #  * Dnsmasq or Unbound or Pdnsd
 #
-## Global Variables------------------------------------------------------------
+# BASH3 Boilerplate - http://bash3boilerplate.sh
+## Global Variables---- --------------------------------------------------------
 FREECONTRIBUTOR_VERSION='0.4.1'
 REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
 REDIRECTIP6="${REDIRECTIP6:=::}"
@@ -176,9 +177,9 @@ dependencies()
 {
   programs=( curl $FORMAT )
 
-  for prg in "${programs[@]}"
+  for PRG in "${programs[@]}"
   do
-    echo -e "\n\t Checking if $prg is installed ..."
+    echo -e "\n\t Checking if $PRG is installed ..."
     type -P $PRG &>/dev/null && echo -e "\t Status: Ok" || install_packages
   done
 }
