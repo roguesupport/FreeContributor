@@ -27,10 +27,19 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
  - [Adblocking: advertising 'accounts for half of data used to read articles'](http://www.theguardian.com/media/2016/mar/16/ad-blocking-advertising-half-of-data-used-articles)
  - [The Verge's web sucks](http://blog.lmorchard.com/2015/07/22/the-verge-web-sucks/) and [The web is Doom](https://mobiforge.com/research-analysis/the-web-is-doom)
 
-## What the scripts does?
+## Why this fork?
 
- - Backup the original configuration files.
- - Download and merge domains lists from various sources.
+This fork has the purpose to create a very simple dns-blacklist generator, so it just downloads all domain lists, merges them and generates a file in the specified format (`/etc/hosts`, `dnsmasq`, `unbound` and `pdnsd`), nothing more.
+
+##### Differences between the original:
+ - doesn't need any privileges besides writing access to the output file
+ - doesn't install any package on the OS
+ - doesn't modifies any system files
+ - doesn't trigger the init-system to restart the dns server
+
+## What the script does?
+
+ - Download domain lists from various sources and generate a blacklist in data formats for `/etc/hosts`, `dnsmasq`, `unbound` and `pdnsd`.
 
 ## Benefits and Features
 
@@ -45,11 +54,8 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
 ## Requirements
 
  - [GNU bash](http://www.gnu.org/software/bash/bash.html)
- - [GNU sed](http://www.gnu.org/software/sed)
- - [GNU grep](http://www.gnu.org/software/grep/grep.html)
- - [GNU coreutils](http://www.gnu.org/software/coreutils)
- - [GNU wget](https://www.gnu.org/software/wget/) or [cURL](http://curl.haxx.se/) (default)
- - DNS resolver: [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) (default), [Unbound](https://unbound.net/) or [Pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/index.html)
+ - [GNU coreutils(grep, sed)](http://www.gnu.org/software/coreutils)
+ - [cURL](http://curl.haxx.se/)
 
 
 ## Installation and Usage
@@ -89,16 +95,11 @@ cd FreeContributor
 
     EXAMPLES:
 
-      $ ./FreeContributor.sh -f hosts -t 0.0.0.0
+      $ ./FreeContributor.sh -f hosts -t 0.0.0.0 -o blacklist.txt
 
-      $ ./FreeContributor.sh -f dnsmasq -t NXDOMAIN
+      $ ./FreeContributor.sh -f dnsmasq -t NXDOMAIN -o blacklist.txt
 
 ```
-
-
-FreeContributor comes with some scripts, such as exporting [uBlock Origin](https://github.com/gorhill/uBlock)/[uMatrix](https://github.com/gorhill/uMatrix) rules 
-to various formats: hosts, dnsmasq, pdnsd and unbound.
-
 
 ## Contributing
 
@@ -212,7 +213,8 @@ return NXDOMAIN.
 
 | Program                                                         | Language      | Adblocking Method                              |
 | :-------------                                                  | :-------------| :--------------------------------------------  |
-| [FreeContributor](https://github.com/tbds/FreeContributor)      | Bash          | DNS resolver (Dnsmasq, Unbound or Pdnsd)       |
+| [FreeContributor (original)](https://github.com/tbds/FreeContributor)      | Bash          | DNS resolver (Dnsmasq, Unbound or Pdnsd)       |
+| [FreeContributor (fork)](https://github.com/gcarq/FreeContributor)     | Bash          | Generates only blacklists (Hosts, Dnsmasq, Unbound or Pdnsd) |
 | [Pi-Hole](https://pi-hole.net/)                                 | Bash, Php     | Dnsmasq                                        |
 | [NoTrack](https://github.com/quidsup/notrack)                   | Bash, Php     | Dnsmasq                                        |
 | [Hostsblock](https://gaenserich.github.io/hostsblock/)          | Bash          | Hosts with Dnsmasq (for cache only)            |
@@ -232,7 +234,7 @@ return NXDOMAIN.
 ## Disclaimer
 
 - **Read the script** to make sure it is what you need.
-- This script needs acess to `/etc` directory of your system. I am not responsible for any damage or loss, always make backups.
+- I am not responsible for any damage or loss, always make backups.
 
 
 ## License
