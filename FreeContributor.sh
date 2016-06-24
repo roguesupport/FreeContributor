@@ -9,7 +9,7 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Simple script that pulls ad blocking host files from different providers 
+# Simple script that pulls ad blocking host files from different providers
 # and combines them to use as a DNS resolver file.
 #
 # Dependencies:
@@ -37,11 +37,11 @@ welcome()
 {
 cat << EOF
 
-     _____               ____            _        _ _           _             
-    |  ___| __ ___  ___ / ___|___  _ __ | |_ _ __(_) |__  _   _| |_ ___  _ __ 
+     _____               ____            _        _ _           _
+    |  ___| __ ___  ___ / ___|___  _ __ | |_ _ __(_) |__  _   _| |_ ___  _ __
     | |_ | '__/ _ \/ _ \ |   / _ \| '_ \| __| '__| | '_ \| | | | __/ _ \| '__|
-    |  _|| | |  __/  __/ |__| (_) | | | | |_| |  | | |_) | |_| | || (_) | |   
-    |_|  |_|  \___|\___|\____\___/|_| |_|\__|_|  |_|_.__/ \__,_|\__\___/|_|   
+    |  _|| | |  __/  __/ |__| (_) | | | | |_| |  | | |_) | |_| | || (_) | |
+    |_|  |_|  \___|\___|\____\___/|_| |_|\__|_|  |_|_.__/ \__,_|\__\___/|_|
 
 
     Enjoy a safe and faster web experience
@@ -59,11 +59,11 @@ cat << EOF
 
 
     FreeContributor is a script to extract and convert domains lists from various sources.
-    
-    USAGE: 
+
+    USAGE:
 
       $ $0 [-f format]  [-o out] [-t target]
-                                                            
+
        -f format: specify an output format:
 
           none        Extract domains only
@@ -75,7 +75,7 @@ cat << EOF
        -o out: specify an output file
 
        -t target: specify the target
-    
+
           default:     $TARGET
                        $REDIRECTIP6
                        NXDOMAIN
@@ -110,6 +110,9 @@ check_dependencies()
 ## See FilterLists for a comprehensive list of filter lists from all over the web
 ## https://filterlists.com/
 ##
+
+download_sources()
+{
 
 sources=(
 ##
@@ -157,15 +160,15 @@ sources=(
 #    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_update.txt'
 ##
 ## Terms of Use of hpHosts
-## This service is free to use, however, any and ALL automated use is 
-## strictly forbidden without express permission from ourselves 
+## This service is free to use, however, any and ALL automated use is
+## strictly forbidden without express permission from ourselves
 ##    'http://hosts-file.net/ad_servers.txt'
 ##    'http://hosts-file.net/hphosts-partial.txt'
 
 
-## error 'http://securemecca.com/Downloads/hosts.txt' 
-#    'http://www.joewein.net/dl/bl/dom-bl.txt' 
-#    'http://adblock.mahakala.is/' 
+## error 'http://securemecca.com/Downloads/hosts.txt'
+#    'http://www.joewein.net/dl/bl/dom-bl.txt'
+#    'http://adblock.mahakala.is/'
 #    'http://mirror1.malwaredomains.com/files/justdomains'
 #    'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt'
 #SSL cerificate 'https://elbinario.net/wp-content/uploads/2015/02/BloquearPubli.txt'
@@ -244,7 +247,7 @@ domains()
 hosts()
 {
   #Generate hosts header
-  ./utils/hosts.header.sh 
+  ./utils/hosts.header.sh
 
   mv hosts.header "${OUTPUTFILE}"
 
@@ -362,6 +365,7 @@ if [ -z ${OUTPUTFILE+x} ]; then
 fi
 
 check_dependencies
+download_sources
 extract_domains
 
 case "$FORMAT" in
