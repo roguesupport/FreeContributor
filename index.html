@@ -92,6 +92,12 @@ It <a href="https://en.wikipedia.org/wiki/DNSBL">blocks ads, malware, trackers a
 </ul>
 
 <h2>
+<a id="gcarq-fork" class="anchor" href="#gcarq-fork" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gcarq Fork</h2>
+
+<p>If you just want a way to create a very simple dns-blacklist generator use <a href="https://github.com/gcarq/FreeContributor">gcarq FreeContributor fork</a>.<br>
+It just downloads all domain lists, merges them and generates a file in the specified format (<code>/etc/hosts</code>, <code>dnsmasq</code>, <code>unbound</code> and <code>pdnsd</code>), nothing more.</p>
+
+<h2>
 <a id="installation-and-usage" class="anchor" href="#installation-and-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation and Usage</h2>
 
 <div class="highlight highlight-source-shell"><pre>
@@ -133,6 +139,12 @@ git clone https://github.com/tbds/FreeContributor
 
 <p>FreeContributor comes with some scripts, such as exporting <a href="https://github.com/gorhill/uBlock">uBlock Origin</a>/<a href="https://github.com/gorhill/uMatrix">uMatrix</a> rules 
 to various formats: hosts, dnsmasq, pdnsd and unbound.</p>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>FreeContributor is a community project, hence all contributions are more than welcome! For more information, 
+head to <a href="https://github.com/tbds/FreeContributor/blob/master/CONTRIBUTING.md">CONTRIBUTING</a></p>
 
 <h2>
 <a id="sources" class="anchor" href="#sources" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sources</h2>
@@ -305,6 +317,11 @@ Thanks to the people working hard to maintain the filter lists below that FreeCo
 <td>Infrequent updates, approx. 120 entries</td>
 <td>?</td>
 </tr>
+<tr>
+<td><a href="http://www.sa-blacklist.stearns.org/">Spamassassin Blacklists</a></td>
+<td></td>
+<td>?</td>
+</tr>
 </tbody>
 </table>
 
@@ -387,6 +404,11 @@ return NXDOMAIN.</p>
 <td align="left">DNS resolver (Dnsmasq, Unbound or Pdnsd)</td>
 </tr>
 <tr>
+<td align="left"><a href="https://github.com/gcarq/FreeContributor">FreeContributor (fork)</a></td>
+<td align="left">Bash</td>
+<td align="left">Generates only blacklists (Hosts, Dnsmasq, Unbound or Pdnsd)</td>
+</tr>
+<tr>
 <td align="left"><a href="https://pi-hole.net/">Pi-Hole</a></td>
 <td align="left">Bash, Php</td>
 <td align="left">Dnsmasq</td>
@@ -450,6 +472,11 @@ return NXDOMAIN.</p>
 <td align="left"><a href="https://github.com/looterz/grimd">grimd</a></td>
 <td align="left">Go</td>
 <td align="left"><a href="https://github.com/kenshinx/godns">goDNS</a></td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/dimkr/nss-block">nss-block</a></td>
+<td align="left">C</td>
+<td align="left">DNS resolver</td>
 </tr>
 </tbody>
 </table>
