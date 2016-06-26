@@ -51,6 +51,10 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
  - [GNU wget](https://www.gnu.org/software/wget/) or [cURL](http://curl.haxx.se/) (default)
  - DNS resolver: [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) (default), [Unbound](https://unbound.net/) or [Pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/index.html)
 
+## gcarq Fork
+
+If you just want a way to create a very simple dns-blacklist generator use [gcarq FreeContributor fork](https://github.com/gcarq/FreeContributor).  
+It just downloads all domain lists, merges them and generates a file in the specified format (`/etc/hosts`, `dnsmasq`, `unbound` and `pdnsd`), nothing more.
 
 ## Installation and Usage
 
@@ -213,6 +217,7 @@ return NXDOMAIN.
 | Program                                                         | Language      | Adblocking Method                              |
 | :-------------                                                  | :-------------| :--------------------------------------------  |
 | [FreeContributor](https://github.com/tbds/FreeContributor)      | Bash          | DNS resolver (Dnsmasq, Unbound or Pdnsd)       |
+| [FreeContributor (fork)](https://github.com/gcarq/FreeContributor)     | Bash   | Generates only blacklists (Hosts, Dnsmasq, Unbound or Pdnsd) |
 | [Pi-Hole](https://pi-hole.net/)                                 | Bash, Php     | Dnsmasq                                        |
 | [NoTrack](https://github.com/quidsup/notrack)                   | Bash, Php     | Dnsmasq                                        |
 | [Hostsblock](https://gaenserich.github.io/hostsblock/)          | Bash          | Hosts with Dnsmasq (for cache only)            |
