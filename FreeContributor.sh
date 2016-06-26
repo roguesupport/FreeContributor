@@ -20,7 +20,6 @@
 #  * GNU wget or cURL
 #  * Dnsmasq or Unbound or Pdnsd
 #
-# BASH3 Boilerplate - http://bash3boilerplate.sh
 ## Global Variables---- --------------------------------------------------------
 FREECONTRIBUTOR_VERSION='0.4.1'
 REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
@@ -89,8 +88,8 @@ cat << EOF
 
 
     FreeContributor is a script to extract and convert domains lists from various sources.
-    
-    USAGE: 
+
+    USAGE:
 
       $ $0 [-f format]  [-o out] [-t target]
 
@@ -105,7 +104,7 @@ cat << EOF
        -o out: specify an output file
 
        -t target: specify the target
-    
+
           default:     $TARGET
                        $REDIRECTIP6
                        NXDOMAIN
@@ -137,19 +136,14 @@ rootcheck()
 
 install_packages()
 {
-# need a universal installer -> snap packages - snapcraft.io
-# https://xkcd.com/1654/
-#    
+# Determine which package manager is being used
+# https://github.com/icy/pacapt
+#
 #    pacman        by ArchLinux/Parabola, ArchBang, Manjaro, Antergos, Apricity OS
 #    dpkg/apt-get  by Debian, Ubuntu, ElementaryOS, Linux Mint, etc ...
 #    yum/rpm/dnf   by Red Hat, CentOS, Fedora, etc ...
 #    zypper        by OpenSUSE
-#    portage       by Gentoo/Funtoo (these guys don't need this script)
-#    xbps          by Void (these guys don't need this script)
-#
-# Determine which package manager is being used
-# https://github.com/icy/pacapt
-#
+
   echo -e "\t Status: Error"
   echo -e "\n\t FreeContributor requires the program $PRG"
   echo -e "\t FreeContributor will install $PRG  ...  \n"
@@ -168,7 +162,7 @@ install_packages()
 
   else
     echo -e "\n\t Unable to work out which package manage is being used."
-    echo -e "\n\t Ensure you have the following packages installed: $prg"
+    echo -e "\n\t Ensure you have the following packages installed: $PRG"
 
   fi
 }
@@ -187,7 +181,6 @@ dependencies()
 resolv()
 {
   if [ -f "$RESOLVCONF" ]; then
-    #echo -e "\n\t Backing up your previous resolv file"
     cp $RESOLVCONF  $RESOLVCONFBAK
   fi
 
@@ -334,7 +327,6 @@ extract_domains()
   sort | uniq > $DOMAINS
 
   echo -e "\n\t Domains extracted using ${FORMAT} format: $(cat ${DOMAINS} | wc -l )"
-
 }
 
 ## none -------------------------------------------------------------------
@@ -354,14 +346,13 @@ hosts()
   fi
 
   #Generate hosts header
-  ./utils/hosts.header.sh 
+  ./utils/hosts.header.sh
 
   mv hosts.header "${OUTPUTFILE:=$HOSTSCONF}"
 
   while read line; do
     echo "${TARGET} ${line}" >> "${OUTPUTFILE:=$HOSTSCONF}"
   done < $DOMAINS
-
 }
 
 
@@ -373,6 +364,7 @@ dnsmasq()
 
   if [ -f "${DNSMASQCONF}" ]; then
     cp "${DNSMASQCONF}" "${DNSMASQCONFBAK}"
+    #cp "${DIR}"/conf/dnsmasq.conf "${DNSMASQCONF}"
   fi
 
   if [ ${TARGET} = "NXDOMAIN" ]; then
@@ -390,6 +382,14 @@ dnsmasq()
 
 unbound()
 {
+
+  mkdir -p "${UNBOUNNDDIR}"
+
+  if [ -f "${UNBOUNNDCONF}" ]; then
+    cp "${UNBOUNNDCONF}" "${UNBOUNNDCONFBAK}"
+    #cp "${DIR}"/conf/unbound.conf "${UNBOUNNDCONF}"
+  fi
+
   if [ ${TARGET} = "NXDOMAIN" ]; then
 
 #local-zone: "testdomain.test" static
@@ -405,8 +405,8 @@ unbound()
 #local-data: "example.tld A 127.0.0.1"
 
     while read line; do
-      echo "local-zone: \"${line}\" redirect" >> "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
-      echo "local-data: \"${line}\" ${TARGET}" >> "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
+      echo "local-zone: \"${line}\" redirect"    >> "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
+      echo "local-data: \"${line} A ${TARGET}\"" >> "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
     done < $DOMAINS
   fi
 }
@@ -415,11 +415,20 @@ unbound()
 
 pdnsd()
 {
+
+  mkdir -p "${PDNSDDIR}"
+
+  if [ -f "${PDNSDCONF}" ]; then
+    cp "${PDNSDCONF}" "${PDNSDCONFBAK}"
+    #cp "${DIR}"/conf/pdnsd.conf "${PDNSDCONF}"
+  fi
+
 #https://news.ycombinator.com/item?id=3035825
 #https://pgl.yoyo.org/adservers/serverlist.php?hostformat=pdnsd
 #neg { name=example.tld; types=domain; }
 
-  awk '{print "neg { name="$1"; types=domain; }"}' $DOMAINS > "${OUTPUTFILE:=${UNBOUNNDDIR}/pdnsd-master.conf}"
+  awk '{print "neg { name="$1"; types=domain; }"}' $DOMAINS > "${OUTPUTFILE:=${PDNSDDIR}/pdnsd-master.conf}"
+# awk '{print "neg { name="$1"; types=A,AAAA; }"}' $DOMAINS > "${OUTPUTFILE:=${PDNSDDIR}/pdnsd-master.conf}"
 }
 
 
