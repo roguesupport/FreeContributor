@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 #
 # FreeContributor: Enjoy a safe and faster web experience
-# (c) 2016 by TBDS
+# (c) 2016 by TBDS, gcarq
 # https://github.com/tbds/FreeContributor
+# https://github.com/gcarq/FreeContributor (forked)
 #
 # FreeContributor is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,14 +15,15 @@
 #
 # Dependencies:
 #  * GNU bash
+#  * GNU awk
 #  * GNU sed
 #  * GNU grep
 #  * GNU coreutils
 #  * GNU wget or cURL
 #  * Dnsmasq or Unbound or Pdnsd
-#
+set -e
 ## Global Variables---- --------------------------------------------------------
-FREECONTRIBUTOR_VERSION='0.4.1'
+FREECONTRIBUTOR_VERSION='0.4.2'
 REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
 REDIRECTIP6="${REDIRECTIP6:=::}"
 
@@ -34,7 +36,7 @@ FORMAT="${FORMAT:=dnsmasq}"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # make temp files
-TMP=$(mktemp /tmp/data.XXXXX)
+TMP=$(mktemp /tmp/raw-domains.XXXXX)
 DOMAINS=$(mktemp /tmp/domains.XXXXX)
 
 # resolv
@@ -51,9 +53,9 @@ DNSMASQCONF="${DNSMASQCONF:=/etc/dnsmasq.conf}"
 DNSMASQCONFBAK="${DNSMASQCONFBAK:=/etc/dnsmasq.conf.bak}"
 
 # unbound
-UNBOUNNDDIR="${UNBOUNNDDIR:=/etc/unbound}"
-UNBOUNNDCONF="${UNBOUNNDCONF:=/etc/unbound/unbound.conf}"
-UNBOUNNDCONFBAK="${UNBOUNNDCONFBAK:=/etc/unbound/unbound.conf.bak}"
+UNBOUNDDIR="${UNBOUNDDIR:=/etc/unbound}"
+UNBOUNDCONF="${UNBOUNDCONF:=/etc/unbound/unbound.conf}"
+UNBOUNDCONFBAK="${UNBOUNDCONFBAK:=/etc/unbound/unbound.conf.bak}"
 
 # pdnsd
 PDNSDDIR="${PDNSDDIR:=/etc/pdnsd}"
@@ -73,11 +75,11 @@ cat << EOF
     |_|  |_|  \___|\___|\____\___/|_| |_|\__|_|  |_|_.__/ \__,_|\__\___/|_|   
 
 
-    Enjoy a safe and faster web experience
+    A script to extract and convert domains lists from various sources.
 
     FreeContributor - http://github.com/tbds/FreeContributor
     Released under the GPLv3 license
-    (c) 2016 tbds and contributors
+    (c) 2016 tbds, gcarq and contributors
 
 EOF
 }
@@ -86,32 +88,28 @@ usage()
 {
 cat << EOF
 
-
-    FreeContributor is a script to extract and convert domains lists from various sources.
-
     USAGE:
 
       $ $0 [-f format]  [-o out] [-t target]
 
        -f format: specify an output format:
 
-          none        Extract domains only
-          hosts       Use hosts format
-          dnsmasq     dnsmasq as DNS resolver
-          unbound     unbound as DNS resolver
-          pdnsd       pdnsd as DNS resolver
+                              none          Extract domains only
+                              hosts         Use hosts format
+                              dnsmasq       dnsmasq as DNS resolver
+                              unbound       unbound as DNS resolver
+                              pdnsd         pdnsd as DNS resolver
 
        -o out: specify an output file
 
        -t target: specify the target
 
-          default:     $TARGET
-                       $REDIRECTIP6
-                       NXDOMAIN
-                       custom (e.g. 192.168.1.20)
+                             ${TARGET} (default)
+                             ${REDIRECTIP6}
+                             NXDOMAIN
+                             custom (e.g. 192.168.1.20)
 
        -help: show this help
-
 
     EXAMPLES:
 
@@ -122,12 +120,12 @@ cat << EOF
 EOF
 }
 
- 
+
 rootcheck()
 {
   if [[ $UID -ne 0 ]]; then
-    echo -e "\nYou need root or su rights to access /etc directory"
-    echo -e "Please install sudo or run this as root.\n"
+    echo -e "\033[5m \n\tYou need root or su rights to access /etc directory\033[0m"
+    echo -e "\033[5m \tPlease install sudo or run this as root.\033[0m\n"
     usage
     exit 1
   fi
@@ -167,14 +165,19 @@ install_packages()
   fi
 }
 
+
 dependencies()
 {
-  programs=( curl $FORMAT )
+  printf "    Checking dependencies...\n"
 
-  for PRG in "${programs[@]}"
+  DEPENDENCIES=("curl" "${FORMAT}")
+
+  for PRG in "${DEPENDENCIES[@]}"
   do
-    echo -e "\n\t Checking if $PRG is installed ..."
-    type -P $PRG &>/dev/null && echo -e "\t Status: Ok" || install_packages
+    if [ ${PRG} != "hosts" ]; then
+        echo -e "\n\t - Checking if $PRG is installed..."
+        type -P $PRG &>/dev/null && echo -e "\t Status: Ok" || install_packages
+    fi
   done
 }
 
@@ -185,8 +188,8 @@ resolv()
   fi
 
   #if [ ${FORMAT} != "none" ] || [ ${FORMAT} != "hosts" ]; then
-  #cp ./conf/resolv.conf $resolvconf
-  #chattr +i $resolvconf
+  #  cp "${DIR}"/conf/resolv.conf "${RESOLVCONF}"
+  #  chattr +i "${RESOLVCONF}"
   #fi
 }
 
@@ -246,22 +249,18 @@ sources=(
     'https://ransomwaretracker.abuse.ch/downloads/TL_PS_DOMBL.txt'
     'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'
     'http://adblock.gjtech.net/?format=unix-hosts'
-#    'http://hostsfile.mine.nu/Hosts'
-##
 ## https://github.com/crazy-max/WindowsSpyBlocker
-##
-#    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_extra.txt'
-#    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_spy.txt'
-#    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/blob/master/hosts/windows10_update.txt'
-##
+    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/extra.txt'
+    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/spy.txt'
+    'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/update.txt'
+
+#    'http://hostsfile.mine.nu/Hosts'
 ## Terms of Use of hpHosts
 ## This service is free to use, however, any and ALL automated use is 
 ## strictly forbidden without express permission from ourselves 
-##    'http://hosts-file.net/ad_servers.txt'
-##    'http://hosts-file.net/hphosts-partial.txt'
-
-
-## error 'http://securemecca.com/Downloads/hosts.txt' 
+#    'http://hosts-file.net/ad_servers.txt'
+#    'http://hosts-file.net/hphosts-partial.txt'
+# error 'http://securemecca.com/Downloads/hosts.txt' 
 #    'http://www.joewein.net/dl/bl/dom-bl.txt' 
 #    'http://adblock.mahakala.is/' 
 #    'http://mirror1.malwaredomains.com/files/justdomains'
@@ -272,9 +271,6 @@ sources=(
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt'
 #    'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'
-#
-# https://github.com/brucebot/pisoft
-#
 #    'http://code.taobao.org/svn/adblock/trunk/hosts.txt'
 #    'http://hostsfile.org/Downloads/BadHosts.unx.zip'
 #    'http://support.it-mate.co.uk/downloads/HOSTS.txt'
@@ -297,10 +293,10 @@ sources=(
 #    'http://www.fanboy.co.nz/adblock/fanboy-tracking.txt'
 )
 
-  echo -e "\n\t FreeContributor is downloading data ..."
+  echo -e "\n\t FreeContributor is downloading data..."
   for item in ${sources[*]}
   do
-    echo -e "\n\t :: Downloading from URL: $item"
+    #echo -e "\n\t :: Downloading from URL: $item"
     download $item >> $TMP || { echo -e "\n\t Error downloading $item"; exit 1; }
   done
 }
@@ -311,6 +307,37 @@ extract_domains()
 # https://blog.mister-muffin.de/2011/11/14/adblocking-with-a-hosts-file/
 # sed 's/\([^#]*\)#.*/\1/;s/[ \t]*$//;s/^[ \t]*//;s/[ \t]\+/ /g'
 #
+# Replacments are done in the following order:
+#   > transform everything to lowercase
+#   > strip comments starting with '#'
+#   > replace substr '127.0.0.1' with ''
+#   > replace substr '0.0.0.0' with ''
+#   > strip ^M (windows newline character)
+#   > ltrim tabs and whitespaces
+#   > rtrim tabs and whitespaces
+#   > remove lines which only contain an ipv4 addresses
+#   > remove 'localhost' lines
+#   > delete empty lines
+#
+#  # Apply replacements
+#  sed -ir "s/\(.*\)/\L\1/;               \
+#           s/#.*$//;                     \
+#           s/127.0.0.1//;                \
+#           s/0.0.0.0//;                  \
+#           s/\^M//;                      \
+#           s/^[[:space:]]*//;            \
+#           s/[[:space:]]*$//;            \
+#           s/${REGEX_IPV4_VALIDATION}//; \
+#           /^localhost$/d;               \
+#           /^[[:space:]]*$/d;            \
+#          " ${TMP_DOMAINS_RAW}
+#
+#  # Remove duplicate lines
+#  awk -i inplace '!x[$0]++' ${TMP_DOMAINS_RAW}
+#
+#  # Remove invalid FQDNs (https://en.wikipedia.org/wiki/Fully_qualified_domain_name)
+#  grep -Po '(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)' \
+#${TMP_DOMAINS_RAW} > ${TMP_DOMAINS}
 
   echo -e "\n\t Extracting domains from previous lists ..."
   # remove empty lines and comments
@@ -333,7 +360,8 @@ extract_domains()
 
 domains()
 {
-  cp ${DOMAINS} > "${OUTPUTFILE:=$DIR/domains.txt}"
+  cp ${DOMAINS} "${OUTPUTFILE:=$DIR/domains.txt}"
+  echo -e "\n\t File output: ${OUTPUTFILE}"
 }
 
 ## hosts ------------------------------------------------------------------
@@ -343,6 +371,11 @@ hosts()
   if [ -f "${HOSTSCONF}" ]; then
     echo -e "\n\t Backing up your previous hosts file"
     cp "${HOSTSCONF}" "${HOSTSCONFBAK}"
+  fi
+
+  if [ ${TARGET} = "NXDOMAIN" ]; then
+    echo -e "\n\t hosts format does not support target NXDOMAIN."
+    exit
   fi
 
   #Generate hosts header
@@ -360,11 +393,12 @@ hosts()
 
 dnsmasq()
 {
+
   mkdir -p "${DNSMASQDIR}"
 
   if [ -f "${DNSMASQCONF}" ]; then
     cp "${DNSMASQCONF}" "${DNSMASQCONFBAK}"
-    #cp "${DIR}"/conf/dnsmasq.conf "${DNSMASQCONF}"
+    cp "${DIR}"/conf/dnsmasq.conf "${DNSMASQCONF}"
   fi
 
   if [ ${TARGET} = "NXDOMAIN" ]; then
@@ -383,30 +417,27 @@ dnsmasq()
 unbound()
 {
 
-  mkdir -p "${UNBOUNNDDIR}"
+  mkdir -p "${UNBOUNDDIR}"
 
-  if [ -f "${UNBOUNNDCONF}" ]; then
-    cp "${UNBOUNNDCONF}" "${UNBOUNNDCONFBAK}"
-    #cp "${DIR}"/conf/unbound.conf "${UNBOUNNDCONF}"
+  if [ -f "${UNBOUNDCONF}" ]; then
+    cp "${UNBOUNDCONF}" "${UNBOUNDCONFBAK}"
+    cp "${DIR}"/conf/unbound.conf "${UNBOUNDCONF}"
   fi
 
   if [ ${TARGET} = "NXDOMAIN" ]; then
 
-#local-zone: "testdomain.test" static
-#http://www.unixcl.com/2012/07/print-double-quotes-in-unix-awk.html
-
-    awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $DOMAINS > "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
+    #local-zone: "testdomain.test" static
+    awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $DOMAINS > "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
 
   else
 
-#https://github.com/jodrell/unbound-block-hosts/
-#https://pgl.yoyo.org/adservers/serverlist.php?hostformat=unbound
-#local-zone: "example.tld" redirect
-#local-data: "example.tld A 127.0.0.1"
+    rm "${UNBOUNDDIR}"/unbound-master.conf
 
     while read line; do
-      echo "local-zone: \"${line}\" redirect"    >> "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
-      echo "local-data: \"${line} A ${TARGET}\"" >> "${OUTPUTFILE:=${UNBOUNNDDIR}/unbound-master.conf}"
+    #local-zone: "example.tld" redirect
+    #local-data: "example.tld A 127.0.0.1"
+      echo "local-zone: \"${line}\" redirect"    >> "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
+      echo "local-data: \"${line} A ${TARGET}\"" >> "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
     done < $DOMAINS
   fi
 }
@@ -420,20 +451,22 @@ pdnsd()
 
   if [ -f "${PDNSDCONF}" ]; then
     cp "${PDNSDCONF}" "${PDNSDCONFBAK}"
-    #cp "${DIR}"/conf/pdnsd.conf "${PDNSDCONF}"
+    cp "${DIR}"/conf/pdnsd.conf "${PDNSDCONF}"
   fi
 
-#https://news.ycombinator.com/item?id=3035825
-#https://pgl.yoyo.org/adservers/serverlist.php?hostformat=pdnsd
-#neg { name=example.tld; types=domain; }
+  if [ ${TARGET} != "NXDOMAIN" ]; then
+    echo -e "Pdnsd format does only support target NXDOMAIN."
+  fi
 
+  #neg { name=example.tld; types=domain; }
   awk '{print "neg { name="$1"; types=domain; }"}' $DOMAINS > "${OUTPUTFILE:=${PDNSDDIR}/pdnsd-master.conf}"
-# awk '{print "neg { name="$1"; types=A,AAAA; }"}' $DOMAINS > "${OUTPUTFILE:=${PDNSDDIR}/pdnsd-master.conf}"
+  #awk '{print "neg { name="$1"; types=A,AAAA; }"}' $DOMAINS > "${OUTPUTFILE:=${PDNSDDIR}/pdnsd-master.conf}"
 }
 
 
 daemons()
 {
+
 INIT=`ls -l /proc/1/exe`
   if [[ $INIT == *"systemd"* ]]; then
     systemctl enable "${FORMAT}" && systemctl restart "${FORMAT}"
@@ -470,10 +503,15 @@ welcome
 NUMARGS=$#
 
 if [ $NUMARGS -eq 0 ]; then
-  usage
-  exit 1
+  echo -e "\n\t Do you wish to use the default settings?"
+  echo -e "\t ./FreeContributor.sh -f dnsmasq -t NXDOMAIN\n"
+  select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) ./FreeContributor.sh -f dnsmasq -t NXDOMAIN;;
+        No ) exit;;
+    esac
+  done
 fi
-
 
 while getopts ":t:f:o:h" opt; do
   case $opt in
@@ -500,14 +538,15 @@ done
 
 shift "$((OPTIND-1))"
 
-
 processing()
 {
-  #resolv
-  dependencies
-  download_sources
-  extract_domains
+    rootcheck
+    resolv
+    dependencies
+    download_sources
+    extract_domains
 }
+
 
 case "$FORMAT" in
   "none")
@@ -516,8 +555,7 @@ case "$FORMAT" in
     domains
   ;;
   "hosts")
-    download_sources
-    extract_domains
+    processing
     hosts
   ;;
   "dnsmasq")

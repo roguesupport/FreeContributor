@@ -47,6 +47,7 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
  - [GNU bash](http://www.gnu.org/software/bash/bash.html)
  - [GNU sed](http://www.gnu.org/software/sed)
  - [GNU grep](http://www.gnu.org/software/grep/grep.html)
+ - [GNU awk](https://www.gnu.org/software/gawk/)
  - [GNU coreutils](http://www.gnu.org/software/coreutils)
  - [GNU wget](https://www.gnu.org/software/wget/) or [cURL](http://curl.haxx.se/) (default)
  - DNS resolver: [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) (default), [Unbound](https://unbound.net/) or [Pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/index.html)

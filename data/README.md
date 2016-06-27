@@ -17,3 +17,19 @@ to tell your computer to never talk to servers on that domain name.
 | Cloud providers        | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/corporations/cloud.list)     | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/hosts.d/hosts-cloud.list)     | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/dnsmasq.d/dnsmasq-cloud.list.conf)     | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/unbound.d/unbound-cloud.list.conf)     | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/pdnsd.d/pdnsd-cloud.list.conf)    |
 | Social services        | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/corporations/social.list)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/hosts.d/hosts-social.list)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/dnsmasq.d/dnsmasq-social.list.conf)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/unbound.d/unbound-social.list.conf)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/pdnsd.d/pdnsd-social.list.conf)   |
 | Custom                 | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/corporations/custom.list)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/hosts.d/hosts-custom.list)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/dnsmasq.d/dnsmasq-custom.list.conf)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/unbound.d/unbound-custom.list.conf)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/pdnsd.d/pdnsd-custom.list.conf)   |
+
+
+Don't forget to edit the dns resolver config file to include the correspond file.
+
+For dnsmasq, just place the file inside '/etc/dnsmasq.d'
+
+For unbound, add the following line in '/etc/unbound/unbound.conf'
+
+
+    include: /etc/unbound/unbound-<corporation>.list.conf
+
+
+For pdnsd, add the following line in '/etc/pdnsd.conf'
+
+
+    include {file="/etc/pdnsd/pdnsd-<corporation>.list.conf";}
