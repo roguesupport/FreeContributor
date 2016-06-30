@@ -233,6 +233,7 @@ sources=(
     'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/tyzbit/hosts'
     'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt'
     'https://raw.githubusercontent.com/quidsup/notrack/master/trackers.txt'
+## Spam 404
     'https://raw.githubusercontent.com/Dawsey21/Lists/master/main-blacklist.txt'
     'http://sysctl.org/cameleon/hosts'
     'http://malwaredomains.lehigh.edu/files/justdomains'

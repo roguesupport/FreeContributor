@@ -23,6 +23,7 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
 
 ## Why
 
+ - [What media companies don’t want you to know about ad blockers](http://www.cjr.org/opinion/ad_blockers_malware_new_york_times.php)
  - [Major sites including New York Times and BBC hit by 'ransomware' malvertising](http://www.theguardian.com/technology/2016/mar/16/major-sites-new-york-times-bbc-ransomware-malvertising)
  - [Adblocking: advertising 'accounts for half of data used to read articles'](http://www.theguardian.com/media/2016/mar/16/ad-blocking-advertising-half-of-data-used-articles)
  - [The Verge's web sucks](http://blog.lmorchard.com/2015/07/22/the-verge-web-sucks/) and [The web is Doom](https://mobiforge.com/research-analysis/the-web-is-doom)
@@ -54,8 +55,7 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
 
 ## gcarq Fork
 
-If you just want a way to create a very simple dns-blacklist generator use [gcarq FreeContributor fork](https://github.com/gcarq/FreeContributor).  
-It just downloads all domain lists, merges them and generates a file in the specified format (`/etc/hosts`, `dnsmasq`, `unbound` and `pdnsd`), nothing more.
+If you just want a way to create a very simple dns-blacklist generator use [gcarq FreeContributor version](https://github.com/gcarq/FreeContributor).
 
 ## Installation and Usage
 
@@ -84,10 +84,10 @@ cd FreeContributor
 
        -t target: specify the target
     
-          default: 0.0.0.0
-                   ::
-                   NXDOMAIN
-                   custom (e.g. 192.168.1.20)
+          0.0.0.0 (default)
+          ::
+          NXDOMAIN (recommended)
+          custom (e.g. 192.168.1.20)
 
        -help         Show this help
 
@@ -112,8 +112,7 @@ head to [CONTRIBUTING](https://github.com/tbds/FreeContributor/blob/master/CONTR
 
 ## Sources
 
-Inspired by [jmdugan's blocklists project](https://github.com/jmdugan/blocklists), FreeContributor project comes with a 
-[catalog of corporation domain names](https://github.com/tbds/FreeContributor/tree/master/data) that people may want to block. 
+FreeContributor project comes with a [catalog of corporation domain names](https://github.com/tbds/FreeContributor/tree/master/data) that people may want to block. 
 
 FreeContributor also downloads external files, each has its own license, detailed in the list below.
 Thanks to the people working hard to maintain the filter lists below that FreeContributor is using.
@@ -132,7 +131,7 @@ Thanks to the people working hard to maintain the filter lists below that FreeCo
 |[CAMELEON](http://sysctl.org/cameleon/)                                           | Weekly updates, approx. 21.000 entries                  | ? |
 |[StevenBlack - hosts](https://github.com/StevenBlack/hosts/)                      |                                                         | ? |
 |[Quidsup - notrack](https://github.com/quidsup/notrack)                           |                                                         | ? |
-|[Gorhill's uMatrix Blocklist](https://github.com/gorhill/uMatrix)                 |                                                         | ? |
+|[Gorhill- uMatrix](https://github.com/gorhill/uMatrix)                            |                                                         | ? |
 |[Malware Domain List](http://www.malwaredomainlist.com/)                          | Daily updates, approx. 1.500 entries                    | ? |
 |[AdBlock filter](http://adblock.gjtech.net/)                                      |                                                         | CC Attribution 3.0 |
 |[Hostfile project](http://hostsfile.org/hosts.html)                               |                                                         | LGPL as GPLv2 |
@@ -219,7 +218,6 @@ return NXDOMAIN.
 | Program                                                         | Language      | Adblocking Method                              |
 | :-------------                                                  | :-------------| :--------------------------------------------  |
 | [FreeContributor](https://github.com/tbds/FreeContributor)      | Bash          | DNS resolver (Dnsmasq, Unbound or Pdnsd)       |
-| [FreeContributor (fork)](https://github.com/gcarq/FreeContributor)     | Bash   | Generates only blacklists (Hosts, Dnsmasq, Unbound or Pdnsd) |
 | [Pi-Hole](https://pi-hole.net/)                                 | Bash, Php     | Dnsmasq                                        |
 | [NoTrack](https://github.com/quidsup/notrack)                   | Bash, Php     | Dnsmasq                                        |
 | [Hostsblock](https://gaenserich.github.io/hostsblock/)          | Bash          | Hosts with Dnsmasq (for cache only)            |
