@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # FreeContributor: Enjoy a safe and faster web experience
 # (c) 2016 by TBDS

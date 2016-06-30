@@ -21,15 +21,15 @@ to tell your computer to never talk to servers on that domain name.
 
 Don't forget to edit the dns resolver config file to include the correspond file.
 
-For dnsmasq, just place the file inside '/etc/dnsmasq.d'
+For dnsmasq, just place the file inside `/etc/dnsmasq.d`
 
-For unbound, add the following line in '/etc/unbound/unbound.conf'
+For unbound, add the following line in `/etc/unbound/unbound.conf`
 
 
     include: /etc/unbound/unbound-<corporation>.list.conf
 
 
-For pdnsd, add the following line in '/etc/pdnsd.conf'
+For pdnsd, add the following line in `/etc/pdnsd.conf`
 
 
     include {file="/etc/pdnsd/pdnsd-<corporation>.list.conf";}

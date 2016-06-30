@@ -8,10 +8,8 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-
-# https://unix.stackexchange.com/questions/92384/how-to-clean-log-file
 #
-# from /etc/dnsmaq.conf
+# for dnsmasq /etc/dnsmaq.conf
 #
 # For debugging purposes, log each DNS query as it passes through
 # dnsmasq.
@@ -19,3 +17,13 @@
 # log-facility=/var/log/dnsmasq.log
 
 truncate --size 0 /var/log/dnsmaq.log
+
+#
+# for unbound /etc/unbound/unbound.conf
+#
+# the log file, "" means log to stderr.
+# Use of this option sets use-syslog to "no".
+# logfile: "/var/log/unbound.log"
+#
+
+truncate --size 0 /var/log/unbound.log

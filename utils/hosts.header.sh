@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # FreeContributor: Enjoy a safe and faster web experience
 # (c) 2016 by TBDS
@@ -36,7 +36,9 @@ cat > hosts.header <<EOF
 # Spam404 - admin [at] spam404.com - http://www.spam404.com/
 # AdBlock filter - http://www.gjtech.net/
 # WindowsSpyBlocker - webmaster [at] crazyws.fr - https://github.com/crazy-max/WindowsSpyBlocker
-#
+# gorhill - uMatrix - https://github.com/gorhill/uMatrix
+# Quidsup - notrack - https://github.com/quidsup/notrack
+# notracking - hosts-blocklists - https://github.com/notracking/hosts-blocklists
 #
 #<ip-adress>    <hostname.domain.org>   <hostname>
 127.0.0.1       localhost

@@ -1,14 +1,14 @@
 #!/bin/sh
 #
 # FreeContributor: Enjoy a safe and faster web experience
-# (c) 2016 by TBDS
+# (c) 2016 by TBDS, gcarq
 # https://github.com/tbds/FreeContributor
+# https://github.com/gcarq/FreeContributor (forked)
 #
 # FreeContributor is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
+# (at your option) any later version
 #
 # Mirrors sources
 #
@@ -45,44 +45,36 @@ curl 'https://ransomwaretracker.abuse.ch/downloads/TL_PS_DOMBL.txt'             
 curl 'https://feodotracker.abuse.ch/blocklist/?download=domainblocklist'                           --output ./mirrors/feodotracker
 curl 'https://palevotracker.abuse.ch/blocklists.php?download=domainblocklist'                      --output ./mirrors/palevotracker
 curl 'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'                         --output ./mirrors/zeustracker
+curl 'https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt'          --output ./mirrors/hosts-blocklists
+curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt'                                  --output ./mirrors/disconnect_ad
+curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'                            --output ./mirrors/disconnect_tracking
+curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'                        --output ./mirrors/disconnect_malvertising_tmp \
+&& tail -n +5 $DIR/mirrors/disconnect_malvertising_tmp > $DIR/mirrors/disconnect_malvertising
+curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt'                             --output ./mirrors/disconnect_malware_tmp \
+&& tail -n +5 $DIR/mirrors/disconnect_malware_tmp > $DIR/mirrors/disconnect_malware
 
+#############
 # blacklist_from *@001web.net
-#curl 'http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.current' | 
-
-http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.200904171239.domains
-curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt'                                  --output ./mirrors/disconnect_ad \
-&& tail -n +3 ./mirrors/disconnect_ad > ./mirrors/disconnect_ad
-curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'                        --output ./mirrors/disconnect_malvertising \
-&& tail -n +3 ./mirrors/disconnect_malvertising > ./mirrors/disconnect_malvertising
-curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt'                             --output ./mirrors/disconnect_malware \
-&& tail -n +3 ./mirrors/disconnect_malware > ./mirrors/disconnect_malware
-curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'                            --output ./mirrors/disconnect_tracking \
-&& tail -n +3 ./mirrors/disconnect_tracking > ./mirrors/disconnect_tracking
+#curl 'http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.current'
+#http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.200904171239.domains
 
 #curl -A 'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0' -e http://forum.xda-developers.com/ http://adblock.mahakala.is/ \
 #| grep -v "#" | awk '{print $2}' | sort >> ./mirrors/adblock.mahakala
 
 # requires p7zip
 #curl 'http://rlwpx.free.fr/WPFF/htrc.7z'                             --output ./mirrors/htrc.7z 
-curl 'http://rlwpx.free.fr/WPFF/hpub.7z'                              --output ./mirrors/hpub.7z
-curl 'http://rlwpx.free.fr/WPFF/hrsk.7z'                              --output ./mirrors/hrsk.7z
-curl 'http://rlwpx.free.fr/WPFF/hsex.7z'                              --output ./mirrors/hsex.7z
-curl 'http://rlwpx.free.fr/WPFF/hmis.7z'                              --output ./mirrors/hmis.7z
-curl 'http://hostsfile.org/Downloads/BadHosts.unx.zip'                --output ./mirrors/BadHosts.zip && \
-unzip ./mirrors/BadHosts.zip -d ./mirrors/ && rm ./mirrors/BadHosts.zip
+#curl 'http://rlwpx.free.fr/WPFF/hpub.7z'                              --output ./mirrors/hpub.7z
+#curl 'http://rlwpx.free.fr/WPFF/hrsk.7z'                              --output ./mirrors/hrsk.7z
+#curl 'http://rlwpx.free.fr/WPFF/hsex.7z'                              --output ./mirrors/hsex.7z
+#curl 'http://rlwpx.free.fr/WPFF/hmis.7z'                              --output ./mirrors/hmis.7z
+#curl 'http://hostsfile.org/Downloads/BadHosts.unx.zip'                --output ./mirrors/BadHosts.zip && \
+#unzip ./mirrors/BadHosts.zip -d ./mirrors/ && rm ./mirrors/BadHosts.zip
 
 
-for file in ${DIR}/mirrors/*.7z
-do
-    7z x "${file}" -o${dir}/mirrors/ && rm "${file}"
-done
-
-
-https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt
-
-
-
-
+#for file in ${DIR}/mirrors/*.7z
+#do
+#    7z x "${file}" -o${dir}/mirrors/ && rm "${file}"
+#done
 #    'http://adblock.gjtech.net/?format=unix-hosts'
 #    'http://hostsfile.mine.nu/Hosts'
 ##

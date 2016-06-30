@@ -130,8 +130,8 @@ Thanks to the people working hard to maintain the filter lists below that FreeCo
 |[Peter Lowe’s Ad server list](http://pgl.yoyo.org/adservers/)                     | Weekly updates, approx. 2.500 entries                   | ? |
 |[Dan Pollock’s hosts file](http://someonewhocares.org/hosts/)                     | Weekly updates, approx. 12.000 entries                  | non-commercial |
 |[CAMELEON](http://sysctl.org/cameleon/)                                           | Weekly updates, approx. 21.000 entries                  | ? |
-|[StevenBlack/hosts](https://github.com/StevenBlack/hosts/)                        |                                                         | ? |
-|[Quidsup/notrack](https://github.com/quidsup/notrack)                             |                                                         | ? |
+|[StevenBlack - hosts](https://github.com/StevenBlack/hosts/)                      |                                                         | ? |
+|[Quidsup - notrack](https://github.com/quidsup/notrack)                           |                                                         | ? |
 |[Gorhill's uMatrix Blocklist](https://github.com/gorhill/uMatrix)                 |                                                         | ? |
 |[Malware Domain List](http://www.malwaredomainlist.com/)                          | Daily updates, approx. 1.500 entries                    | ? |
 |[AdBlock filter](http://adblock.gjtech.net/)                                      |                                                         | CC Attribution 3.0 |
@@ -154,6 +154,7 @@ Thanks to the people working hard to maintain the filter lists below that FreeCo
 |[Shalla's Blacklists ](https://ransomwaretracker.abuse.ch/)                       | Daily updates, approx. 32.000 entries [description](http://www.shallalist.de/categories.html)  | ? |                     | ? |
 |[Windows Spy Blocker](https://github.com/crazy-max/WindowsSpyBlocker)             | Infrequent updates, approx. 120 entries                 | ? |
 |[Spamassassin Blacklists](http://www.sa-blacklist.stearns.org/)                   |                                                         | ? |
+|[notracking - hosts-blocklists](https://github.com/notracking/hosts-blocklists)   | Daily updates, approx. 27.500 entries                   | ? |
 
 ## DNS 101
 

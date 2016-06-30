@@ -23,7 +23,7 @@
 #  * Dnsmasq or Unbound or Pdnsd
 set -e
 ## Global Variables---- --------------------------------------------------------
-FREECONTRIBUTOR_VERSION='0.4.2'
+FREECONTRIBUTOR_VERSION='0.4.3'
 REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
 REDIRECTIP6="${REDIRECTIP6:=::}"
 
@@ -36,8 +36,8 @@ FORMAT="${FORMAT:=dnsmasq}"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # make temp files
-TMP=$(mktemp /tmp/raw-domains.XXXXX)
-DOMAINS=$(mktemp /tmp/domains.XXXXX)
+TMP_DOMAINS_RAW=$(mktemp /tmp/raw-domains.XXXXX)
+TMP_DOMAINS=$(mktemp /tmp/domains.XXXXX)
 
 # resolv
 RESOLVCONF="${RESOLVCONF:=/etc/resolv.conf}"
@@ -75,7 +75,7 @@ cat << EOF
     |_|  |_|  \___|\___|\____\___/|_| |_|\__|_|  |_|_.__/ \__,_|\__\___/|_|   
 
 
-    A script to extract and convert domains lists from various sources.
+    Script to extract and convert domains lists from various sources.
 
     FreeContributor - http://github.com/tbds/FreeContributor
     Released under the GPLv3 license
@@ -205,14 +205,17 @@ download_sources()
     download () {
       wget -q "$1"
   }
+  else
+    printf "You don't seem to have curl or wget"
+    exit 4
   fi
 
+
+
+sources=(
 ##
 ## See FilterLists for a comprehensive list of filter lists from all over the web
 ## https://filterlists.com/
-##
-
-sources=(
 ##
 ## Use StevenBlack/hosts mirrors to save bandwidth from original servers
 ## https://github.com/StevenBlack/hosts/tree/master/data
@@ -249,10 +252,23 @@ sources=(
     'https://ransomwaretracker.abuse.ch/downloads/TL_PS_DOMBL.txt'
     'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'
     'http://adblock.gjtech.net/?format=unix-hosts'
+## Mirror
+    'https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt'
 ## https://github.com/crazy-max/WindowsSpyBlocker
     'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/extra.txt'
     'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/spy.txt'
     'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/update.txt'
+## Disconnect Lists
+    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_ad'
+    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_malvertising'
+    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_malware'
+    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_tracking'
+## Airelle's host file mirror
+#    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/Hosts.rsk'
+#    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/Hosts.sex'
+#    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/Hosts.mis'
+#    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/Hosts.pub'
+#
 
 #    'http://hostsfile.mine.nu/Hosts'
 ## Terms of Use of hpHosts
@@ -266,11 +282,6 @@ sources=(
 #    'http://mirror1.malwaredomains.com/files/justdomains'
 #    'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt'
 #SSL cerificate 'https://elbinario.net/wp-content/uploads/2015/02/BloquearPubli.txt'
-#
-#    'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
-#    'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'
-#    'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt'
-#    'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'
 #    'http://code.taobao.org/svn/adblock/trunk/hosts.txt'
 #    'http://hostsfile.org/Downloads/BadHosts.unx.zip'
 #    'http://support.it-mate.co.uk/downloads/HOSTS.txt'
@@ -293,75 +304,60 @@ sources=(
 #    'http://www.fanboy.co.nz/adblock/fanboy-tracking.txt'
 )
 
-  echo -e "\n\t FreeContributor is downloading data..."
+  printf "\n    FreeContributor is downloading data...\n"
   for item in ${sources[*]}
   do
     #echo -e "\n\t :: Downloading from URL: $item"
-    download $item >> $TMP || { echo -e "\n\t Error downloading $item"; exit 1; }
+    download $item >> $TMP_DOMAINS_RAW || { echo -e "\n\t Error downloading $item"; exit 1; }
   done
 }
 
 extract_domains()
 {
-# clean this code with better regex
-# https://blog.mister-muffin.de/2011/11/14/adblocking-with-a-hosts-file/
-# sed 's/\([^#]*\)#.*/\1/;s/[ \t]*$//;s/^[ \t]*//;s/[ \t]\+/ /g'
-#
-# Replacments are done in the following order:
-#   > transform everything to lowercase
-#   > strip comments starting with '#'
-#   > replace substr '127.0.0.1' with ''
-#   > replace substr '0.0.0.0' with ''
-#   > strip ^M (windows newline character)
-#   > ltrim tabs and whitespaces
-#   > rtrim tabs and whitespaces
-#   > remove lines which only contain an ipv4 addresses
-#   > remove 'localhost' lines
-#   > delete empty lines
-#
-#  # Apply replacements
-#  sed -ir "s/\(.*\)/\L\1/;               \
-#           s/#.*$//;                     \
-#           s/127.0.0.1//;                \
-#           s/0.0.0.0//;                  \
-#           s/\^M//;                      \
-#           s/^[[:space:]]*//;            \
-#           s/[[:space:]]*$//;            \
-#           s/${REGEX_IPV4_VALIDATION}//; \
-#           /^localhost$/d;               \
-#           /^[[:space:]]*$/d;            \
-#          " ${TMP_DOMAINS_RAW}
-#
-#  # Remove duplicate lines
-#  awk -i inplace '!x[$0]++' ${TMP_DOMAINS_RAW}
-#
-#  # Remove invalid FQDNs (https://en.wikipedia.org/wiki/Fully_qualified_domain_name)
-#  grep -Po '(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)' \
-#${TMP_DOMAINS_RAW} > ${TMP_DOMAINS}
+  printf "\n    Extracting domains from previous lists...\n"
 
-  echo -e "\n\t Extracting domains from previous lists ..."
-  # remove empty lines and comments
-  grep -Ev '^$' $TMP | \
-  grep -o '^[^#]*'  | \
-  # exclude locahost entries
-  grep -v "localhost" | \
-  # remove 127.0.0.1 and 0.0.0.0
-  sed 's/127.0.0.1//;s/0.0.0.0//' | \
-  # remove tab and spaces in the begining
-  sed -e 's/^[ \t]*//' | \
-  # remove ^M
-  sed 's/\r//g' | grep -Ev '^$' | \
-  sort | uniq > $DOMAINS
+## Replacments are done in the following order:
+##   > transform everything to lowercase
+##   > strip comments starting with '#'
+##   > replace substr '127.0.0.1' with ''
+##   > replace substr '0.0.0.0' with ''
+##   > strip ^M (windows newline character)
+##   > ltrim tabs and whitespaces
+##   > rtrim tabs and whitespaces
+##   > remove lines which only contain an ipv4 addresses
+##   > remove 'localhost' lines
+##   > delete empty lines
+## Remove invalid FQDNs (https://en.wikipedia.org/wiki/Fully_qualified_domain_name)
+REGEX_IPV4_VALIDATION="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)\
+{3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
 
-  echo -e "\n\t Domains extracted using ${FORMAT} format: $(cat ${DOMAINS} | wc -l )"
+  sed -ir "s/\(.*\)/\L\1/;               \
+           s/#.*$//;                     \
+           s/127.0.0.1//;                \
+           s/0.0.0.0//;                  \
+           s/\^M//;                      \
+           s/^[[:space:]]*//;            \
+           s/[[:space:]]*$//;            \
+           s/${REGEX_IPV4_VALIDATION}//; \
+           /^localhost$/d;               \
+           /^[[:space:]]*$/d;            \
+          " ${TMP_DOMAINS_RAW}
+
+  # Remove duplicate lines
+  awk -i inplace '!x[$0]++' ${TMP_DOMAINS_RAW}
+
+  grep -Po '(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)' \
+  ${TMP_DOMAINS_RAW} > ${TMP_DOMAINS}
+
+  echo -e "\n\t Domains extracted using ${FORMAT} format: $(cat ${TMP_DOMAINS} | wc -l )"
 }
 
 ## none -------------------------------------------------------------------
 
 domains()
 {
-  cp ${DOMAINS} "${OUTPUTFILE:=$DIR/domains.txt}"
-  echo -e "\n\t File output: ${OUTPUTFILE}"
+  cp ${TMP_DOMAINS} "${OUTPUTFILE:=$DIR/domains.txt}"
+  echo -e "\n\t File saved at: ${OUTPUTFILE}"
 }
 
 ## hosts ------------------------------------------------------------------
@@ -369,13 +365,12 @@ domains()
 hosts()
 {
   if [ -f "${HOSTSCONF}" ]; then
-    echo -e "\n\t Backing up your previous hosts file"
     cp "${HOSTSCONF}" "${HOSTSCONFBAK}"
   fi
 
   if [ ${TARGET} = "NXDOMAIN" ]; then
     echo -e "\n\t hosts format does not support target NXDOMAIN."
-    exit
+    exit 0
   fi
 
   #Generate hosts header
@@ -385,7 +380,7 @@ hosts()
 
   while read line; do
     echo "${TARGET} ${line}" >> "${OUTPUTFILE:=$HOSTSCONF}"
-  done < $DOMAINS
+  done < $TMP_DOMAINS
 }
 
 
@@ -393,7 +388,6 @@ hosts()
 
 dnsmasq()
 {
-
   mkdir -p "${DNSMASQDIR}"
 
   if [ -f "${DNSMASQCONF}" ]; then
@@ -402,12 +396,11 @@ dnsmasq()
   fi
 
   if [ ${TARGET} = "NXDOMAIN" ]; then
-    awk '{print "server=/"$1"/"}' $DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
+    awk '{print "server=/"$1"/"}' $TMP_DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
 
   else
-    awk -v var="${TARGET}" '{print "address=/"$1"/"var}' $DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
+    awk -v var="${TARGET}" '{print "address=/"$1"/"var}' $TMP_DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
   fi
-
 
   #cp "${DIR}"/data/formats/dnsmasq.d/*.conf "${DNSMASQDIR}"
 }
@@ -416,7 +409,6 @@ dnsmasq()
 
 unbound()
 {
-
   mkdir -p "${UNBOUNDDIR}"
 
   if [ -f "${UNBOUNDCONF}" ]; then
@@ -427,7 +419,7 @@ unbound()
   if [ ${TARGET} = "NXDOMAIN" ]; then
 
     #local-zone: "testdomain.test" static
-    awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $DOMAINS > "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
+    awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $TMP_DOMAINS > "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
 
   else
 
@@ -438,7 +430,7 @@ unbound()
     #local-data: "example.tld A 127.0.0.1"
       echo "local-zone: \"${line}\" redirect"    >> "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
       echo "local-data: \"${line} A ${TARGET}\"" >> "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
-    done < $DOMAINS
+    done < $TMP_DOMAINS
   fi
 }
 
@@ -446,7 +438,6 @@ unbound()
 
 pdnsd()
 {
-
   mkdir -p "${PDNSDDIR}"
 
   if [ -f "${PDNSDCONF}" ]; then
@@ -459,15 +450,14 @@ pdnsd()
   fi
 
   #neg { name=example.tld; types=domain; }
-  awk '{print "neg { name="$1"; types=domain; }"}' $DOMAINS > "${OUTPUTFILE:=${PDNSDDIR}/pdnsd-master.conf}"
-  #awk '{print "neg { name="$1"; types=A,AAAA; }"}' $DOMAINS > "${OUTPUTFILE:=${PDNSDDIR}/pdnsd-master.conf}"
+  awk '{print "neg { name="$1"; types=domain; }"}'  $TMP_DOMAINS > "${OUTPUTFILE:=${PDNSDDIR}/pdnsd-master.conf}"
+  #awk '{print "neg { name="$1"; types=A,AAAA; }"}' $TMP_DOMAINS > "${OUTPUTFILE:=${PDNSDDIR}/pdnsd-master.conf}"
 }
 
 
 daemons()
 {
-
-INIT=`ls -l /proc/1/exe`
+  INIT=`ls -l /proc/1/exe`
   if [[ $INIT == *"systemd"* ]]; then
     systemctl enable "${FORMAT}" && systemctl restart "${FORMAT}"
   elif [[ $INIT == *"upstart"* ]]; then
@@ -499,52 +489,35 @@ EOF
 
 welcome
 
-#Check the number of arguments. If none are passed, print help and exit.
-NUMARGS=$#
-
-if [ $NUMARGS -eq 0 ]; then
+if [ $# -eq 0 ]; then
   echo -e "\n\t Do you wish to use the default settings?"
   echo -e "\t ./FreeContributor.sh -f dnsmasq -t NXDOMAIN\n"
   select yn in "Yes" "No"; do
     case $yn in
         Yes ) ./FreeContributor.sh -f dnsmasq -t NXDOMAIN;;
-        No ) exit;;
+        No )  ./FreeContributor.sh -h;;
     esac
   done
 fi
 
 while getopts ":t:f:o:h" opt; do
   case $opt in
-    h)
-      usage
-      exit 1
-    ;;
-    f)
-      FORMAT="$OPTARG"
-    ;;
-    o)
-      OUTPUTFILE="$OPTARG"
-    ;;
-    t)
-      TARGET="$OPTARG"
-    ;;
-    \?)
-      echo -e "\n\tInvalid option: -$OPTARG" >&2
-      usage
-      exit 1
-    ;;
+    h) usage; exit 0;;
+    f) FORMAT="$OPTARG";;
+    o) OUTPUTFILE="$OPTARG";;
+    t) TARGET="$OPTARG";;
+    \?) echo -e "\n\tInvalid option: -$OPTARG" >&2; usage; exit 0;;
   esac
 done
-
 shift "$((OPTIND-1))"
 
 processing()
 {
-    rootcheck
-    resolv
-    dependencies
-    download_sources
-    extract_domains
+  rootcheck
+  resolv
+  dependencies
+  download_sources
+  extract_domains
 }
 
 
