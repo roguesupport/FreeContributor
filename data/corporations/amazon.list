@@ -8,6 +8,8 @@
 # Provider: Amazon
 #
 amazon-adsystem.com
+amazonaws.com
+compute.amazonaws.com
 s3.amazonaws.com
 assoc-amazon.co.uk
 assoc-amazon.com

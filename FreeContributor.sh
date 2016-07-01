@@ -264,45 +264,14 @@ sources=(
     'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_malvertising'
     'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_malware'
     'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_tracking'
+## Mahakala
+    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/mahakala'
 ## Airelle's host file mirror
 #    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/Hosts.rsk'
 #    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/Hosts.sex'
 #    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/Hosts.mis'
 #    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/Hosts.pub'
 #
-
-#    'http://hostsfile.mine.nu/Hosts'
-## Terms of Use of hpHosts
-## This service is free to use, however, any and ALL automated use is 
-## strictly forbidden without express permission from ourselves 
-#    'http://hosts-file.net/ad_servers.txt'
-#    'http://hosts-file.net/hphosts-partial.txt'
-# error 'http://securemecca.com/Downloads/hosts.txt' 
-#    'http://www.joewein.net/dl/bl/dom-bl.txt' 
-#    'http://adblock.mahakala.is/' 
-#    'http://mirror1.malwaredomains.com/files/justdomains'
-#    'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt'
-#SSL cerificate 'https://elbinario.net/wp-content/uploads/2015/02/BloquearPubli.txt'
-#    'http://code.taobao.org/svn/adblock/trunk/hosts.txt'
-#    'http://hostsfile.org/Downloads/BadHosts.unx.zip'
-#    'http://support.it-mate.co.uk/downloads/HOSTS.txt'
-#    'https://hosts.neocities.org/'
-#    'https://publicsuffix.org/list/effective_tld_names.dat'
-#    'http://cdn.files.trjlive.com/hosts/hosts-v8.txt'
-#    'http://tcpdiag.dl.sourceforge.net/project/adzhosts/HOSTS.txt'
-#    'http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt'
-#    'https://openphish.com/feed.txt'
-#    'https://easylist-downloads.adblockplus.org/rolist+easylist.txt'
-#    'http://www.shallalist.de/Downloads/shallalist.tar.gz'
-#    'http://support.it-mate.co.uk/downloads/HOSTS.txt'
-#    'https://raw.githubusercontent.com/reek/anti-adblock-killer/master/anti-adblock-killer-filters.txt'
-#    'http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.current'
-#    'https://easylist-downloads.adblockplus.org/malwaredomains_full.txt'
-#    'https://easylist-downloads.adblockplus.org/easyprivacy.txt'
-#    'https://easylist-downloads.adblockplus.org/easylist.txt'
-#    'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt'
-#    'http://www.fanboy.co.nz/adblock/opera/urlfilter.ini'
-#    'http://www.fanboy.co.nz/adblock/fanboy-tracking.txt'
 )
 
   printf "\n    FreeContributor is downloading data...\n"
