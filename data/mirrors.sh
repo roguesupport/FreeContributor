@@ -13,8 +13,6 @@
 # Mirrors sources
 #
 
-AGENT="'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0'"
-CMD_EXT="http://forum.xda-developers.com/"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo "
@@ -34,7 +32,7 @@ curl 'https://mirror.cedia.org.ec/malwaredomains/justdomains'                   
 curl 'http://www.joewein.net/dl/bl/dom-bl.txt'                                                     --output ./mirrors/joewein
 curl 'http://code.taobao.org/svn/adblock/trunk/hosts.txt'                                          --output ./mirrors/taobao
 curl 'https://isc.sans.edu/feeds/suspiciousdomains_High.txt'                                       --output ./mirrors/suspiciousdomains_high
-curl ''https://www.dshield.org/feeds/suspiciousdomains_Low.txt''                                   --output ./mirrors/suspiciousdomains_low
+curl 'https://www.dshield.org/feeds/suspiciousdomains_Low.txt'                                     --output ./mirrors/suspiciousdomains_low
 curl 'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt'                                   --output ./mirrors/RW_DOMBL
 curl 'https://ransomwaretracker.abuse.ch/downloads/CW_C2_DOMBL.txt'                                --output ./mirrors/CW_C2_DOMBL
 curl 'https://ransomwaretracker.abuse.ch/downloads/CW_PS_DOMBL.txt'                                --output ./mirrors/CW_PS_DOMBL
@@ -48,7 +46,7 @@ curl 'https://feodotracker.abuse.ch/blocklist/?download=domainblocklist'        
 curl 'https://palevotracker.abuse.ch/blocklists.php?download=domainblocklist'                      --output ./mirrors/palevotracker
 curl 'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'                         --output ./mirrors/zeustracker
 curl 'https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt'          --output ./mirrors/hosts-blocklists
-curl 'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt                          --output ./mirrors/caraesnaur    # Blocks facebook at the end
+curl 'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt                          --output ./mirrors/caraesnaur    # Blocks Facebook at the end
 curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt'                                  --output ./mirrors/disconnect_ad
 curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'                            --output ./mirrors/disconnect_tracking
 curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'                        --output ./mirrors/disconnect_malvertising_tmp \
@@ -59,36 +57,75 @@ curl 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/
 curl 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/spy.txt'      --output ./mirrors/win10spy
 curl 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/update.txt'   --output ./mirrors/win10update
 
+
 if [ -e "${DIR}/mirrors/mahakala" ]; then 
   rm "${DIR}/mirrors/mahakala" 
 fi
 
 curl -A 'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0' -e http://forum.xda-developers.com/ http://adblock.mahakala.is/ \
 | grep -v "#" | awk '{print $2}' >> ./mirrors/mahakala
+"
 
-## Untested Lists:                       
+
+# requires p7zip
+#curl 'http://rlwpx.free.fr/WPFF/htrc.7z'                              --output ./mirrors/htrc.7z 
+curl 'http://rlwpx.free.fr/WPFF/hpub.7z'                              --output ./mirrors/hpub.7z
+curl 'http://rlwpx.free.fr/WPFF/hrsk.7z'                              --output ./mirrors/hrsk.7z
+curl 'http://rlwpx.free.fr/WPFF/hsex.7z'                              --output ./mirrors/hsex.7z
+curl 'http://rlwpx.free.fr/WPFF/hmis.7z'                              --output ./mirrors/hmis.7z
+
+
+for file in ${DIR}/mirrors/*.7z
+do
+    echo "${file}"
+    7z x "${file}" -o${DIR}/mirrors/ && rm "${file}"
+done
+
+echo "test4"
+
+rm -rf ${DIR}/mirrors/BadHosts.unx
+
+curl 'http://hostsfile.org/Downloads/BadHosts.unx.zip'                --output ./mirrors/BadHosts.zip && \
+unzip ./mirrors/BadHosts.zip -d ./mirrors/ && rm ${DIR}/mirrors/BadHosts.zip
+
+cp ${DIR}/mirrors/BadHosts.unx/add*  ${DIR}/mirrors/
+
+rm -rf ${DIR}/mirrors/BadHosts.unx
+
+
+## Untested Lists: 
+#
+# download adblock lists
 #    'https://easylist-downloads.adblockplus.org/malwaredomains_full.txt'
 #    'https://easylist-downloads.adblockplus.org/rolist+easylist.txt'
 #    'https://easylist-downloads.adblockplus.org/easyprivacy.txt'
 #    'https://easylist-downloads.adblockplus.org/easylist.txt'
 #    'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt'
+#
+#!---------------------------Third-party advertisers---------------------------!
+#! *** easylist:easylist/easylist_adservers.txt ***
+#||007-gateway.com^$third-party
+#
+#
+#!-------------------------Third-party blocking rules--------------------------!
+#! *** easylist:fanboy-addon/fanboy_annoyance_thirdparty.txt ***
+#||123cursors.com^$third-party
+#
+#
+#curl -L https://easylist-downloads.adblockplus.org/easylist.txt \
+#        https://easylist-downloads.adblockplus.org/malwaredomains_full.txt \
+#        > adblock.unsorted
+#
+# look for:  ||domain.tld^
+#sort -u adblock.unsorted | grep ^\|\|.*\^$ | grep -v \/ > adblock.sorted
+#
+# remove extra chars
+#sed 's/[\|^]//g' < adblock.sorted > adblock.hosts
 #    'http://www.fanboy.co.nz/adblock/opera/urlfilter.ini'
 #    'http://www.fanboy.co.nz/adblock/fanboy-tracking.txt'
 # blacklist_from *@001web.net
 #curl 'http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.current'
 #http://www.sa-blacklist.stearns.org/sa-blacklist/sa-blacklist.200904171239.domains
-# requires p7zip
-#curl 'http://rlwpx.free.fr/WPFF/htrc.7z'                             --output ./mirrors/htrc.7z 
-#curl 'http://rlwpx.free.fr/WPFF/hpub.7z'                              --output ./mirrors/hpub.7z
-#curl 'http://rlwpx.free.fr/WPFF/hrsk.7z'                              --output ./mirrors/hrsk.7z
-#curl 'http://rlwpx.free.fr/WPFF/hsex.7z'                              --output ./mirrors/hsex.7z
-#curl 'http://rlwpx.free.fr/WPFF/hmis.7z'                              --output ./mirrors/hmis.7z
-#curl 'http://hostsfile.org/Downloads/BadHosts.unx.zip'                --output ./mirrors/BadHosts.zip && \
-#unzip ./mirrors/BadHosts.zip -d ./mirrors/ && rm ./mirrors/BadHosts.zip
-#for file in ${DIR}/mirrors/*.7z
-#do
-#    7z x "${file}" -o${dir}/mirrors/ && rm "${file}"
-#done
 #    'http://adblock.gjtech.net/?format=unix-hosts'
 #    'http://hostsfile.mine.nu/Hosts'
 ##

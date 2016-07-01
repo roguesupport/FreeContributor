@@ -23,12 +23,12 @@
 #  * Dnsmasq or Unbound or Pdnsd
 set -e
 ## Global Variables---- --------------------------------------------------------
-FREECONTRIBUTOR_VERSION='0.4.3'
+FREECONTRIBUTOR_VERSION='0.4.4'
 REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
 REDIRECTIP6="${REDIRECTIP6:=::}"
 
-DNSSERVER1="${DNSSERVER1:=}"
-DNSSERVER2="${DNSSERVER2:=}"
+DNSSERVER1="${DNSSERVER1:=91.239.100.100}"
+DNSSERVER2="${DNSSERVER2:=89.233.43.71}"
 
 TARGET="${TARGET:=$REDIRECTIP4}"
 FORMAT="${FORMAT:=dnsmasq}"
@@ -42,6 +42,7 @@ TMP_DOMAINS=$(mktemp /tmp/domains.XXXXX)
 # resolv
 RESOLVCONF="${RESOLVCONF:=/etc/resolv.conf}"
 RESOLVCONFBAK="${RESOLVCONFBAK:=/etc/resolv.conf.bak}"
+DHCPDCONF="${DHCPDCONF:=/etc/dhcpcd.conf}"
 
 # hosts
 HOSTSCONF="${HOSTSCONF:=/etc/hosts}"
@@ -184,13 +185,16 @@ dependencies()
 resolv()
 {
   if [ -f "$RESOLVCONF" ]; then
-    cp $RESOLVCONF  $RESOLVCONFBAK
+    cp $RESOLVCONF $RESOLVCONFBAK
+    cp $DIR/conf/resolv.conf $RESOLVCONF
   fi
 
-  #if [ ${FORMAT} != "none" ] || [ ${FORMAT} != "hosts" ]; then
-  #  cp "${DIR}"/conf/resolv.conf "${RESOLVCONF}"
-  #  chattr +i "${RESOLVCONF}"
-  #fi
+## Prevent the dhcpcd daemon from overwriting /etc/resolv.conf
+## or add to /etc/dhcpcd.conf
+## static domain_name_servers=$DNSSERVER1 $DNSSERVER2
+  if ! grep -Fxq "nohook resolv.conf" "$DHCPDCONF"; then
+    echo -e "\nnohook resolv.conf" >> "$DHCPDCONF"
+  fi
 }
 
 
@@ -264,7 +268,7 @@ sources=(
     'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_malvertising'
     'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_malware'
     'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_tracking'
-## Mahakala
+## Mahakala - Mother of All Ad Blocks list
     'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/mahakala'
 ## Airelle's host file mirror
 #    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/Hosts.rsk'
@@ -278,7 +282,7 @@ sources=(
   for item in ${sources[*]}
   do
     #echo -e "\n\t :: Downloading from URL: $item"
-    download $item >> $TMP_DOMAINS_RAW || { echo -e "\n\t Error downloading $item"; exit 1; }
+    download $item >> $TMP_DOMAINS_RAW || { echo -e "\n\t Error downloading $item"; }
   done
 }
 
@@ -371,8 +375,6 @@ dnsmasq()
   else
     awk -v var="${TARGET}" '{print "address=/"$1"/"var}' $TMP_DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
   fi
-
-  #cp "${DIR}"/data/formats/dnsmasq.d/*.conf "${DNSMASQDIR}"
 }
 
 ## unbound -----------------------------------------------------------------
@@ -401,6 +403,12 @@ unbound()
       echo "local-zone: \"${line}\" redirect"    >> "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
       echo "local-data: \"${line} A ${TARGET}\"" >> "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
     done < $TMP_DOMAINS
+  fi
+
+  if [ ! -f ${UNBOUNDDIR}/unbound_server.key ]; then
+    # Setting up unbound-control to generate a self-signed certificate 
+    # and private key for the server, as well as the client
+    unbound-control-setup
   fi
 }
 

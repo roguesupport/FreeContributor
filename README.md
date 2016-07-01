@@ -28,11 +28,6 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
  - [Adblocking: advertising 'accounts for half of data used to read articles'](http://www.theguardian.com/media/2016/mar/16/ad-blocking-advertising-half-of-data-used-articles)
  - [The Verge's web sucks](http://blog.lmorchard.com/2015/07/22/the-verge-web-sucks/) and [The web is Doom](https://mobiforge.com/research-analysis/the-web-is-doom)
 
-## What the scripts does?
-
- - Backup the original configuration files.
- - Download and merge domains lists from various sources.
-
 ## Benefits and Features
 
  - Low CPU and RAM usage.
@@ -52,10 +47,6 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
  - [GNU coreutils](http://www.gnu.org/software/coreutils)
  - [GNU wget](https://www.gnu.org/software/wget/) or [cURL](http://curl.haxx.se/) (default)
  - DNS resolver: [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) (default), [Unbound](https://unbound.net/) or [Pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/index.html)
-
-## gcarq Fork
-
-If you just want a way to create a very simple dns-blacklist generator use [gcarq FreeContributor version](https://github.com/gcarq/FreeContributor).
 
 ## Installation and Usage
 
@@ -125,13 +116,13 @@ Thanks to the people working hard to maintain the filter lists below that FreeCo
 |[Adaway list](https://adaway.org/hosts.txt)                                       | Infrequent updates, approx. 400 entries                 | CC Attribution 3.0 |
 |[Disconnect](https://disconnect.me/)                                              | Numerous updates on the same day, approx. 6.500 entries | ?                  |
 |[MVPS Hosts](http://winhelp2002.mvps.org/hosts.htm)                               | Infrequent updates, approx. 15.000 entries              | CC Attribution-NonCommercial-ShareAlike 4.0 |
-|[hpHosts’s ad and tracking servers‎](http://www.hosts-file.net/)                   |                                                         | *Read [Terms of Use](http://www.hosts-file.net/)* |
+|[hpHosts‎](http://www.hosts-file.net/)                                             |                                                         | *Read [Terms of Use](http://www.hosts-file.net/)* |
 |[Peter Lowe’s Ad server list](http://pgl.yoyo.org/adservers/)                     | Weekly updates, approx. 2.500 entries                   | ? |
 |[Dan Pollock’s hosts file](http://someonewhocares.org/hosts/)                     | Weekly updates, approx. 12.000 entries                  | non-commercial |
 |[CAMELEON](http://sysctl.org/cameleon/)                                           | Weekly updates, approx. 21.000 entries                  | ? |
 |[StevenBlack - hosts](https://github.com/StevenBlack/hosts/)                      |                                                         | ? |
 |[Quidsup - notrack](https://github.com/quidsup/notrack)                           |                                                         | ? |
-|[Gorhill- uMatrix](https://github.com/gorhill/uMatrix)                            |                                                         | ? |
+|[Gorhill - uMatrix](https://github.com/gorhill/uMatrix)                           |                                                         | ? |
 |[Malware Domain List](http://www.malwaredomainlist.com/)                          | Daily updates, approx. 1.500 entries                    | ? |
 |[AdBlock filter](http://adblock.gjtech.net/)                                      |                                                         | CC Attribution 3.0 |
 |[Hostfile project](http://hostsfile.org/hosts.html)                               |                                                         | LGPL as GPLv2 |
