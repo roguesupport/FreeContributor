@@ -207,7 +207,7 @@ return NXDOMAIN.
 
 
 | Program                                                         | Language      | Adblocking Method                              |
-| :-------------                                                  | :-------------| :--------------------------------------------  |
+| -------------                                                   | ------------- | --------------------------------------------   |
 | [FreeContributor](https://github.com/tbds/FreeContributor)      | Bash          | DNS resolver (Dnsmasq, Unbound or Pdnsd)       |
 | [Pi-Hole](https://pi-hole.net/)                                 | Bash, Php     | Dnsmasq                                        |
 | [NoTrack](https://github.com/quidsup/notrack)                   | Bash, Php     | Dnsmasq                                        |

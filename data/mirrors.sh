@@ -15,7 +15,6 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo "
 curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/adaway.org/hosts'            --output ./mirrors/adaway
 curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/malwaredomainlist.com/hosts' --output ./mirrors/malwaredomainlist
 curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts'              --output ./mirrors/mvps
@@ -56,15 +55,16 @@ curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt'          
 curl 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/extra.txt'    --output ./mirrors/win10extra
 curl 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/spy.txt'      --output ./mirrors/win10spy
 curl 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/update.txt'   --output ./mirrors/win10update
+curl 'https://raw.githubusercontent.com/cbuijs/rpz-scum-blocker/master/block-domains.list'         --output ./mirrors/block-domains.list
+curl 'https://raw.githubusercontent.com/cbuijs/rpz-scum-blocker/master/my.include'                 --output ./mirrors/my.include
+ 
 
-
-if [ -e "${DIR}/mirrors/mahakala" ]; then 
+if [ -e "${DIR}/mirrors/mahakala" ]; then
   rm "${DIR}/mirrors/mahakala" 
 fi
 
 curl -A 'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0' -e http://forum.xda-developers.com/ http://adblock.mahakala.is/ \
 | grep -v "#" | awk '{print $2}' >> ./mirrors/mahakala
-"
 
 
 # requires p7zip

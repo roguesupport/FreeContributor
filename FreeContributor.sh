@@ -192,8 +192,11 @@ resolv()
 ## Prevent the dhcpcd daemon from overwriting /etc/resolv.conf
 ## or add to /etc/dhcpcd.conf
 ## static domain_name_servers=$DNSSERVER1 $DNSSERVER2
-  if ! grep -Fxq "nohook resolv.conf" "$DHCPDCONF"; then
-    echo -e "\nnohook resolv.conf" >> "$DHCPDCONF"
+
+  if [ -f "$DHCPDCONF" ]; then 
+    if ! grep -Fxq "nohook resolv.conf" "$DHCPDCONF"; then
+      echo -e "\nnohook resolv.conf" >> "$DHCPDCONF"
+    fi
   fi
 }
 
