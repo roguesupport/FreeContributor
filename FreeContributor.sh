@@ -272,7 +272,7 @@ sources=(
     'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_malware'
     'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/disconnect_tracking'
 ## Mahakala - Mother of All Ad Blocks list
-    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/mahakala'
+#    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/mahakala'
 ## Airelle's host file mirror
 #    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/Hosts.rsk'
 #    'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/mirrors/Hosts.sex'
@@ -369,8 +369,9 @@ dnsmasq()
 
   if [ -f "${DNSMASQCONF}" ]; then
     cp "${DNSMASQCONF}" "${DNSMASQCONFBAK}"
-    cp "${DIR}"/conf/dnsmasq.conf "${DNSMASQCONF}"
   fi
+
+  cp "${DIR}"/conf/dnsmasq.conf "${DNSMASQCONF}"
 
   if [ ${TARGET} = "NXDOMAIN" ]; then
     awk '{print "server=/"$1"/"}' $TMP_DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
@@ -388,17 +389,20 @@ unbound()
 
   if [ -f "${UNBOUNDCONF}" ]; then
     cp "${UNBOUNDCONF}" "${UNBOUNDCONFBAK}"
-    cp "${DIR}"/conf/unbound.conf "${UNBOUNDCONF}"
   fi
+
+  cp "${DIR}"/conf/unbound.conf "${UNBOUNDCONF}"
+
+  curl -s https://www.internic.net/domain/named.cache -o "${UNBOUNDDIR}"/root.hints
 
   if [ ${TARGET} = "NXDOMAIN" ]; then
 
     #local-zone: "testdomain.test" static
     awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $TMP_DOMAINS > "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
 
-  else
+  elif [ -f "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}" ]; then
 
-    rm "${UNBOUNDDIR}"/unbound-master.conf
+    rm "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
 
     while read line; do
     #local-zone: "example.tld" redirect
@@ -413,6 +417,8 @@ unbound()
     # and private key for the server, as well as the client
     unbound-control-setup
   fi
+
+  unbound-checkconf "${UNBOUNDCONF}"
 }
 
 ## pdnsd -------------------------------------------------------------------
@@ -423,8 +429,9 @@ pdnsd()
 
   if [ -f "${PDNSDCONF}" ]; then
     cp "${PDNSDCONF}" "${PDNSDCONFBAK}"
-    cp "${DIR}"/conf/pdnsd.conf "${PDNSDCONF}"
   fi
+
+  cp "${DIR}"/conf/pdnsd.conf "${PDNSDCONF}"
 
   if [ ${TARGET} != "NXDOMAIN" ]; then
     echo -e "Pdnsd format does only support target NXDOMAIN."
