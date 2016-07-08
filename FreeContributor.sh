@@ -23,12 +23,9 @@
 #  * Dnsmasq or Unbound or Pdnsd
 set -e
 ## Global Variables---- --------------------------------------------------------
-FREECONTRIBUTOR_VERSION='0.4.4'
+FREECONTRIBUTOR_VERSION='0.4.5'
 REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
 REDIRECTIP6="${REDIRECTIP6:=::}"
-
-DNSSERVER1="${DNSSERVER1:=91.239.100.100}"
-DNSSERVER2="${DNSSERVER2:=89.233.43.71}"
 
 TARGET="${TARGET:=$REDIRECTIP4}"
 FORMAT="${FORMAT:=dnsmasq}"
@@ -42,7 +39,13 @@ TMP_DOMAINS=$(mktemp /tmp/domains.XXXXX)
 # resolv
 RESOLVCONF="${RESOLVCONF:=/etc/resolv.conf}"
 RESOLVCONFBAK="${RESOLVCONFBAK:=/etc/resolv.conf.bak}"
+
+# Change here the DNS servers
+DNSSERVER1="${DNSSERVER1:=91.239.100.100}"
+DNSSERVER2="${DNSSERVER2:=89.233.43.71}"
+
 DHCPDCONF="${DHCPDCONF:=/etc/dhcpcd.conf}"
+NETCONF="${NETCONF:=/etc/NetworkManager/NetworkManager.conf}"
 
 # hosts
 HOSTSCONF="${HOSTSCONF:=/etc/hosts}"
@@ -191,7 +194,7 @@ resolv()
 
 ## Prevent the dhcpcd daemon from overwriting /etc/resolv.conf
 ## or add to /etc/dhcpcd.conf
-## static domain_name_servers=$DNSSERVER1 $DNSSERVER2
+## echo -e "\nstatic domain_name_servers=$DNSSERVER1 $DNSSERVER2" >> /etc/dhcpcd.conf
 
   if [ -f "$DHCPDCONF" ]; then 
     if ! grep -Fxq "nohook resolv.conf" "$DHCPDCONF"; then
@@ -260,6 +263,11 @@ sources=(
     'https://ransomwaretracker.abuse.ch/downloads/TL_PS_DOMBL.txt'
     'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'
     'http://adblock.gjtech.net/?format=unix-hosts'
+## Adblock lists
+##
+## https://www.reddit.com/r/pihole/comments/4p2tp7/adding_easylist_and_other_adblocklike_sources_to/
+##
+#   'https://raw.githubusercontent.com/tbds/FreeContributor/master/data/corporations/adblock.list'
 ## Mirror
     'https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt'
 ## https://github.com/crazy-max/WindowsSpyBlocker
@@ -371,7 +379,13 @@ dnsmasq()
     cp "${DNSMASQCONF}" "${DNSMASQCONFBAK}"
   fi
 
+  # to test the dnsmasq conf
+  # dnsmasq --test
   cp "${DIR}"/conf/dnsmasq.conf "${DNSMASQCONF}"
+
+  if [ -f "${NETCONF}" ]; then
+    sed -i 's/dns=/dns=dnsmasq/g' "${NETCONF}"
+  fi
 
   if [ ${TARGET} = "NXDOMAIN" ]; then
     awk '{print "server=/"$1"/"}' $TMP_DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
