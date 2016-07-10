@@ -1,3 +1,4 @@
+
 # Corporations
 
 Files in this project list the domain names of servers, one per line that can be added to FreeContributor 
@@ -6,6 +7,7 @@ to tell your computer to never talk to servers on that domain name.
 
 | Corporation            | Domains  |  Hosts    | Dnsmasq   | Unbound | Pdnsd   |
 | -------                | -------  | -------   | -------   | ------- | ------- |
+| Alphabet               | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/corporations/adblock.list)   | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/hosts.d/hosts-adblock.list)   | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/dnsmasq.d/dnsmasq-adblock.list.conf)   | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/unbound.d/unbound-adblock.list.conf)   | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/pdnsd.d/pdnsd-adblock.list.conf)  |
 | Alphabet               | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/corporations/google.list)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/hosts.d/hosts-google.list)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/dnsmasq.d/dnsmasq-google.list.conf)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/unbound.d/unbound-google.list.conf)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/pdnsd.d/pdnsd-google.list.conf)   |
 | Adobe                  | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/corporations/adobe.list)     | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/hosts.d/hosts-adobe.list)     | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/dnsmasq.d/dnsmasq-adobe.list.conf)     | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/unbound.d/unbound-adobe.list.conf)     | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/pdnsd.d/pdnsd-adobe.list.conf)    |
 | Amazon                 | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/corporations/amazon.list)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/hosts.d/hosts-amazon.list)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/dnsmasq.d/dnsmasq-amazon.list.conf)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/unbound.d/unbound-amazon.list.conf)    | [link](https://raw.githubusercontent.com/tbds/FreeContributor/master/data/formats/pdnsd.d/pdnsd-amazon.list.conf)   |
@@ -23,7 +25,7 @@ Don't forget to edit the dns resolver config file to include the correspond file
 
 For dnsmasq, just place the file inside `/etc/dnsmasq.d`
 
-For unbound, add the following line in `/etc/unbound/unbound.conf`
+For unbound, add the following line in `/etc/unbound/unbound.conf` inside the `server:` section
 
 
     include: /etc/unbound/unbound-<corporation>.list.conf

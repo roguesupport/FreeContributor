@@ -15,57 +15,59 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/adaway.org/hosts'            --output ./mirrors/adaway
-curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/malwaredomainlist.com/hosts' --output ./mirrors/malwaredomainlist
-curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts'              --output ./mirrors/mvps
-curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/someonewhocares.org/hosts'   --output ./mirrors/someonewhocares
-curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/yoyo.org/hosts'              --output ./mirrors/yoyo
-curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/tyzbit/hosts'                --output ./mirrors/tyzbit
-curl 'https://raw.githubusercontent.com/StevenBlack/hosts/master/extensions/gambling/hosts'        --output ./mirrors/gambling
-curl 'https://raw.githubusercontent.com/quidsup/notrack/master/trackers.txt'                       --output ./mirrors/notrack
-curl 'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt'       --output ./mirrors/umatrix
-curl 'https://raw.githubusercontent.com/zant95/hosts/master/hosts'                                 --output ./mirrors/zant95
-curl 'http://sysctl.org/cameleon/hosts'                                                            --output ./mirrors/cameleon
-curl 'http://malwaredomains.lehigh.edu/files/justdomains'                                          --output ./mirrors/malwaredomains
-curl 'https://mirror.cedia.org.ec/malwaredomains/justdomains'                                      --output ./mirrors/justdomains
-curl 'http://www.joewein.net/dl/bl/dom-bl.txt'                                                     --output ./mirrors/joewein
-curl 'http://code.taobao.org/svn/adblock/trunk/hosts.txt'                                          --output ./mirrors/taobao
-curl 'https://isc.sans.edu/feeds/suspiciousdomains_High.txt'                                       --output ./mirrors/suspiciousdomains_high
-curl 'https://www.dshield.org/feeds/suspiciousdomains_Low.txt'                                     --output ./mirrors/suspiciousdomains_low
-curl 'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt'                                   --output ./mirrors/RW_DOMBL
-curl 'https://ransomwaretracker.abuse.ch/downloads/CW_C2_DOMBL.txt'                                --output ./mirrors/CW_C2_DOMBL
-curl 'https://ransomwaretracker.abuse.ch/downloads/CW_PS_DOMBL.txt'                                --output ./mirrors/CW_PS_DOMBL
-curl 'https://ransomwaretracker.abuse.ch/downloads/TC_C2_DOMBL.txt'                                --output ./mirrors/TC_C2_DOMBL
-curl 'https://ransomwaretracker.abuse.ch/downloads/TC_PS_DOMBL.txt'                                --output ./mirrors/TC_PS_DOMBL
-curl 'https://ransomwaretracker.abuse.ch/downloads/LY_C2_DOMBL.txt'                                --output ./mirrors/LY_C2_DOMBL
-curl 'https://ransomwaretracker.abuse.ch/downloads/LY_PS_DOMBL.txt'                                --output ./mirrors/LY_PS_DOMBL
-curl 'https://ransomwaretracker.abuse.ch/downloads/TL_C2_DOMBL.txt'                                --output ./mirrors/TL_C2_DOMBL
-curl 'https://ransomwaretracker.abuse.ch/downloads/TL_PS_DOMBL.txt'                                --output ./mirrors/TL_PS_DOMBL
-curl 'https://feodotracker.abuse.ch/blocklist/?download=domainblocklist'                           --output ./mirrors/feodotracker
-curl 'https://palevotracker.abuse.ch/blocklists.php?download=domainblocklist'                      --output ./mirrors/palevotracker
-curl 'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'                         --output ./mirrors/zeustracker
-curl 'https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt'          --output ./mirrors/hosts-blocklists
-curl 'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt                          --output ./mirrors/caraesnaur    # Blocks Facebook at the end
-curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt'                                  --output ./mirrors/disconnect_ad
-curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'                            --output ./mirrors/disconnect_tracking
-curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'                        --output ./mirrors/disconnect_malvertising_tmp \
-&& tail -n +5 $DIR/mirrors/disconnect_malvertising_tmp > $DIR/mirrors/disconnect_malvertising && rm ./mirrors/disconnect_malvertising_tmp
-curl 'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt'                             --output ./mirrors/disconnect_malware_tmp \
-&& tail -n +5 $DIR/mirrors/disconnect_malware_tmp > $DIR/mirrors/disconnect_malware && rm ./mirrors/disconnect_malware_tmp
-curl 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/extra.txt'    --output ./mirrors/win10extra
-curl 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/spy.txt'      --output ./mirrors/win10spy
-curl 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/update.txt'   --output ./mirrors/win10update
-curl 'https://raw.githubusercontent.com/cbuijs/rpz-scum-blocker/master/block-domains.list'         --output ./mirrors/block-domains.list
-curl 'https://raw.githubusercontent.com/cbuijs/rpz-scum-blocker/master/my.include'                 --output ./mirrors/my.include
- 
+curl -s 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/adaway.org/hosts'            --output ./mirrors/adaway
+curl -s 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/malwaredomainlist.com/hosts' --output ./mirrors/malwaredomainlist
+curl -s 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts'              --output ./mirrors/mvps
+curl -s 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/someonewhocares.org/hosts'   --output ./mirrors/someonewhocares
+curl -s 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/yoyo.org/hosts'              --output ./mirrors/yoyo
+curl -s 'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/tyzbit/hosts'                --output ./mirrors/tyzbit
+curl -s 'https://raw.githubusercontent.com/StevenBlack/hosts/master/extensions/gambling/hosts'        --output ./mirrors/gambling
+curl -s 'https://raw.githubusercontent.com/quidsup/notrack/master/trackers.txt'                       --output ./mirrors/notrack
+curl -s 'https://raw.githubusercontent.com/gorhill/uMatrix/master/assets/umatrix/blacklist.txt'       --output ./mirrors/umatrix
+curl -s 'https://raw.githubusercontent.com/zant95/hosts/master/hosts'                                 --output ./mirrors/zant95
+curl -s 'http://sysctl.org/cameleon/hosts'                                                            --output ./mirrors/cameleon
+curl -s 'http://malwaredomains.lehigh.edu/files/justdomains'                                          --output ./mirrors/malwaredomains
+curl -s 'https://mirror.cedia.org.ec/malwaredomains/justdomains'                                      --output ./mirrors/justdomains
+curl -s 'http://www.joewein.net/dl/bl/dom-bl.txt'                                                     --output ./mirrors/joewein
+curl -s 'http://code.taobao.org/svn/adblock/trunk/hosts.txt'                                          --output ./mirrors/taobao
+curl -s 'https://isc.sans.edu/feeds/suspiciousdomains_High.txt'                                       --output ./mirrors/suspiciousdomains_high
+curl -s 'https://www.dshield.org/feeds/suspiciousdomains_Low.txt'                                     --output ./mirrors/suspiciousdomains_low
+curl -s 'https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt'                                   --output ./mirrors/RW_DOMBL
+curl -s 'https://ransomwaretracker.abuse.ch/downloads/CW_C2_DOMBL.txt'                                --output ./mirrors/CW_C2_DOMBL
+curl -s 'https://ransomwaretracker.abuse.ch/downloads/CW_PS_DOMBL.txt'                                --output ./mirrors/CW_PS_DOMBL
+curl -s 'https://ransomwaretracker.abuse.ch/downloads/TC_C2_DOMBL.txt'                                --output ./mirrors/TC_C2_DOMBL
+curl -s 'https://ransomwaretracker.abuse.ch/downloads/TC_PS_DOMBL.txt'                                --output ./mirrors/TC_PS_DOMBL
+curl -s 'https://ransomwaretracker.abuse.ch/downloads/LY_C2_DOMBL.txt'                                --output ./mirrors/LY_C2_DOMBL
+curl -s 'https://ransomwaretracker.abuse.ch/downloads/LY_PS_DOMBL.txt'                                --output ./mirrors/LY_PS_DOMBL
+curl -s 'https://ransomwaretracker.abuse.ch/downloads/TL_C2_DOMBL.txt'                                --output ./mirrors/TL_C2_DOMBL
+curl -s 'https://ransomwaretracker.abuse.ch/downloads/TL_PS_DOMBL.txt'                                --output ./mirrors/TL_PS_DOMBL
+curl -s 'https://feodotracker.abuse.ch/blocklist/?download=domainblocklist'                           --output ./mirrors/feodotracker
+curl -s 'https://palevotracker.abuse.ch/blocklists.php?download=domainblocklist'                      --output ./mirrors/palevotracker
+curl -s 'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'                         --output ./mirrors/zeustracker
+curl -s 'https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt'          --output ./mirrors/hosts-blocklists
+curl -s 'https://raw.githubusercontent.com/CaraesNaur/hosts/master/hosts.txt                          --output ./mirrors/caraesnaur    # Blocks Facebook at the end
+curl -s 'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt'                                  --output ./mirrors/disconnect_ad
+curl -s 'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'                            --output ./mirrors/disconnect_tracking
+curl -s 'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'                        --output ./mirrors/disconnect_malvertising_tmp \
+&& tail -n +5 $DIR/mirrors/disconnect_malvertising_tmp > $DIR/mirrors/disconnect_malvertising && rm $DIR/mirrors/disconnect_malvertising_tmp
+curl -s 'https://s3.amazonaws.com/lists.disconnect.me/simple_malware.txt'                             --output ./mirrors/disconnect_malware_tmp \
+&& tail -n +5 $DIR/mirrors/disconnect_malware_tmp > $DIR/mirrors/disconnect_malware && rm $DIR/mirrors/disconnect_malware_tmp
+curl -s 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/extra.txt'    --output ./mirrors/win10extra
+curl -s 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/spy.txt'      --output ./mirrors/win10spy
+curl -s 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/update.txt'   --output ./mirrors/win10update
+curl -s 'https://raw.githubusercontent.com/cbuijs/rpz-scum-blocker/master/block-domains.list'         --output ./mirrors/block-domains.list
+curl -s 'https://raw.githubusercontent.com/cbuijs/rpz-scum-blocker/master/my.include'                 --output ./mirrors/my.include
+
+echo "ergvwenrienrin"
 
 if [ -e "${DIR}/mirrors/mahakala" ]; then
   rm "${DIR}/mirrors/mahakala" 
 fi
 
-curl -A 'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0' -e http://forum.xda-developers.com/ http://adblock.mahakala.is/ \
-| grep -v "#" | awk '{print $2}' >> ./mirrors/mahakala
-
+echo "
+#curl -A 'Mozilla/5.0' -e http://forum.xda-developers.com/ http://adblock.mahakala.is/ \
+#| grep -v "#" | awk '{print $2}' >> ./mirrors/mahakala
+"
 
 # requires p7zip
 #curl 'http://rlwpx.free.fr/WPFF/htrc.7z'                              --output ./mirrors/htrc.7z 
@@ -94,31 +96,7 @@ rm -rf ${DIR}/mirrors/BadHosts.unx
 
 
 ## Untested Lists: 
-#
-# download adblock lists
-#    'https://easylist-downloads.adblockplus.org/malwaredomains_full.txt'
-#    'https://easylist-downloads.adblockplus.org/rolist+easylist.txt'
-#    'https://easylist-downloads.adblockplus.org/easyprivacy.txt'
-#    'https://easylist-downloads.adblockplus.org/easylist.txt'
-#    'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt'
-#
-#!---------------------------Third-party advertisers---------------------------!
-#! *** easylist:easylist/easylist_adservers.txt ***
-#||007-gateway.com^$third-party
-#
-#
-#!-------------------------Third-party blocking rules--------------------------!
-#! *** easylist:fanboy-addon/fanboy_annoyance_thirdparty.txt ***
-#||123cursors.com^$third-party
-#
-#
-#curl -L https://easylist-downloads.adblockplus.org/easylist.txt \
-#        https://easylist-downloads.adblockplus.org/malwaredomains_full.txt \
-#        > adblock.unsorted
-#
-# look for:  ||domain.tld^
-#sort -u adblock.unsorted | grep ^\|\|.*\^$ | grep -v \/ > adblock.sorted
-#
+
 # remove extra chars
 #sed 's/[\|^]//g' < adblock.sorted > adblock.hosts
 #    'http://www.fanboy.co.nz/adblock/opera/urlfilter.ini'

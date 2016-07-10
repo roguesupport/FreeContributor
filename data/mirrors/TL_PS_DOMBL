@@ -1,10 +1,12 @@
 ##########################################################################
 # TorrentLocker Ransomware Payment Sites domain blocklist (TL_PS_DOMBL)  #
-# Generated on 2016-07-01 10:00:02 UTC                                   #
+# Generated on 2016-07-08 20:05:00 UTC                                   #
 #                                                                        #
 # For questions please refer to:                                         #
 # https://ransomwaretracker.abuse.ch/blocklist/                          #
 ##########################################################################
+mz7oyb3v32vshcvk.bidobject.li
+mz7oyb3v32vshcvk.getstar.li
 mz7oyb3v32vshcvk.torapples.li
 mz7oyb3v32vshcvk.torlongor.li
 de2nuvwegoo32oqv.tormilki.li
@@ -46,4 +48,4 @@ vrvis6ndra5jeggj.livewargaming.ch
 vrvis6ndra5jeggj.livegaming.ch
 rzss2zfue73dfvmj.truewargame.ch
 vrvis6ndra5jeggj.onlinebattlefield.ch
-# 41 entries
+# 43 entries

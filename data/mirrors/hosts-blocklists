@@ -1,7 +1,7 @@
 ################################[UPDATE]#################################
 # Source: https://github.com/notracking/hosts-blocklists
-# Last update: Fri Jul 1 07:50:13 CEST 2016
-# Number of unique hostnames: 27436
+# Last update: Fri Jul 8 07:50:38 CEST 2016
+# Number of unique hostnames: 27410
 #################################[INFO]##################################
 # Blocks ads, fake sites, shock sites, malware hosts and trackers
 # Removed verified false calls and added a large set of custom entries
@@ -1087,6 +1087,7 @@
 0.0.0.0 add.oliveandemerald.com
 0.0.0.0 ad.domainfactory.de
 0.0.0.0 ad.donanimhaber.com
+0.0.0.0 ad.download.cnet.com
 0.0.0.0 ad.download.net
 0.0.0.0 add.providencegalleryandframes.com
 0.0.0.0 add.quantum-marketing-quickies.net
@@ -1265,6 +1266,7 @@
 0.0.0.0 adimg.alice.it
 0.0.0.0 adimg.bnet.com
 0.0.0.0 adimg.chow.com
+0.0.0.0 adimg.cnet.com
 0.0.0.0 adimg.com.com
 0.0.0.0 adimg.download.com
 0.0.0.0 adimg.egroups.com
@@ -1294,6 +1296,7 @@
 0.0.0.0 ad.inmuiads.info
 0.0.0.0 ad.inpizdads.info
 0.0.0.0 ad.inpulds.info
+0.0.0.0 adinterax.cnet.com.edgesuite.net
 0.0.0.0 ad.internetradioinc.com
 0.0.0.0 ad.intsig.net
 0.0.0.0 ad.investopedia.com
@@ -1545,7 +1548,6 @@
 0.0.0.0 ad.pupsik.ru
 0.0.0.0 adpush.dreamscape.com
 0.0.0.0 ad.putenbrust.net
-0.0.0.0 ad.pxlad.io
 0.0.0.0 ad.pyce.info
 0.0.0.0 adq.nextag.com
 0.0.0.0 ad.qq.com
@@ -2099,6 +2101,7 @@
 0.0.0.0 ads.cluster01.oasis.zmh.zope.net
 0.0.0.0 ads.cmediaworld.com
 0.0.0.0 ads.cnbc.com
+0.0.0.0 ads.cnet.com
 0.0.0.0 ads.cnn.com
 0.0.0.0 ads.cnngo.com
 0.0.0.0 ads.cnpapers.com
@@ -2840,7 +2843,6 @@
 0.0.0.0 ads.geekswithblogs.net
 0.0.0.0 ads.gemscool.com
 0.0.0.0 adsgen.bangbros.com
-0.0.0.0 ads.genericlink.com
 0.0.0.0 ads.geoads.net
 0.0.0.0 ads.geornmd.net
 0.0.0.0 ads.germanfriendfinder.com
@@ -4188,7 +4190,6 @@
 0.0.0.0 adunit.chango.ca
 0.0.0.0 adunit.namiflow.com
 0.0.0.0 ad.usatoday.com
-0.0.0.0 ad-us-east-1.pxlad.io
 0.0.0.0 ad.userporn.com
 0.0.0.0 ad.utop.ir
 0.0.0.0 adv01.interfree.it
@@ -5384,7 +5385,6 @@
 0.0.0.0 api.nrelate.com
 0.0.0.0 api.otherlevels.com
 0.0.0.0 api.perun.s5labs.io
-0.0.0.0 api.petametrics.com
 0.0.0.0 api.proofpositivemedia.com
 0.0.0.0 api.quarticon.com
 0.0.0.0 api.salesfeed.com
@@ -6988,7 +6988,6 @@
 0.0.0.0 bm.annonce.cz
 0.0.0.0 bm.hbtronix.de
 0.0.0.0 bminstalacoeseletricas.com.br
-0.0.0.0 bm.met.vgwort.de
 0.0.0.0 bmorealestate.com.ng
 0.0.0.0 bmo.secureaccess.montrealbmo.com
 0.0.0.0 bmp.rentboy.com
@@ -7863,7 +7862,6 @@
 0.0.0.0 cdn.optimatic.com
 0.0.0.0 cdn.orbengine.com
 0.0.0.0 cdn.performance.hlads.com
-0.0.0.0 cdn.petametrics.com
 0.0.0.0 cdn.polmontventures.com
 0.0.0.0 cdn.popwin.net
 0.0.0.0 cdn.program3.com
@@ -8112,7 +8110,6 @@
 0.0.0.0 childrenengland.org.uk
 0.0.0.0 chillout.real.com
 0.0.0.0 china.c-zs.com
-0.0.0.0 chip.met.vgwort.de
 0.0.0.0 chisto-himchisto.com.ua
 0.0.0.0 c.hk.msn.com
 0.0.0.0 chkpt.zdnet.com
@@ -9222,6 +9219,7 @@
 0.0.0.0 ct4dzr.boro.katsujinken.co.uk
 0.0.0.0 ctboucherie.com.br
 0.0.0.0 ct.buzzfeed.com
+0.0.0.0 ct.cnet-ssa.cnet.com
 0.0.0.0 ct.eid.co.nz
 0.0.0.0 c.teromil.com
 0.0.0.0 c.thanksearch.com
@@ -10418,6 +10416,7 @@
 0.0.0.0 dw.cbsi.com
 0.0.0.0 dw.cbsi.com.cn
 0.0.0.0 dw.cbsimg.net
+0.0.0.0 dw.cnet.com
 0.0.0.0 dw.com.com
 0.0.0.0 dwellersheritage.advancementconsultants.com
 0.0.0.0 dw-eu.com.com
@@ -10550,7 +10549,6 @@
 0.0.0.0 ecommerceday.com.ve
 0.0.0.0 ecommstats.s3.amazonaws.com
 0.0.0.0 e-communications.insidebandwidth.com
-0.0.0.0 econa.met.vgwort.de
 0.0.0.0 econda.web.de
 0.0.0.0 economy.mfrconnect.com
 0.0.0.0 econt.elegance.bg
@@ -10930,7 +10928,6 @@
 0.0.0.0 et.twyn-group.com
 0.0.0.0 etui.fs.ml.com
 0.0.0.0 eu0.content-serve.net
-0.0.0.0 eu1.heatmap.it
 0.0.0.0 eue.collect-opnet.com
 0.0.0.0 eugeniofirst.esy.es
 0.0.0.0 eu.link.decideinteractive.com
@@ -11187,7 +11184,6 @@
 0.0.0.0 fax.tinmoinhanh.com
 0.0.0.0 fazendamimosa.com.br
 0.0.0.0 fazendasantaines.com.br
-0.0.0.0 faz.met.vgwort.de
 0.0.0.0 fb1-pw.go2clickbank.com
 0.0.0.0 fb7707vd.bget.ru
 0.0.0.0 fbbaodantri.byethost32.com
@@ -11496,7 +11492,6 @@
 0.0.0.0 focus.buydrugtests.net
 0.0.0.0 focus.cdscollectibles.com
 0.0.0.0 focus.fairweatherleatherworks.com
-0.0.0.0 focus.met.vgwort.de
 0.0.0.0 focus.mfrbudget.com
 0.0.0.0 focus.topsoftwareguide.com
 0.0.0.0 focus.zarca-inc.com
@@ -12118,7 +12113,6 @@
 0.0.0.0 get-back-now.atwebpages.com
 0.0.0.0 get-back-ur-id-fb.atwebpages.com
 0.0.0.0 getbarometer.s3.amazonaws.com
-0.0.0.0 getboating.com.au
 0.0.0.0 getcarisoprodol.polybuild.ru
 0.0.0.0 get.designrainwater.com
 0.0.0.0 getdetails02.sim-technik.de
@@ -12273,7 +12267,6 @@
 0.0.0.0 golden1.synqenta.com
 0.0.0.0 goldenticket.disconnect.me
 0.0.0.0 goldisn.cu.cc
-0.0.0.0 golem.met.vgwort.de
 0.0.0.0 golflinkmedical.com.au
 0.0.0.0 go.ll.net.co
 0.0.0.0 gomgher-enzeghe.890m.com
@@ -12389,6 +12382,8 @@
 0.0.0.0 granturismo.console2pc.info
 0.0.0.0 granular.matorral.cl
 0.0.0.0 graonoponto.com.br
+0.0.0.0 graph.facebook.com
+0.0.0.0 graph.facebook.net
 0.0.0.0 graphics7.nytimes.com
 0.0.0.0 graphics8.nytimes.m7z.net
 0.0.0.0 graphics.cams.com
@@ -12564,7 +12559,6 @@
 0.0.0.0 hamburg.pennerzone.de
 0.0.0.0 hamroekata.com.np
 0.0.0.0 hand.brookviewcommunications.com
-0.0.0.0 handelsblatt.met.vgwort.de
 0.0.0.0 hand.knowthetruthng.com
 0.0.0.0 hand.mfrperformancesolutions.com
 0.0.0.0 hand.nauexpress.com
@@ -12655,7 +12649,6 @@
 0.0.0.0 hebenstreit.us.com
 0.0.0.0 heir.f1foodies.org
 0.0.0.0 heisebanner.geizhals.at
-0.0.0.0 heise.met.vgwort.de
 0.0.0.0 helenacalazans.com.br
 0.0.0.0 helesouurusa.cjb.com
 0.0.0.0 helios.finn.no
@@ -13125,7 +13118,6 @@
 0.0.0.0 idea.raincollege.com
 0.0.0.0 ideaspositivas.com.ve
 0.0.0.0 idg.dmdelivery.com
-0.0.0.0 idgmagazine.met.vgwort.de
 0.0.0.0 id.google.com
 0.0.0.0 idhea.com.ve
 0.0.0.0 id.hellomagazine.com
@@ -13633,7 +13625,6 @@
 0.0.0.0 ipswitchweiap.dlmix.ourdvs.com
 0.0.0.0 iptoo.cruisingsmallship.com
 0.0.0.0 ipwhrtmla.epac.to
-0.0.0.0 i.pxlad.io
 0.0.0.0 iqj-registry-l.100webspace.net
 0.0.0.0 iq.mobilix.mobi
 0.0.0.0 ir0.mobify.com
@@ -15051,6 +15042,7 @@
 0.0.0.0 mads.cbs.com
 0.0.0.0 mads.cbsnews.com
 0.0.0.0 mads.chow.com
+0.0.0.0 mads.cnet.com
 0.0.0.0 mads.cnettv.com
 0.0.0.0 mads.com.com
 0.0.0.0 mads.dailymail.co.uk
@@ -15218,6 +15210,7 @@
 0.0.0.0 marketing.ghosterymktg.com
 0.0.0.0 marketing.hearstmagazines.nl
 0.0.0.0 marketinghub.active.com
+0.0.0.0 marketinghub.hp.com
 0.0.0.0 marketing.kalahari.net
 0.0.0.0 marketing.lloydsbank.co.uk
 0.0.0.0 marketing-material.ieiworld.com
@@ -15516,6 +15509,7 @@
 0.0.0.0 merchandising.mirage.it
 0.0.0.0 merchant.myofferpal.com
 0.0.0.0 merchant.wgiftcard.com
+0.0.0.0 mercury.jd.com
 0.0.0.0 mercury.tiser.com.au
 0.0.0.0 meregivo.com.ua
 0.0.0.0 meridiameridia.3xforum.ro
@@ -16403,6 +16397,7 @@
 0.0.0.0 nettpost.mchecc.com
 0.0.0.0 netwan.inf.br
 0.0.0.0 netweather.accuweather.com
+0.0.0.0 netwebb.gslb.monster.com
 0.0.0.0 network2.aufeminin.com
 0.0.0.0 network-a.bazaarvoice.com
 0.0.0.0 network.adbullion.com
@@ -16714,7 +16709,6 @@
 0.0.0.0 nto8aaris.polarbearhk.com
 0.0.0.0 ntracking.optimatic.com
 0.0.0.0 ntrust.or.kr
-0.0.0.0 n-tv.met.vgwort.de
 0.0.0.0 ntxybhhe.oahqub.ml
 0.0.0.0 nub9r.maisonx.com
 0.0.0.0 nucleocanoabo.com.ve
@@ -17427,7 +17421,6 @@
 0.0.0.0 optimize.innity.com
 0.0.0.0 optimizely.appspot.com
 0.0.0.0 optimizely.s3.amazonaws.com
-0.0.0.0 optimize-stats.voxmedia.com
 0.0.0.0 optimzedby.rmxads.com
 0.0.0.0 option.rainharvestinginternet.com
 0.0.0.0 option.zisvd.com
@@ -18832,7 +18825,6 @@
 0.0.0.0 proud.ampersandhelen.com
 0.0.0.0 proudmary.com.au
 0.0.0.0 prove.phyturrecords.com
-0.0.0.0 providence.voxmedia.com
 0.0.0.0 provide-update.id-ed0801037f5bfd90d0a.epapeventos.com
 0.0.0.0 pro.wupy.org
 0.0.0.0 proximityads.flipcorp.com
@@ -19450,6 +19442,8 @@
 0.0.0.0 rembourssement-impots.gouv.fr.autoresponsi.com
 0.0.0.0 reminder-page.at.ua
 0.0.0.0 remission.tv.gg
+0.0.0.0 remotead.cnet.com
+0.0.0.0 remotead-internal.cnet.com
 0.0.0.0 rem.rezonmedia.eu
 0.0.0.0 rem-track.bild.de
 0.0.0.0 renaiolo.ch.vtxhosting.ch
@@ -19705,7 +19699,6 @@
 0.0.0.0 rp.alcoholsoftcdn.com
 0.0.0.0 rp.filefactscdn.com
 0.0.0.0 rp.mamamama2.com
-0.0.0.0 rp-online.met.vgwort.de
 0.0.0.0 rpt.anchorfree.net
 0.0.0.0 rpt.footlocker.com
 0.0.0.0 rpt.msn.com
@@ -19894,7 +19887,6 @@
 0.0.0.0 s.adexpert.cz
 0.0.0.0 sad.icapop.com
 0.0.0.0 s.adklik.com.tr
-0.0.0.0 s.admathhd.com
 0.0.0.0 s.ads.t-online.de
 0.0.0.0 sad.teleskip.net
 0.0.0.0 sadv.dadapro.com
@@ -20976,7 +20968,6 @@
 0.0.0.0 s-parta.za.pl
 0.0.0.0 spastroyproekt.pe.hu
 0.0.0.0 spbalancas.com.br
-0.0.0.0 spclient.wg.spotify.com
 0.0.0.0 spcode.baidu.com
 0.0.0.0 spd.atdmt.speedera.net
 0.0.0.0 specialoffers.aol.com
@@ -20991,7 +20982,6 @@
 0.0.0.0 speedypc.safecart.com
 0.0.0.0 spell.sellyourilhouse.com
 0.0.0.0 spgrupo.com.br
-0.0.0.0 spiegel.met.vgwort.de
 0.0.0.0 spinbox.consumerreview.com
 0.0.0.0 spinbox.freedom.com
 0.0.0.0 spinbox.maccentral.com
@@ -21127,7 +21117,6 @@
 0.0.0.0 ssl-static.vinsight.de
 0.0.0.0 ssl-stats.wordpress.com
 0.0.0.0 ssl-unlock-pages.esy.es
-0.0.0.0 ssl-vg03.met.vgwort.de
 0.0.0.0 ssl.xplosion.de
 0.0.0.0 ssnhs.arete-energy.us
 0.0.0.0 sso.canada.com
@@ -21342,7 +21331,6 @@
 0.0.0.0 static.parkingpanel.com
 0.0.0.0 static.pochta.ru
 0.0.0.0 static.proximic.com
-0.0.0.0 static.pxlad.io
 0.0.0.0 static.realmediadigital.com
 0.0.0.0 static.regiojobs.be
 0.0.0.0 static.retirementcommunitiesfyi.com
@@ -21762,7 +21750,6 @@
 0.0.0.0 stell.k12insight.org
 0.0.0.0 stem.modelosmasculinos.org
 0.0.0.0 step.doctortoken.co.in
-0.0.0.0 stern.met.vgwort.de
 0.0.0.0 steroidsaustralia.com.au
 0.0.0.0 st.europeantourvr.com
 0.0.0.0 stf2et.nose.iamveryhappy.net
@@ -21953,6 +21940,7 @@
 0.0.0.0 survey.china.alibaba.com
 0.0.0.0 survey.com-annualsurvey.info
 0.0.0.0 survey.interquest.com
+0.0.0.0 surveys.cnet.com
 0.0.0.0 survey.watson.microsoft.com
 0.0.0.0 survive.masterwatertanks.com
 0.0.0.0 survivor.thats.im
@@ -22047,6 +22035,7 @@
 0.0.0.0 syndication.streamads.yahoo.com
 0.0.0.0 syndication.teleborsa.it
 0.0.0.0 syndication.theguardian.com
+0.0.0.0 syndication.twitter.com
 0.0.0.0 syndication.universalnightlife.com
 0.0.0.0 syndication.visualthesaurus.com
 0.0.0.0 syndication.voodoo.com
@@ -22070,7 +22059,6 @@
 0.0.0.0 sywhpe.net.a1traveldirect.co.uk
 0.0.0.0 szach-mat.com.pl
 0.0.0.0 szgxkd.gay.tathamservice.com
-0.0.0.0 sz.met.vgwort.de
 0.0.0.0 sznaucer-figa.nd.e-wro.pl
 0.0.0.0 sznm.com.cn
 0.0.0.0 sz.track4.com
@@ -22584,7 +22572,6 @@
 0.0.0.0 tomalinoalambres.com.ar
 0.0.0.0 tomazpetraglia.adv.br
 0.0.0.0 t.omkt.co
-0.0.0.0 tom.vgwort.de
 0.0.0.0 tone.arysbeautysalon.com
 0.0.0.0 toneladabalancas.com.br
 0.0.0.0 tone.mykiddi.co.uk
@@ -23471,10 +23458,8 @@
 0.0.0.0 ugalaxy.com.my
 0.0.0.0 ughmvqf.spitt.ru
 0.0.0.0 uhau2u.4.fourcrossesinn.com
-0.0.0.0 u.heatmap.it
 0.0.0.0 uhkulvh.nepaltvcanada.ca
 0.0.0.0 uhowdg.broz.northerndishedends.co
-0.0.0.0 uim.tifbs.net
 0.0.0.0 ui.ppjol.com
 0.0.0.0 uitbrach.condomsex.org
 0.0.0.0 uitgepalminbraakvrye.memorialdaymile.com
@@ -23923,16 +23908,6 @@
 0.0.0.0 vfm.org.uk
 0.0.0.0 vfqkc4.iudasitebuildng.net
 0.0.0.0 vfwuc.eu.org
-0.0.0.0 vg00.met.vgwort.de
-0.0.0.0 vg01.met.vgwort.de
-0.0.0.0 vg02.met.vgwort.de
-0.0.0.0 vg03.met.vgwort.de
-0.0.0.0 vg04.met.vgwort.de
-0.0.0.0 vg05.met.vgwort.de
-0.0.0.0 vg06.met.vgwort.de
-0.0.0.0 vg07.met.vgwort.de
-0.0.0.0 vg08.met.vgwort.de
-0.0.0.0 vg09.met.vgwort.de
 0.0.0.0 vg.ad.asap-asp.net
 0.0.0.0 v.gfhdkse.com
 0.0.0.0 v-going.com.cn
@@ -25541,7 +25516,6 @@
 0.0.0.0 www.dowdenphotography.com
 0.0.0.0 www.down1oads.com
 0.0.0.0 www.downassbitches.com
-0.0.0.0 www.download.com
 0.0.0.0 www.downloaddirect.com
 0.0.0.0 www.downloadnowstart.com
 0.0.0.0 www.downloadseden.com
@@ -25576,6 +25550,7 @@
 0.0.0.0 www.effectivebrand.com
 0.0.0.0 www.efficienttraffic.com
 0.0.0.0 www.e-googles.com
+0.0.0.0 www.eielectronics.com
 0.0.0.0 www.eivamos.com
 0.0.0.0 www.elaptopsaver.com
 0.0.0.0 www.elded.eu
@@ -27383,7 +27358,6 @@
 0.0.0.0 zdolbynivzem.gov.ua
 0.0.0.0 zdyskredytujeethnicit.ansonslaw.co.uk
 0.0.0.0 zeetce.oaktuna.top
-0.0.0.0 zeit.met.vgwort.de
 0.0.0.0 zen.ancestrybloodhound.biz
 0.0.0.0 zero.socalbellydancer.info
 0.0.0.0 zetes.vdsinside.com

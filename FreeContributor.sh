@@ -40,9 +40,11 @@ TMP_DOMAINS=$(mktemp /tmp/domains.XXXXX)
 RESOLVCONF="${RESOLVCONF:=/etc/resolv.conf}"
 RESOLVCONFBAK="${RESOLVCONFBAK:=/etc/resolv.conf.bak}"
 
-# Change here the DNS servers
-DNSSERVER1="${DNSSERVER1:=91.239.100.100}"
-DNSSERVER2="${DNSSERVER2:=89.233.43.71}"
+## Change here the DNS servers
+## Nearest OpenNIC DNS servers - https://www.opennicproject.org/nearest-servers/
+## More options see ./conf/resolv.conf
+DNSSERVER1="${DNSSERVER1:=91.239.100.100}"   ## anycast.censurfridns.dk
+DNSSERVER2="${DNSSERVER2:=89.233.43.71}"     ## ns1.censurfridns.dk
 
 DHCPDCONF="${DHCPDCONF:=/etc/dhcpcd.conf}"
 NETCONF="${NETCONF:=/etc/NetworkManager/NetworkManager.conf}"
@@ -192,6 +194,9 @@ resolv()
     cp $DIR/conf/resolv.conf $RESOLVCONF
   fi
 
+  sed -i "s/#DNSSERVER1/$DNSSERVER1/g" $RESOLVCONF
+  sed -i "s/#DNSSERVER2/$DNSSERVER2/g" $RESOLVCONF
+  
 ## Prevent the dhcpcd daemon from overwriting /etc/resolv.conf
 ## or add to /etc/dhcpcd.conf
 ## echo -e "\nstatic domain_name_servers=$DNSSERVER1 $DNSSERVER2" >> /etc/dhcpcd.conf
@@ -383,9 +388,11 @@ dnsmasq()
   # dnsmasq --test
   cp "${DIR}"/conf/dnsmasq.conf "${DNSMASQCONF}"
 
-  if [ -f "${NETCONF}" ]; then
-    sed -i 's/dns=/dns=dnsmasq/g' "${NETCONF}"
-  fi
+  ## NetworkManager has a plugin to enable DNS caching using dnsmasq
+  ## https://wiki.archlinux.org/index.php/Dnsmasq#NetworkManager
+  #if [ -f "${NETCONF}" ]; then
+  #  sed -i 's/dns=*/dns=dnsmasq/g' "${NETCONF}"
+  #fi
 
   if [ ${TARGET} = "NXDOMAIN" ]; then
     awk '{print "server=/"$1"/"}' $TMP_DOMAINS > "${OUTPUTFILE:=${DNSMASQDIR}/dnsmasq-master.conf}"
