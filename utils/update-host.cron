@@ -7,6 +7,12 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
+# http://crontab.guru
+# http://crontab-generator.org/
+#
+#
+#
+#
 # This is a cron job line to get the hosts list every 7 days
 #minute (0-59)
 #|   hour (0-23)

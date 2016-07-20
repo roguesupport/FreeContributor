@@ -57,17 +57,15 @@ curl -s 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/da
 curl -s 'https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/win10/update.txt'   --output ./mirrors/win10update
 curl -s 'https://raw.githubusercontent.com/cbuijs/rpz-scum-blocker/master/block-domains.list'         --output ./mirrors/block-domains.list
 curl -s 'https://raw.githubusercontent.com/cbuijs/rpz-scum-blocker/master/my.include'                 --output ./mirrors/my.include
+curl -s 'https://raw.githubusercontent.com/mat1th/Dns-add-block/master/domains'                       --output ./mirrors/mat1th-domains # Blocks Facebook
 
-echo "ergvwenrienrin"
 
 if [ -e "${DIR}/mirrors/mahakala" ]; then
   rm "${DIR}/mirrors/mahakala" 
 fi
 
-echo "
-#curl -A 'Mozilla/5.0' -e http://forum.xda-developers.com/ http://adblock.mahakala.is/ \
-#| grep -v "#" | awk '{print $2}' >> ./mirrors/mahakala
-"
+curl -A 'Mozilla/5.0' -e http://forum.xda-developers.com/ http://adblock.mahakala.is/ \
+| grep -v "#" | awk '{print $2}' >> ./mirrors/mahakala
 
 # requires p7zip
 #curl 'http://rlwpx.free.fr/WPFF/htrc.7z'                              --output ./mirrors/htrc.7z 

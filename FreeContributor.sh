@@ -19,9 +19,11 @@
 #  * GNU sed
 #  * GNU grep
 #  * GNU coreutils
-#  * GNU wget or cURL
+#  * cURL
 #  * Dnsmasq or Unbound or Pdnsd
+
 set -e
+
 ## Global Variables---- --------------------------------------------------------
 FREECONTRIBUTOR_VERSION='0.4.5'
 REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
@@ -32,11 +34,9 @@ FORMAT="${FORMAT:=dnsmasq}"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# make temp files
 TMP_DOMAINS_RAW=$(mktemp /tmp/raw-domains.XXXXX)
 TMP_DOMAINS=$(mktemp /tmp/domains.XXXXX)
 
-# resolv
 RESOLVCONF="${RESOLVCONF:=/etc/resolv.conf}"
 RESOLVCONFBAK="${RESOLVCONFBAK:=/etc/resolv.conf.bak}"
 
@@ -49,21 +49,17 @@ DNSSERVER2="${DNSSERVER2:=89.233.43.71}"     ## ns1.censurfridns.dk
 DHCPDCONF="${DHCPDCONF:=/etc/dhcpcd.conf}"
 NETCONF="${NETCONF:=/etc/NetworkManager/NetworkManager.conf}"
 
-# hosts
 HOSTSCONF="${HOSTSCONF:=/etc/hosts}"
 HOSTSCONFBAK="${HOSTSCONFBAK:=/etc/hosts.bak}"
 
-# dnsmasq
 DNSMASQDIR="${DNSMASQDIR:=/etc/dnsmasq.d}"
 DNSMASQCONF="${DNSMASQCONF:=/etc/dnsmasq.conf}"
 DNSMASQCONFBAK="${DNSMASQCONFBAK:=/etc/dnsmasq.conf.bak}"
 
-# unbound
 UNBOUNDDIR="${UNBOUNDDIR:=/etc/unbound}"
 UNBOUNDCONF="${UNBOUNDCONF:=/etc/unbound/unbound.conf}"
 UNBOUNDCONFBAK="${UNBOUNDCONFBAK:=/etc/unbound/unbound.conf.bak}"
 
-# pdnsd
 PDNSDDIR="${PDNSDDIR:=/etc/pdnsd}"
 PDNSDCONF="${PDNSDCONF:=/etc/pdnsd.conf}"
 PDNSDCONFBAK="${PDNSDCONFBAK:=/etc/pdnsd.conf.bak}"
@@ -140,13 +136,13 @@ rootcheck()
 
 install_packages()
 {
-# Determine which package manager is being used
-# https://github.com/icy/pacapt
-#
-#    pacman        by ArchLinux/Parabola, ArchBang, Manjaro, Antergos, Apricity OS
-#    dpkg/apt-get  by Debian, Ubuntu, ElementaryOS, Linux Mint, etc ...
-#    yum/rpm/dnf   by Red Hat, CentOS, Fedora, etc ...
-#    zypper        by OpenSUSE
+## Determine which package manager is being used
+## https://github.com/icy/pacapt
+##
+##    pacman        by ArchLinux/Parabola, ArchBang, Manjaro, Antergos, Apricity OS
+##    dpkg/apt-get  by Debian, Ubuntu, ElementaryOS, Linux Mint, etc ...
+##    yum/rpm/dnf   by Red Hat, CentOS, Fedora, etc ...
+##    zypper        by OpenSUSE
 
   echo -e "\t Status: Error"
   echo -e "\n\t FreeContributor requires the program $PRG"
@@ -192,40 +188,27 @@ resolv()
   if [ -f "$RESOLVCONF" ]; then
     cp $RESOLVCONF $RESOLVCONFBAK
     cp $DIR/conf/resolv.conf $RESOLVCONF
+
+    sed -i "s/#DNSSERVER1/$DNSSERVER1/g" $RESOLVCONF
+    sed -i "s/#DNSSERVER2/$DNSSERVER2/g" $RESOLVCONF
+
   fi
 
-  sed -i "s/#DNSSERVER1/$DNSSERVER1/g" $RESOLVCONF
-  sed -i "s/#DNSSERVER2/$DNSSERVER2/g" $RESOLVCONF
-  
 ## Prevent the dhcpcd daemon from overwriting /etc/resolv.conf
-## or add to /etc/dhcpcd.conf
-## echo -e "\nstatic domain_name_servers=$DNSSERVER1 $DNSSERVER2" >> /etc/dhcpcd.conf
-
   if [ -f "$DHCPDCONF" ]; then 
     if ! grep -Fxq "nohook resolv.conf" "$DHCPDCONF"; then
       echo -e "\nnohook resolv.conf" >> "$DHCPDCONF"
     fi
+
+    #if ! grep -q "^static domain_name_servers" "$DHCPDCONF"; then
+    #  echo -e "\nstatic domain_name_servers=$DNSSERVER1 $DNSSERVER2" >> "$DHCPDCONF"
+    #fi
   fi
 }
 
 
 download_sources()
 {
-  if command -v curl >/dev/null 2>&1; then
-    download(){
-      curl -s "$1"
-  }
-  elif command -v wget >/dev/null 2>&1; then
-  #doesn't work yet
-    download () {
-      wget -q "$1"
-  }
-  else
-    printf "You don't seem to have curl or wget"
-    exit 4
-  fi
-
-
 
 sources=(
 ##
@@ -268,6 +251,7 @@ sources=(
     'https://ransomwaretracker.abuse.ch/downloads/TL_PS_DOMBL.txt'
     'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'
     'http://adblock.gjtech.net/?format=unix-hosts'
+#   'https://raw.githubusercontent.com/mat1th/Dns-add-block/master/domains'
 ## Adblock lists
 ##
 ## https://www.reddit.com/r/pihole/comments/4p2tp7/adding_easylist_and_other_adblocklike_sources_to/
@@ -297,8 +281,8 @@ sources=(
   printf "\n    FreeContributor is downloading data...\n"
   for item in ${sources[*]}
   do
-    #echo -e "\n\t :: Downloading from URL: $item"
-    download $item >> $TMP_DOMAINS_RAW || { echo -e "\n\t Error downloading $item"; }
+    #printf "\n    :: Downloading from URL: $item"
+    curl -s $item >> $TMP_DOMAINS_RAW || { echo -e "\n\t Error downloading $item"; }
   done
 }
 
@@ -333,7 +317,7 @@ REGEX_IPV4_VALIDATION="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)\
            /^[[:space:]]*$/d;            \
           " ${TMP_DOMAINS_RAW}
 
-  # Remove duplicate lines
+  ## Remove duplicate lines
   awk -i inplace '!x[$0]++' ${TMP_DOMAINS_RAW}
 
   grep -Po '(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)' \
@@ -363,7 +347,7 @@ hosts()
     exit 0
   fi
 
-  #Generate hosts header
+  ## Generate hosts header
   ./utils/hosts.header.sh
 
   mv hosts.header "${OUTPUTFILE:=$HOSTSCONF}"
@@ -384,9 +368,10 @@ dnsmasq()
     cp "${DNSMASQCONF}" "${DNSMASQCONFBAK}"
   fi
 
-  # to test the dnsmasq conf
-  # dnsmasq --test
   cp "${DIR}"/conf/dnsmasq.conf "${DNSMASQCONF}"
+
+  ## Test the dnsmasq conf
+  ## dnsmasq --test
 
   ## NetworkManager has a plugin to enable DNS caching using dnsmasq
   ## https://wiki.archlinux.org/index.php/Dnsmasq#NetworkManager
@@ -418,7 +403,7 @@ unbound()
 
   if [ ${TARGET} = "NXDOMAIN" ]; then
 
-    #local-zone: "testdomain.test" static
+    ## local-zone: "testdomain.test" static
     awk '{print "local-zone: ""\x22"$1"\x22"" static"}' $TMP_DOMAINS > "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
 
   elif [ -f "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}" ]; then
@@ -426,16 +411,16 @@ unbound()
     rm "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
 
     while read line; do
-    #local-zone: "example.tld" redirect
-    #local-data: "example.tld A 127.0.0.1"
+    ## local-zone: "example.tld" redirect
+    ## local-data: "example.tld A 127.0.0.1"
       echo "local-zone: \"${line}\" redirect"    >> "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
       echo "local-data: \"${line} A ${TARGET}\"" >> "${OUTPUTFILE:=${UNBOUNDDIR}/unbound-master.conf}"
     done < $TMP_DOMAINS
   fi
 
   if [ ! -f ${UNBOUNDDIR}/unbound_server.key ]; then
-    # Setting up unbound-control to generate a self-signed certificate 
-    # and private key for the server, as well as the client
+    ## Setting up unbound-control to generate a self-signed certificate 
+    ## and private key for the server, as well as the client
     unbound-control-setup
   fi
 
@@ -458,7 +443,7 @@ pdnsd()
     echo -e "Pdnsd format does only support target NXDOMAIN."
   fi
 
-  #neg { name=example.tld; types=domain; }
+  ## neg { name=example.tld; types=domain; }
   awk '{print "neg { name="$1"; types=domain; }"}'  $TMP_DOMAINS > "${OUTPUTFILE:=${PDNSDDIR}/pdnsd-master.conf}"
   #awk '{print "neg { name="$1"; types=A,AAAA; }"}' $TMP_DOMAINS > "${OUTPUTFILE:=${PDNSDDIR}/pdnsd-master.conf}"
 }

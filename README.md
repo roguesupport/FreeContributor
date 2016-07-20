@@ -1,5 +1,3 @@
-This project is still in **beta**! It currently works well, but some changes may be expected.
-
 <!-- language: lang-none -->
       ______              _____            _        _ _           _             
      |  ____|            / ____|          | |      (_) |         | |            
@@ -10,8 +8,6 @@ This project is still in **beta**! It currently works well, but some changes may
                                                                                                                                                         
 
 Enjoy a safe and faster web experience
-
-TL:DR `cat domains-{ads,tracking,malware} > /dev/null`
 
 ## Intro
 
@@ -45,7 +41,7 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
  - [GNU grep](http://www.gnu.org/software/grep/grep.html)
  - [GNU awk](https://www.gnu.org/software/gawk/)
  - [GNU coreutils](http://www.gnu.org/software/coreutils)
- - [GNU wget](https://www.gnu.org/software/wget/) or [cURL](http://curl.haxx.se/) (default)
+ - [cURL](http://curl.haxx.se/) (default)
  - DNS resolver: [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) (default), [Unbound](https://unbound.net/) or [Pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/index.html)
 
 ## Installation and Usage
@@ -54,6 +50,7 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
 
 git clone https://github.com/tbds/FreeContributor
 cd FreeContributor
+chmod +x FreeContributor.sh
 
 ```
 
@@ -137,11 +134,8 @@ Thanks to the people working hard to maintain the filter lists below that FreeCo
 |[Malekal](http://www.malekal.com/)                                                |                                                         | ? |
 |[dshield](http://dshield.org/)                                                    | Daily updates, approx. 4.500 entries                    | NonCommercial-ShareAlike 2.5 Generic |
 |[openphish](feodotracker)                                                         | Numerous updates on the same day, approx. 1.800 entries | ? |
-|[Zeustracker](https://zeustracker.abuse.ch/)                                      | Daily updates, approx. 440 entries                      | ? |
-|[Feodotracker](https://feodotracker.abuse.ch/)                                    | Daily updates, approx. 0-10 entries                     | ? |
-|[Palevo tracker](https://palevotracker.abuse.ch/)                                 | Daily updates, approx. 15 entries                       | ? |
-|[Ransomware tracker](https://ransomwaretracker.abuse.ch/)                         | Daily updates, approx. 150 entries                      | ? |
-|[Shalla's Blacklists ](https://ransomwaretracker.abuse.ch/)                       | Daily updates, approx. 32.000 entries [description](http://www.shallalist.de/categories.html)  | ? |                     | ? |
+|[The Swiss Security](https://www.abuse.ch/ )                                      | Daily updates                                           | ? |
+|[Shalla's Blacklists ](http://www.shallalist.de/)                                 | Daily updates, approx. 32.000 entries [description](http://www.shallalist.de/categories.html)  | ? |                     | ? |
 |[Windows Spy Blocker](https://github.com/crazy-max/WindowsSpyBlocker)             | Infrequent updates, approx. 120 entries                 | ? |
 |[Spamassassin Blacklists](http://www.sa-blacklist.stearns.org/)                   |                                                         | ? |
 |[notracking - hosts-blocklists](https://github.com/notracking/hosts-blocklists)   | Daily updates, approx. 27.500 entries                   | ? |
@@ -205,6 +199,7 @@ return NXDOMAIN.
 
 ## Comparison
 
+<center>
 
 | Program                                                         | Language      | Adblocking Method                              |
 | -------------                                                   | ------------- | --------------------------------------------   |
@@ -224,6 +219,7 @@ return NXDOMAIN.
 | [grimd](https://github.com/looterz/grimd)                       | Go            | [goDNS](https://github.com/kenshinx/godns)     |
 | [nss-block](https://github.com/dimkr/nss-block)                 | C             | DNS resolver                                   |
 
+</center>
 
 ## Disclaimer
 

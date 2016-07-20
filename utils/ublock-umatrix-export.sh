@@ -24,7 +24,9 @@
 OPT=$1   # option
 FILE=$2  # filename
 
-usage(){
+
+usage()
+{
 echo "Select format to export"
 echo "Options:"
 echo "      -[d]omains:   extract domains"
@@ -52,11 +54,9 @@ info(){
 }
 
 
-#'^*' and 'block$'
-
 domains(){
   tail -n +$((header + 1)) $FILE | \
-  grep "block" | \
+  grep -E "^[*].*block$" | \
   sort | uniq | \
   awk '{print $2}' > domains
 
@@ -66,7 +66,7 @@ domains(){
 
 hosts(){
   tail -n +$((header + 1)) $FILE | \
-  grep "block" | \
+  grep -E "^[*].*block$" | \
   sort | uniq | \
   awk '{print "0.0.0.0 "$2}' > hosts
 
@@ -76,7 +76,7 @@ hosts(){
 
 dnsmasq(){
   tail -n +$((header + 1)) $FILE | \
-  grep "block" | \
+  grep -E "^[*].*block$" | \
   sort | uniq | \
   awk '{print "server=/"$2"/"}' > dnsmasq-umatrix.conf
 
@@ -86,7 +86,7 @@ dnsmasq(){
 
 unbound(){
   tail -n +$((header + 1)) $FILE | \
-  grep "block" | \
+  grep -E "^[*].*block$" | \
   sort | uniq | \
   awk '{print "local-zone: ""\x22"$2"\x22"" static"}' > unbound-umatrix.conf
 
@@ -96,7 +96,7 @@ unbound(){
 
 pdnsd(){
   tail -n +$((header + 1)) $FILE | \
-  grep "block" | \
+  grep -E "^[*].*block$" | \
   sort | uniq | \
   awk '{print "{ name="$2"; types=domain; }"}' > pdnsd-umatrix.conf
 
@@ -119,6 +119,5 @@ main(){
     *) echo "Bad argument!"; usage ;;
   esac
 }
-
 
 main
