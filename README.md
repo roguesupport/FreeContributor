@@ -41,7 +41,7 @@ It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DN
  - [GNU grep](http://www.gnu.org/software/grep/grep.html)
  - [GNU awk](https://www.gnu.org/software/gawk/)
  - [GNU coreutils](http://www.gnu.org/software/coreutils)
- - [cURL](http://curl.haxx.se/) (default)
+ - [cURL](http://curl.haxx.se/)
  - DNS resolver: [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) (default), [Unbound](https://unbound.net/) or [Pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/index.html)
 
 ## Installation and Usage
@@ -199,8 +199,6 @@ return NXDOMAIN.
 
 ## Comparison
 
-<center>
-
 | Program                                                         | Language      | Adblocking Method                              |
 | -------------                                                   | ------------- | --------------------------------------------   |
 | [FreeContributor](https://github.com/tbds/FreeContributor)      | Bash          | DNS resolver (Dnsmasq, Unbound or Pdnsd)       |
@@ -219,7 +217,6 @@ return NXDOMAIN.
 | [grimd](https://github.com/looterz/grimd)                       | Go            | [goDNS](https://github.com/kenshinx/godns)     |
 | [nss-block](https://github.com/dimkr/nss-block)                 | C             | DNS resolver                                   |
 
-</center>
 
 ## Disclaimer
 
