@@ -19,9 +19,7 @@
     </section>
 
     <section class="main-content">
-      <p>This project is still in <strong>beta</strong>! It currently works well, but some changes may be expected.</p>
-
-
+      
 
 <pre><code>  ______              _____            _        _ _           _             
  |  ____|            / ____|          | |      (_) |         | |            
@@ -32,8 +30,6 @@
 </code></pre>
 
 <p>Enjoy a safe and faster web experience</p>
-
-<p>TL:DR <code>cat domains-{ads,tracking,malware} &gt; /dev/null</code></p>
 
 <h2>
 <a id="intro" class="anchor" href="#intro" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Intro</h2>
@@ -48,19 +44,12 @@ It <a href="https://en.wikipedia.org/wiki/DNSBL">blocks ads, malware, trackers a
 <a id="why" class="anchor" href="#why" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why</h2>
 
 <ul>
+<li><a href="http://www.cjr.org/opinion/ad_blockers_malware_new_york_times.php">What media companies don’t want you to know about ad blockers</a></li>
 <li><a href="http://www.theguardian.com/technology/2016/mar/16/major-sites-new-york-times-bbc-ransomware-malvertising">Major sites including New York Times and BBC hit by 'ransomware' malvertising</a></li>
 <li><a href="http://www.theguardian.com/media/2016/mar/16/ad-blocking-advertising-half-of-data-used-articles">Adblocking: advertising 'accounts for half of data used to read articles'</a></li>
 <li>
 <a href="http://blog.lmorchard.com/2015/07/22/the-verge-web-sucks/">The Verge's web sucks</a> and <a href="https://mobiforge.com/research-analysis/the-web-is-doom">The web is Doom</a>
 </li>
-</ul>
-
-<h2>
-<a id="what-the-scripts-does" class="anchor" href="#what-the-scripts-does" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What the scripts does?</h2>
-
-<ul>
-<li>Backup the original configuration files.</li>
-<li>Download and merge domains lists from various sources.</li>
 </ul>
 
 <h2>
@@ -86,17 +75,10 @@ It <a href="https://en.wikipedia.org/wiki/DNSBL">blocks ads, malware, trackers a
 <li><a href="http://www.gnu.org/software/grep/grep.html">GNU grep</a></li>
 <li><a href="https://www.gnu.org/software/gawk/">GNU awk</a></li>
 <li><a href="http://www.gnu.org/software/coreutils">GNU coreutils</a></li>
-<li>
-<a href="https://www.gnu.org/software/wget/">GNU wget</a> or <a href="http://curl.haxx.se/">cURL</a> (default)</li>
+<li><a href="http://curl.haxx.se/">cURL</a></li>
 <li>DNS resolver: <a href="http://www.thekelleys.org.uk/dnsmasq/doc.html">Dnsmasq</a> (default), <a href="https://unbound.net/">Unbound</a> or <a href="http://members.home.nl/p.a.rombouts/pdnsd/index.html">Pdnsd</a>
 </li>
 </ul>
-
-<h2>
-<a id="gcarq-fork" class="anchor" href="#gcarq-fork" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gcarq Fork</h2>
-
-<p>If you just want a way to create a very simple dns-blacklist generator use <a href="https://github.com/gcarq/FreeContributor">gcarq FreeContributor fork</a>.<br>
-It just downloads all domain lists, merges them and generates a file in the specified format (<code>/etc/hosts</code>, <code>dnsmasq</code>, <code>unbound</code> and <code>pdnsd</code>), nothing more.</p>
 
 <h2>
 <a id="installation-and-usage" class="anchor" href="#installation-and-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation and Usage</h2>
@@ -104,6 +86,7 @@ It just downloads all domain lists, merges them and generates a file in the spec
 <div class="highlight highlight-source-shell"><pre>
 git clone https://github.com/tbds/FreeContributor
 <span class="pl-c1">cd</span> FreeContributor
+chmod +x FreeContributor.sh
 </pre></div>
 
 <div class="highlight highlight-source-shell"><pre>
@@ -123,10 +106,10 @@ git clone https://github.com/tbds/FreeContributor
 
        -t target: specify the target
 
-          default: 0.0.0.0
-                   ::
-                   NXDOMAIN
-                   custom (e.g. 192.168.1.20)
+          0.0.0.0 (default)
+          ::
+          NXDOMAIN (recommended)
+          custom (e.g. 192.168.1.20)
 
        -help         Show this <span class="pl-c1">help</span>
 
@@ -150,8 +133,7 @@ head to <a href="https://github.com/tbds/FreeContributor/blob/master/CONTRIBUTIN
 <h2>
 <a id="sources" class="anchor" href="#sources" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sources</h2>
 
-<p>Inspired by <a href="https://github.com/jmdugan/blocklists">jmdugan's blocklists project</a>, FreeContributor project comes with a 
-<a href="https://github.com/tbds/FreeContributor/tree/master/data">catalog of corporation domain names</a> that people may want to block. </p>
+<p>FreeContributor project comes with a <a href="https://github.com/tbds/FreeContributor/tree/master/data">catalog of corporation domain names</a> that people may want to block. </p>
 
 <p>FreeContributor also downloads external files, each has its own license, detailed in the list below.
 Thanks to the people working hard to maintain the filter lists below that FreeContributor is using.</p>
@@ -183,7 +165,7 @@ Thanks to the people working hard to maintain the filter lists below that FreeCo
 <td>CC Attribution-NonCommercial-ShareAlike 4.0</td>
 </tr>
 <tr>
-<td><a href="http://www.hosts-file.net/">hpHosts’s ad and tracking servers‎</a></td>
+<td><a href="http://www.hosts-file.net/">hpHosts‎</a></td>
 <td></td>
 <td><em>Read <a href="http://www.hosts-file.net/">Terms of Use</a></em></td>
 </tr>
@@ -213,7 +195,7 @@ Thanks to the people working hard to maintain the filter lists below that FreeCo
 <td>?</td>
 </tr>
 <tr>
-<td><a href="https://github.com/gorhill/uMatrix">Gorhill's uMatrix Blocklist</a></td>
+<td><a href="https://github.com/gorhill/uMatrix">Gorhill - uMatrix</a></td>
 <td></td>
 <td>?</td>
 </tr>
@@ -288,27 +270,12 @@ Thanks to the people working hard to maintain the filter lists below that FreeCo
 <td>?</td>
 </tr>
 <tr>
-<td><a href="https://zeustracker.abuse.ch/">Zeustracker</a></td>
-<td>Daily updates, approx. 440 entries</td>
+<td><a href="https://www.abuse.ch/">The Swiss Security</a></td>
+<td>Daily updates</td>
 <td>?</td>
 </tr>
 <tr>
-<td><a href="https://feodotracker.abuse.ch/">Feodotracker</a></td>
-<td>Daily updates, approx. 0-10 entries</td>
-<td>?</td>
-</tr>
-<tr>
-<td><a href="https://palevotracker.abuse.ch/">Palevo tracker</a></td>
-<td>Daily updates, approx. 15 entries</td>
-<td>?</td>
-</tr>
-<tr>
-<td><a href="https://ransomwaretracker.abuse.ch/">Ransomware tracker</a></td>
-<td>Daily updates, approx. 150 entries</td>
-<td>?</td>
-</tr>
-<tr>
-<td><a href="https://ransomwaretracker.abuse.ch/">Shalla's Blacklists </a></td>
+<td><a href="http://www.shallalist.de/">Shalla's Blacklists </a></td>
 <td>Daily updates, approx. 32.000 entries <a href="http://www.shallalist.de/categories.html">description</a>
 </td>
 <td>?</td>
@@ -398,91 +365,86 @@ return NXDOMAIN.</p>
 <table>
 <thead>
 <tr>
-<th align="left">Program</th>
-<th align="left">Language</th>
-<th align="left">Adblocking Method</th>
+<th>Program</th>
+<th>Language</th>
+<th>Adblocking Method</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left"><a href="https://github.com/tbds/FreeContributor">FreeContributor</a></td>
-<td align="left">Bash</td>
-<td align="left">DNS resolver (Dnsmasq, Unbound or Pdnsd)</td>
+<td><a href="https://github.com/tbds/FreeContributor">FreeContributor</a></td>
+<td>Bash</td>
+<td>DNS resolver (Dnsmasq, Unbound or Pdnsd)</td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/gcarq/FreeContributor">FreeContributor (fork)</a></td>
-<td align="left">Bash</td>
-<td align="left">Generates only blacklists (Hosts, Dnsmasq, Unbound or Pdnsd)</td>
+<td><a href="https://pi-hole.net/">Pi-Hole</a></td>
+<td>Bash, Php</td>
+<td>Dnsmasq</td>
 </tr>
 <tr>
-<td align="left"><a href="https://pi-hole.net/">Pi-Hole</a></td>
-<td align="left">Bash, Php</td>
-<td align="left">Dnsmasq</td>
+<td><a href="https://github.com/quidsup/notrack">NoTrack</a></td>
+<td>Bash, Php</td>
+<td>Dnsmasq</td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/quidsup/notrack">NoTrack</a></td>
-<td align="left">Bash, Php</td>
-<td align="left">Dnsmasq</td>
+<td><a href="https://gaenserich.github.io/hostsblock/">Hostsblock</a></td>
+<td>Bash</td>
+<td>Hosts with Dnsmasq (for cache only)</td>
 </tr>
 <tr>
-<td align="left"><a href="https://gaenserich.github.io/hostsblock/">Hostsblock</a></td>
-<td align="left">Bash</td>
-<td align="left">Hosts with Dnsmasq (for cache only)</td>
+<td><a href="https://github.com/zant95/hBlock">hBlock</a></td>
+<td>Shell</td>
+<td>Hosts</td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/zant95/hBlock">hBlock</a></td>
-<td align="left">Shell</td>
-<td align="left">Hosts</td>
+<td><a href="https://github.com/jakeogh/dnsgate">dnsgate</a></td>
+<td>Python</td>
+<td>Hosts or Dnsmasq</td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/jakeogh/dnsgate">dnsgate</a></td>
-<td align="left">Python</td>
-<td align="left">Hosts or Dnsmasq</td>
+<td><a href="https://github.com/StevenBlack/hosts">StevenBlack hosts</a></td>
+<td>Python</td>
+<td>Hosts</td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/StevenBlack/hosts">StevenBlack hosts</a></td>
-<td align="left">Python</td>
-<td align="left">Hosts</td>
+<td><a href="https://github.com/conformal/adsuck">adsuck</a></td>
+<td>C</td>
+<td>DNS server</td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/conformal/adsuck">adsuck</a></td>
-<td align="left">C</td>
-<td align="left">DNS server</td>
+<td><a href="https://github.com/apankrat/dnswhisperer">dnswhisperer</a></td>
+<td>C</td>
+<td>DNS proxy</td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/apankrat/dnswhisperer">dnswhisperer</a></td>
-<td align="left">C</td>
-<td align="left">DNS proxy</td>
+<td><a href="https://forum.pfsense.org/index.php?topic=86212.0">pfBlockerNG</a></td>
+<td>Shell, PHP</td>
+<td>DNS resolver: Unbound</td>
 </tr>
 <tr>
-<td align="left"><a href="https://forum.pfsense.org/index.php?topic=86212.0">pfBlockerNG</a></td>
-<td align="left">Shell, PHP</td>
-<td align="left">DNS resolver: Unbound</td>
+<td><a href="https://github.com/imanel/hosts_updater">Hosts Updater</a></td>
+<td>Ruby</td>
+<td>Hosts</td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/imanel/hosts_updater">Hosts Updater</a></td>
-<td align="left">Ruby</td>
-<td align="left">Hosts</td>
+<td><a href="https://github.com/shuLhan/rescached">Rescached</a></td>
+<td>C++</td>
+<td>Hosts</td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/shuLhan/rescached">Rescached</a></td>
-<td align="left">C++</td>
-<td align="left">Hosts</td>
+<td><a href="https://github.com/openwrt/packages/tree/master/net/adblock/files">OpenWRT package</a></td>
+<td>Shell</td>
+<td>Dnsmasq</td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/openwrt/packages/tree/master/net/adblock/files">OpenWRT package</a></td>
-<td align="left">Shell</td>
-<td align="left">Dnsmasq</td>
+<td><a href="https://github.com/looterz/grimd">grimd</a></td>
+<td>Go</td>
+<td><a href="https://github.com/kenshinx/godns">goDNS</a></td>
 </tr>
 <tr>
-<td align="left"><a href="https://github.com/looterz/grimd">grimd</a></td>
-<td align="left">Go</td>
-<td align="left"><a href="https://github.com/kenshinx/godns">goDNS</a></td>
-</tr>
-<tr>
-<td align="left"><a href="https://github.com/dimkr/nss-block">nss-block</a></td>
-<td align="left">C</td>
-<td align="left">DNS resolver</td>
+<td><a href="https://github.com/dimkr/nss-block">nss-block</a></td>
+<td>C</td>
+<td>DNS resolver</td>
 </tr>
 </tbody>
 </table>
