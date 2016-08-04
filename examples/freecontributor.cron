@@ -10,10 +10,8 @@
 # http://crontab.guru
 # http://crontab-generator.org/
 #
-#
-#
-#
-# This is a cron job line to get the hosts list every 7 days
+# This is a cron job line will update the source lists from FreeContributor
+# at 22:00 on the 30th of every month
 #minute (0-59)
 #|   hour (0-23)
 #|   |    day of the month (1-31)
@@ -21,4 +19,4 @@
 #|   |    |   |   day of the week (0-6 with 0=Sun or Sun-Sat)
 #|   |    |   |   |   commands
 #|   |    |   |   |   |
-*   *    *   *   6  root /usr/local/bin/freecontributor-updater.sh
+0  22    30   *   *  /usr/local/bin/FreeContributor.sh -f dnsmasq -t NXDOMAIN >/dev/null 2>&1

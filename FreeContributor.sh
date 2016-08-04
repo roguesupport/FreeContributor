@@ -25,7 +25,7 @@
 set -e
 
 ## Global Variables---- --------------------------------------------------------
-FREECONTRIBUTOR_VERSION='0.4.5'
+FREECONTRIBUTOR_VERSION='0.4.6'
 REDIRECTIP4="${REDIRECTIP4:=0.0.0.0}"
 REDIRECTIP6="${REDIRECTIP6:=::}"
 
@@ -41,8 +41,7 @@ RESOLVCONF="${RESOLVCONF:=/etc/resolv.conf}"
 RESOLVCONFBAK="${RESOLVCONFBAK:=/etc/resolv.conf.bak}"
 
 ## Change here the DNS servers
-## Nearest OpenNIC DNS servers - https://www.opennicproject.org/nearest-servers/
-## More options see ./conf/resolv.conf
+## More options see /conf/resolv.conf
 DNSSERVER1="${DNSSERVER1:=91.239.100.100}"   ## anycast.censurfridns.dk
 DNSSERVER2="${DNSSERVER2:=89.233.43.71}"     ## ns1.censurfridns.dk
 
@@ -106,7 +105,7 @@ cat << EOF
 
        -t target: specify the target
 
-                             ${TARGET} (default)
+                             ${REDIRECTIP4} (default)
                              ${REDIRECTIP6}
                              NXDOMAIN
                              custom (e.g. 192.168.1.20)

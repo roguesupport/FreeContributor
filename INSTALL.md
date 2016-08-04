@@ -1,6 +1,6 @@
 ## Install notes
 
-First install a DNS cacher, such as dnsmasq using you package manager. 
+First install a DNS resolver, such as dnsmasq using you package manager. 
 For example for Debian/Ubuntu GNU/Linux distribution
 
     sudo apt-get install dnsmasq

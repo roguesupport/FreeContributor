@@ -23,6 +23,6 @@ formats=(hosts dnsmasq unbound pdnsd)
 
 for list in ${lists[@]}; do
     for format in ${formats[@]}; do
-        ./domain-dns-format.sh $list $format
+        ./domain-to-dns.sh $list $format
     done
 done
