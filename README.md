@@ -7,7 +7,7 @@
      |_|  |_|  \___|\___|\_____\___/|_| |_|\__|_|  |_|_.__/ \__,_|\__\___/|_|   
                                                                                                                                                         
 
-Simple DNS Ad Blocker. Enjoy a safe and faster web experience
+Simple DNS Ad Blocker. Enjoy a safe and faster web experience.
 
 ## Intro
 
@@ -16,6 +16,9 @@ FreeContributor is an alternative for "ad blocking extensions" in your browser.
 
 FreeContributor intends to extract domains lists from various sources.
 It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DNSBL).
+This means blocking works across any browser you’re using on your phone or your computer.
+
+It takes less than 2 minutes to set up! Please try it, and let me know how it works for you!
 
 ## Why
 
