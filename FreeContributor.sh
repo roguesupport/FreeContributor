@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# FreeContributor: Enjoy a safe and faster web experience
+# FreeContributor: Simple DNS Ad Blocker. Enjoy a safe and faster web experience
 # (c) 2016 by TBDS, gcarq
 # https://github.com/tbds/FreeContributor
 # https://github.com/gcarq/FreeContributor (forked)
@@ -36,6 +36,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 TMP_DOMAINS_RAW=$(mktemp /tmp/raw-domains.XXXXX)
 TMP_DOMAINS=$(mktemp /tmp/domains.XXXXX)
+FREECONTRIBUTOR_LOG="${FREECONTRIBUTOR_LOG:=/var/log/freecontributor.log}"
 
 RESOLVCONF="${RESOLVCONF:=/etc/resolv.conf}"
 RESOLVCONFBAK="${RESOLVCONFBAK:=/etc/resolv.conf.bak}"
@@ -182,6 +183,17 @@ dependencies()
   done
 }
 
+
+logging() 
+{
+  if [ ! -f "$FREECONTRIBUTOR_LOG" ]; then
+    touch "$FREECONTRIBUTOR_LOG"
+    chmod 644 "$FREECONTRIBUTOR_LOG"
+  fi
+}
+
+
+
 resolv()
 {
   if [ -f "$RESOLVCONF" ]; then
@@ -280,7 +292,7 @@ sources=(
   printf "\n    FreeContributor is downloading data...\n"
   for item in ${sources[*]}
   do
-    #printf "\n    :: Downloading from URL: $item"
+    #printf "\n    :: Downloading from URL: $item $date" >> "$FREECONTRIBUTOR_LOG"
     curl -s $item >> $TMP_DOMAINS_RAW || { echo -e "\n\t Error downloading $item"; }
   done
 }
@@ -368,6 +380,14 @@ dnsmasq()
   fi
 
   cp "${DIR}"/conf/dnsmasq.conf "${DNSMASQCONF}"
+
+  if [ ! -f /var/log/dnsmaq.log ]; then
+    touch /var/log/dnsmaq.log
+    chmod 644 /var/log/dnsmaq.log
+    chown dnsmasq:root /var/log/dnsmaq.log
+  fi
+}
+
 
   ## Test the dnsmasq conf
   ## dnsmasq --test
