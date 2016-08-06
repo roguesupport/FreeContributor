@@ -386,8 +386,6 @@ dnsmasq()
     chmod 644 /var/log/dnsmaq.log
     chown dnsmasq:root /var/log/dnsmaq.log
   fi
-}
-
 
   ## Test the dnsmasq conf
   ## dnsmasq --test
@@ -417,6 +415,12 @@ unbound()
   fi
 
   cp "${DIR}"/conf/unbound.conf "${UNBOUNDCONF}"
+
+  if [ ! -f /var/log/unbound.log ]; then
+    touch /var/log/unbound.log
+    chmod 644 /var/log/unbound.log
+    chown unbound:root /var/log/unbound.log
+  fi
 
   curl -s https://www.internic.net/domain/named.cache -o "${UNBOUNDDIR}"/root.hints
 
