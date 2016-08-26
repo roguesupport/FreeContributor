@@ -381,10 +381,10 @@ dnsmasq()
 
   cp "${DIR}"/conf/dnsmasq.conf "${DNSMASQCONF}"
 
-  if [ ! -f /var/log/dnsmaq.log ]; then
-    touch /var/log/dnsmaq.log
-    chmod 644 /var/log/dnsmaq.log
-    chown dnsmasq:root /var/log/dnsmaq.log
+  if [ ! -f /var/log/dnsmasq.log ]; then
+    touch /var/log/dnsmasq.log
+    chmod 644 /var/log/dnsmasq.log
+    chown dnsmasq:root /var/log/dnsmasq.log
   fi
 
   ## Test the dnsmasq conf

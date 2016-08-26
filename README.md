@@ -26,7 +26,7 @@ It takes less than 2 minutes to set up! Please try it, and let me know how it wo
  - [Major sites including New York Times and BBC hit by 'ransomware' malvertising](http://www.theguardian.com/technology/2016/mar/16/major-sites-new-york-times-bbc-ransomware-malvertising)
  - [Malvertising Campaign Infected Thousands of Users per Day for More than a Year](http://news.softpedia.com/news/malvertising-campaign-infected-thousands-of-users-per-day-for-more-than-a-year-506730.shtml)
  - [Adblocking: advertising 'accounts for half of data used to read articles'](http://www.theguardian.com/media/2016/mar/16/ad-blocking-advertising-half-of-data-used-articles)
- - [The Verge's web sucks](http://blog.lmorchard.com/2015/07/22/the-verge-web-sucks/) and [The web is Doom](https://mobiforge.com/research-analysis/the-web-is-doom)
+ - [The Website Obesity Crisis](http://idlewords.com/talks/website_obesity.htm), [The Verge's web sucks](http://blog.lmorchard.com/2015/07/22/the-verge-web-sucks/) and [The web is Doom](https://mobiforge.com/research-analysis/the-web-is-doom)
 
 ## Benefits and Features
 
