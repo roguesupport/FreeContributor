@@ -10,6 +10,8 @@
 # http://crontab.guru
 # http://crontab-generator.org/
 #
+# /etc/cron.d/freeContributor.cron: crontab entries to auto update Freecontributor
+#
 # This is a cron job line will update the source lists from FreeContributor
 # at 22:00 on the 30th of every month
 #minute (0-59)

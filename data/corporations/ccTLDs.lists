@@ -1,0 +1,20 @@
+# FreeContributor: Enjoy a safe and faster web experience
+# (c) 2016 by TBDS
+# https://github.com/tbds/FreeContributor
+#
+# License: Creative Commons Attribution Share Alike 4.0
+# url: https://creativecommons.org/licenses/by-sa/4.0/
+#
+# Provider: ccTLD
+#
+# https://github.com/quidsup/notrack/blob/master/admin/include/tld.csv
+#
+.ads
+.biz
+.click
+.date
+.faith
+.mobi
+.link
+.gq
+.ms

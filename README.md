@@ -16,7 +16,7 @@ FreeContributor is an alternative for "ad blocking extensions" in your browser.
 
 FreeContributor intends to extract domains lists from various sources.
 It [blocks ads, malware, trackers at DNS level](https://en.wikipedia.org/wiki/DNSBL).
-This means blocking works across any browser you’re using on your phone or your computer.
+This means blocking works across any browser you’re using on your computer.
 
 It takes less than 2 minutes to set up! Please try it, and let me know how it works for you!
 
@@ -58,6 +58,9 @@ cd FreeContributor
 chmod +x FreeContributor.sh
 
 ```
+
+or you can download this repo as a ZIP and install it anywhere you want, using `make install`
+
 
 ```sh
 
